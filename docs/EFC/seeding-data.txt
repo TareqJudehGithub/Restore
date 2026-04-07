@@ -1,0 +1,10 @@
+In the DbInitializer class we have 2 methods:
+
+1. InitDb - this is the method called when our application starts - we use this in the 
+Program.cs.  It creates a service scope so that we can access the DB Context - the class 
+that provides us with a session to the DB.
+
+2. SeedData - this does 2 things.  Executes context.Database.Migrate().  This will apply 
+any pending migrations and create the DB if it does not already exist.   Checks if any 
+Products are in the DB, and if no products exist in the DB already then it will create 
+a list of products in the DB.   It will then save these into the DB.

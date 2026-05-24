@@ -10,8 +10,15 @@ builder.Services.AddControllers();
 // DbContext
 builder.Services.AddDbContext<StoreContext>(Options =>
 {
-  // SQLite
+  // SQLITE
   Options.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection"));
+});
+
+builder.Services.AddDbContext<StoreSqlDbContext>(Options =>
+{
+  // SQL Server
+  Options.UseSqlServer(builder.Configuration
+  .GetConnectionString("MSSQLConnection"));
 });
 
 var app = builder.Build();

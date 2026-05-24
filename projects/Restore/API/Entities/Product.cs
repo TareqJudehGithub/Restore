@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities;
 
-[Table("Products")]
+[Table(name: "Products", Schema = "dbo")]
 public class Product
 {
   public int Id { get; set; }

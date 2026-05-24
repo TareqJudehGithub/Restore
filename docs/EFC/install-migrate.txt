@@ -28,8 +28,11 @@ EF Core installation
       $ dotnet ef database update  
       This will create a new database called Restore.db
 
-
   To drop a database created
   $ dotnet ef database drop 
 
 
+Specify your DbContext name
+ dotnet ef migrations add MigrationName --context YourDbContextName
+ dotnet ef database update --context YourDbContextName
+ 

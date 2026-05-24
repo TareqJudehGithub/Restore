@@ -1,34 +1,33 @@
-using Microsoft.EntityFrameworkCore;
+using System;
 using API.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class DbDbInitializer
+public class StoreSqlDbContext : DbContext
 {
-    public static void InitDb(WebApplication app)
-    {
-        // Create a scope to get the StoreContext instance
-        using var scope = app.Services.CreateScope();
-        // Get the StoreContext instance/access
-        var context = scope.ServiceProvider.GetRequiredService<StoreContext>()
-        ?? throw new InvalidOperationException("Failed to get StoreContext instance.");
 
-        // Seed the database with initial data
-        SeedData(context);
+    #region Constructor
+    public StoreSqlDbContext(DbContextOptions<StoreSqlDbContext> options) : base(options)
+    {
     }
-    // Seed the database with initial data
-    private static void SeedData(StoreContext context)
-    {
-        // Apply any pending migrations to the database
-        context.Database.Migrate();
+    #endregion
 
-        // Check if there are any products in the database
-        if (context.Products.Any()) return;
+    #region DBsets
+    public DbSet<Product> Products { get; set; }
+    #endregion
 
-        var products = new List<Product>
+    #region Seeding and inserting data into the DB
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        new Product
+        base.OnModelCreating(builder);
+
+        // Seed data
+        var products = new List<Product>()
+    {
+     new Product
         {
+            Id = 1,
             Name = "Angular Speedster Board 2000",
             Description =
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
@@ -40,6 +39,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 2,
             Name = "Green Angular Board 3000",
             Description = "Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.",
             Price = 15000,
@@ -50,6 +50,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 3,
             Name = "Core Board Speed Rush 3",
             Description =
                 "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
@@ -61,6 +62,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 4,
             Name = "Net Core Super Board",
             Description =
                 "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
@@ -72,6 +74,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 5,
             Name = "React Board Super Whizzy Fast",
             Description =
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
@@ -83,6 +86,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 6,
             Name = "Typescript Entry Board",
             Description =
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
@@ -94,6 +98,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 7,
             Name = "Core Blue Hat",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
@@ -105,6 +110,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 8,
             Name = "Green React Woolen Hat",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
@@ -116,6 +122,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 9,
             Name = "Purple React Woolen Hat",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
@@ -127,6 +134,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 10,
             Name = "Blue Code Gloves",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
@@ -138,6 +146,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 11,
             Name = "Green Code Gloves",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
@@ -149,6 +158,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 12,
             Name = "Purple React Gloves",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
@@ -160,6 +170,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 13,
             Name = "Green React Gloves",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
@@ -171,6 +182,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 14,
             Name = "Redis Red Boots",
             Description =
                 "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
@@ -182,6 +194,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 15,
             Name = "Core Red Boots",
             Description =
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
@@ -193,6 +206,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 16,
             Name = "Core Purple Boots",
             Description =
                 "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
@@ -204,6 +218,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 17,
             Name = "Angular Purple Boots",
             Description = "Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.",
             Price = 15000,
@@ -214,6 +229,7 @@ public class DbDbInitializer
         },
         new Product
         {
+            Id = 18,
             Name = "Angular Blue Boots",
             Description =
                 "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
@@ -224,9 +240,8 @@ public class DbDbInitializer
             QuantityInStock = 100
         }
     };
-
-        // Add the products to the database and save changes
-        context.Products.AddRange(products);
-        context.SaveChanges();
+        // Insert into DB
+        builder.Entity<Product>().HasData(products);
     }
+    #endregion
 }

@@ -10,24 +10,37 @@ namespace API.Controllers
     [ApiController] // attribute to make this class a controller
     public class ProductsController : ControllerBase
     {
-        private readonly StoreContext _context;
-
-        public ProductsController(StoreContext context)
+        #region SQLITE
+        private readonly StoreContext _dbContext;
+        public ProductsController(StoreContext dbContext)
         {
-            _context = context;
+            _dbContext = dbContext;
         }
+        #endregion
+
+        #region  MSSQL
+        // Uncomment code below in order to use MSSQL instead of SQLITE
+
+        // private readonly StoreSqlDbContext _dbContext;
+        // public ProductsController(StoreSqlDbContext dbContext)
+        // {
+        //     _dbContext = dbContext;
+        // }
+        #endregion
+
+        // GET: //https:/localhost/api/products
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
-            var model = await _context.Products.ToListAsync();
+            var model = await _dbContext.Products.ToListAsync();
             return Ok(model);
         }
-
-        [HttpGet] //http:/localhost:5000/api/products/3
-        [Route("{id:int}")] //http:/localhost:5000/api/products/3
+        // GET: //https:/localhost/api/products/3
+        [HttpGet]
+        [Route("{id:int}")]
         public async Task<IActionResult> GetProduct([FromRoute] int id)
         {
-            var model = await _context.Products
+            var model = await _dbContext.Products
             .FirstOrDefaultAsync(x => x.Id == id);
 
             if (model == null) return NotFound();

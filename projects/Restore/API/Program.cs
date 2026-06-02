@@ -1,9 +1,9 @@
 using API.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region Services 
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -28,15 +28,21 @@ builder.Services.AddDbContext<StoreSqlDbContext>(Options =>
 builder.Services.AddCors();
 #endregion
 
+#endregion
+
+#region Middlewares
 var app = builder.Build();
+
 #region CORS Middleware
 app.UseCors(opt =>
 {
-  opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000");
+  opt
+  .AllowAnyHeader()
+  .AllowAnyMethod()
+  .WithOrigins("https://localhost:3000");
 });
 #endregion
 
-// Configure the HTTP request pipeline.
 app.MapControllers();
 
 #region SQLite Middleware
@@ -44,4 +50,7 @@ app.MapControllers();
 DbDbInitializer.InitDb(app);
 #endregion
 
+#endregion
+
 app.Run();
+

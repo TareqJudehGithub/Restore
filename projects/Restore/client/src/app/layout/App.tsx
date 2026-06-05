@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-
-import type { Product } from "../models/product";
-import Catalog from "../features/catalog/Catalog";
+import { useState } from "react";
+import { Outlet } from "react-router";
 import {
 	Container,
 	createTheme,
@@ -9,23 +7,13 @@ import {
 	Box,
 	CssBaseline,
 } from "@mui/material";
+
 import NavBar from "./NavBar";
 
 function App() {
 	// States
-	const [products, setProducts] = useState<Product[]>([]);
+
 	const [darkMode, setDarkMode] = useState<boolean>(true);
-	useEffect(() => {
-		const url: string = "https://localhost:5001/api/products";
-
-		const fetchData = async () => {
-			const response = await fetch(url);
-			const data = await response.json();
-
-			setProducts(data);
-		};
-		fetchData();
-	}, []);
 
 	// Handlers
 	function handleDarkMode(): void {
@@ -60,7 +48,8 @@ function App() {
 				}}
 			>
 				<Container maxWidth="xl" sx={{ mt: 8 }}>
-					<Catalog products={products} />
+					{/* <Catalog /> */}
+					<Outlet />
 				</Container>
 			</Box>
 		</ThemeProvider>

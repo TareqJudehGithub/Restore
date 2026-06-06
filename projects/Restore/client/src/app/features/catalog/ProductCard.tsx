@@ -1,4 +1,5 @@
 import type { Product } from "../../models/product";
+import { NavLink } from "react-router";
 import {
 	Card,
 	CardMedia,
@@ -6,6 +7,8 @@ import {
 	Typography,
 	CardActions,
 	Button,
+	ListItem,
+	List,
 } from "@mui/material";
 
 export default function ProductCard({ product }: ProductCardProps) {
@@ -37,9 +40,21 @@ export default function ProductCard({ product }: ProductCardProps) {
 					${(product.price / 100).toFixed(2)}
 				</Typography>
 			</CardContent>
-			<CardActions sx={{ justifyContent: "space-between" }}>
+			<CardActions
+				sx={{
+					display: "flex",
+					justifyContent: "space-between",
+				}}
+			>
 				<Button>Add to cart</Button>
-				<Button>View</Button>
+				{/* <Button>View</Button> */}
+				<Button
+					component={NavLink}
+					to={`/catalog/${product.id}`}
+					sx={navLinkStyleDark}
+				>
+					View
+				</Button>
 			</CardActions>
 		</Card>
 	);
@@ -47,4 +62,28 @@ export default function ProductCard({ product }: ProductCardProps) {
 
 type ProductCardProps = {
 	product: Product;
+};
+
+const navLinkStyleDark = {
+	justifyContent: "center",
+	color: "inherit",
+	textDecoration: "none",
+	":hover": {
+		color: "gray",
+		fontWeight: "bold",
+	},
+	"&.active": {
+		color: "#baecf9",
+	},
+};
+const navLinkStyleLight = {
+	justifyContent: "center",
+	color: "inherit",
+	textDecoration: "none",
+	":hover": {
+		color: "#baecf9",
+	},
+	"&.active": {
+		color: "#baecf9",
+	},
 };

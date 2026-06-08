@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import type { Product } from "../../models/product";
+import { useFetchProductDetailsQuery } from "./catalogApi";
 import Grid from "@mui/material/Grid";
 import {
 	Button,
@@ -17,25 +16,41 @@ import {
 
 export default function ProductDetails() {
 	const { id } = useParams();
-	const [product, setProduct] = useState<Product | null>(null);
 
-	// Fetch item
-	useEffect(() => {
-		const url = `https://localhost:5001/api/products/${id}`;
+	const { data: product, isLoading } = useFetchProductDetailsQuery(
+		id ? +id : 0,
+	);
 
-		const fetchData = async () => {
-			try {
-				const response = await fetch(url);
-				const data = await response.json();
-				setProduct(data);
-			} catch (err) {
-				console.log(err);
-			}
-		};
-		fetchData();
-	}, [id]);
+	//#region useEffect - getProduct by id
+	// const [product, setProduct] = useState<Product | null>(null);
 
-	if (!product) return <div>Loading...</div>;
+	// // Fetch item
+	// useEffect(() => {
+	// 	const url = `https://localhost:5001/api/products/${id}`;
+
+	// 	const fetchData = async () => {
+	// 		try {
+	// 			const response = await fetch(url);
+	// 			const data = await response.json();
+	// 			setProduct(data);
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 		}
+	// 	};
+	// 	fetchData();
+	// }, [id]);
+	//#endregion
+
+	if (!product || isLoading) return <div>Loading...</div>;
+
+	const productDetails: { label: string; value: string | number }[] = [
+		{ label: "Brand", value: product.brand },
+		// { label: "Name", value: product.name },
+		{ label: "Type", value: product.type },
+		{ label: "Description", value: product.description },
+		{ label: "quantity In Stock", value: product.quantityInStock },
+	];
+
 	return (
 		<Grid container spacing={6} sx={{ mx: "auto" }}>
 			<Grid size={6}>
@@ -53,22 +68,19 @@ export default function ProductDetails() {
 				</Typography>
 
 				<TableContainer>
-					<Table>
-						<TableHead>
-							<TableRow>
-								<TableCell align="right">Brand</TableCell>
-								<TableCell align="right">Description</TableCell>
-								<TableCell align="right">Quantity</TableCell>
-								<TableCell align="right">Type</TableCell>
-							</TableRow>
-						</TableHead>
+					<Table
+						// Increase cell font size
+						sx={{ "& td": { fontSize: "1rem" } }}
+					>
 						<TableBody>
-							<TableRow>
-								<TableCell align="right">{product.brand}</TableCell>
-								<TableCell align="right">{product.description}</TableCell>
-								<TableCell align="right">{product.quantityInStock}</TableCell>
-								<TableCell align="right">{product.type}</TableCell>
-							</TableRow>
+							{productDetails.map((product, index) => (
+								<TableRow key={index}>
+									<TableCell align="left" sx={{ fontWeight: "bold" }}>
+										{product.label}
+									</TableCell>
+									<TableCell align="left">{product.value}</TableCell>
+								</TableRow>
+							))}
 						</TableBody>
 					</Table>
 				</TableContainer>

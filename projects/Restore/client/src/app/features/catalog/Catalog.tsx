@@ -1,27 +1,29 @@
-import { useEffect, useState } from "react";
-import type { Product } from "../../models/product";
-
+import { useFetchProductsQuery } from "./catalogApi";
 import ProductList from "./ProductList";
-// OR: import Button from "@mui/material/Button";
 
 export default function Catalog() {
-	const [products, setProducts] = useState<Product[]>([]);
+	const { data, isLoading } = useFetchProductsQuery();
 
-	useEffect(() => {
-		const url: string = "https://localhost:5001/api/products";
+	if (isLoading || !data) return <h3>Loading...</h3>;
 
-		const fetchData = async () => {
-			const response = await fetch(url);
-			const data = await response.json();
+	////#region useEffect hook
+	//const [products, setProducts] = useState<Product[]>([]);
 
-			setProducts(data);
-		};
-		fetchData();
-	}, []);
+	// useEffect(() => {
+	// 	const url: string = "https://localhost:5001/api/products";
 
+	// 	const fetchData = async () => {
+	// 		const response = await fetch(url);
+	// 		const data = await response.json();
+
+	// 		setProducts(data);
+	// 	};
+	// 	fetchData();
+	// }, []);
+	////#endregion
 	return (
 		<>
-			<ProductList products={products} />
+			<ProductList products={data} />
 		</>
 	);
 }

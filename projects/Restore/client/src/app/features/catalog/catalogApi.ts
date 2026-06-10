@@ -1,7 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query";
-import type { Product } from "../../models/product";
 import { baseQueryWithErrorHandling } from "../../api/baseApi";
+
+import type { Product } from "../../models/product";
 
 // Define a service using a base URL and expected endpoints
 export const catalogApi = createApi({
@@ -9,10 +10,12 @@ export const catalogApi = createApi({
 	// baseQuery: fetchBaseQuery({ baseUrl: "https://localhost:5001/api" }),
 	baseQuery: baseQueryWithErrorHandling,
 	endpoints: (builder) => ({
+		// GetProducts
 		fetchProducts: builder.query<Product[], void>({
 			// Define the baseQuery endpoints
 			query: () => ({ url: "products" }),
 		}),
+		// GetProduct
 		fetchProductDetails: builder.query<Product, number>({
 			query: (productId) => ({ url: `products/${productId}` }),
 		}),

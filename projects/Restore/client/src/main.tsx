@@ -1,12 +1,12 @@
-import * as React from "react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import { RouterProvider } from "react-router";
 import { router } from "./app/routes/Routes";
 
-import { store } from "./app/store/store";
 import { Provider } from "react-redux";
+import { store } from "./app/store/store";
+
 // Styles
 import "./app/layout/styles.css";
 import "@fontsource/roboto/300.css";
@@ -22,11 +22,10 @@ createRoot(document.getElementById("root")!).render(
 	</StrictMode>,
 );
 
-{
-	/*
-import { ApiProvider } from "@reduxjs/toolkit/query/react";
-import { catalogApi } from "./app/features/catalog/catalogApi";
- <ApiProvider api={catalogApi}>
-	<RouterProvider router={router} />
-</ApiProvider> */
-}
+//#region ApiProvider - no store
+// import { ApiProvider } from "@reduxjs/toolkit/query/react";
+// import { catalogApi } from "./app/features/catalog/catalogApi";
+//  <ApiProvider api={catalogApi}>
+// 	<RouterProvider router={router} />
+// </ApiProvider>
+//#endregion

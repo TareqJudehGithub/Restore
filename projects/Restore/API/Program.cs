@@ -1,4 +1,5 @@
 using API.Data;
+using API.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,12 +29,24 @@ builder.Services.AddDbContext<StoreSqlDbContext>(Options =>
 builder.Services.AddCors();
 #endregion
 
+#region Exception 
+builder.Services.AddTransient<ExceptionMiddleware>();
 #endregion
 
-#region Middlewares
+#endregion
+
+// Build the project
 var app = builder.Build();
 
-#region CORS Middleware
+#region Middlewares
+
+#region Exception
+app.UseMiddleware<ExceptionMiddleware>();
+#endregion
+
+#region CORS
+app.MapControllers();
+
 app.UseCors(opt =>
 {
   opt
@@ -43,6 +56,9 @@ app.UseCors(opt =>
 });
 #endregion
 
+#region Error Handling
+
+#endregion
 app.MapControllers();
 
 #region SQLite Middleware

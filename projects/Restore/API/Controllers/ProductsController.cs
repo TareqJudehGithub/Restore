@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-
-using API.Entities;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +6,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")] //http:/localhost:5000/api/products
     [ApiController] // attribute to make this class a controller
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseApiController
     {
         #region SQLITE
         private readonly StoreContext _dbContext;

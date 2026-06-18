@@ -1,4 +1,3 @@
-using System;
 using API.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +14,8 @@ public class StoreSqlDbContext : DbContext
 
     #region DBsets
     public DbSet<Product> Products { get; set; }
+    public DbSet<Basket> Baskets { get; set; }
+    // public DbSet<BasketItem> basketItems { get; set; }
     #endregion
 
     #region Seeding and inserting data into the DB

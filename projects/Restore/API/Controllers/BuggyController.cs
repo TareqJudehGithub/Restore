@@ -16,7 +16,6 @@ public class BuggyController : BaseApiController
     ModelState.AddModelError("Problem2", "Second error");
 
     return ValidationProblem();
-    return BadRequest("Validation Error code: 400");
   }
   [HttpGet("bad-request")]
   public IActionResult GetBadRequest()

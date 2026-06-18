@@ -1,6 +1,6 @@
 namespace API.DTOs.Product;
 
-public class GetProductDto
+public class CreateProductDto
 {
   public int Id { get; set; }
   public required string Name { get; set; }

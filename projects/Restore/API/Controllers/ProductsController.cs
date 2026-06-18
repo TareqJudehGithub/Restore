@@ -3,6 +3,7 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using API.Entities;
 using API.DTOs.Product;
+using API.Extensions;
 
 namespace API.Controllers
 {
@@ -36,14 +37,14 @@ namespace API.Controllers
 
             var productDto = productModel.Select(q => new GetProductDto()
             {
-                IdDto = q.Id,
-                NameDto = q.Name,
-                DescriptionDto = q.Description,
-                PriceDto = q.Price,
-                PictureUrlDto = q.PictureUrl,
-                TypeDto = q.Type,
-                BrandDto = q.Brand,
-                QuantityInStockDto = q.QuantityInStock
+                Id = q.Id,
+                Name = q.Name,
+                Description = q.Description,
+                Price = q.Price,
+                PictureUrl = q.PictureUrl,
+                Type = q.Type,
+                Brand = q.Brand,
+                QuantityInStock = q.QuantityInStock
             });
             return Ok(productDto);
         }
@@ -58,19 +59,7 @@ namespace API.Controllers
 
             if (productModel == null) return NotFound();
 
-            var productDto = new GetProductDto()
-            {
-                IdDto = productModel.Id,
-                NameDto = productModel.Name,
-                DescriptionDto = productModel.Description,
-                PriceDto = productModel.Price,
-                PictureUrlDto = productModel.PictureUrl,
-                TypeDto = productModel.Type,
-                BrandDto = productModel.Brand,
-                QuantityInStockDto = productModel.QuantityInStock
-            };
-
-            return Ok(productModel);
+            return Ok(productModel.ToDto());
         }
 
         // POST: //https://localhost/api/products
@@ -92,23 +81,72 @@ namespace API.Controllers
             await _dbContext.Products.AddAsync(newProduct);
             await _dbContext.SaveChangesAsync();
 
-            var newProductDto = new GetProductDto()
-            {
-                IdDto = newProduct.Id,
-                NameDto = newProduct.Name,
-                DescriptionDto = newProduct.Description,
-                PriceDto = newProduct.Price,
-                PictureUrlDto = newProduct.PictureUrl,
-                TypeDto = newProduct.Type,
-                BrandDto = newProduct.Brand,
-                QuantityInStockDto = newProduct.QuantityInStock
-            };
-
             return CreatedAtAction(
                 actionName: nameof(GetProduct),
-                routeValues: new { id = newProductDto.IdDto },
-                value: newProductDto
+                routeValues: new { id = newProduct.ToDto().Id },
+                value: newProduct.ToDto()
             );
         }
+        //PUT: https:/localhost/api/products/3
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> UpdateProduct([FromRoute] int id, UpdateProductDto updateDto)
+        {
+
+            if (id != updateDto.Id)
+            {
+                return BadRequest("DTO ID mismatch between URL and request body.");
+            }
+
+            var product = await _dbContext.Products
+            .FirstOrDefaultAsync(q => q.Id == id);
+
+            if (product is null)
+            {
+                return NotFound("Product was not found");
+            }
+
+            product.Id = updateDto.Id;
+            product.Name = updateDto.Name;
+            product.Description = updateDto.Description;
+            product.Price = updateDto.PriceDto;
+            product.PictureUrl = updateDto.PictureUrl;
+            product.Type = updateDto.Type;
+            product.Brand = updateDto.Brand;
+            product.QuantityInStock = updateDto.QuantityInStock;
+
+            await _dbContext.SaveChangesAsync();
+
+            return CreatedAtAction(
+                         actionName: nameof(GetProduct),
+                         routeValues: new { id = product.ToDto().Id },
+                         value: product.ToDto()
+                     );
+
+        }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        // DELETE: https:/localhost/api/products/3
+        public async Task<IActionResult> DeleteProduct([FromRoute] int id)
+        {
+            var product = await _dbContext.Products
+            .FirstOrDefaultAsync(q => q.Id == id);
+
+            if (product is null)
+            {
+                return NotFound("Product not found");
+            }
+            if (id != product.Id)
+            {
+                return BadRequest("Invalid product Id");
+            }
+
+            _dbContext.Products.Remove(product);
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction(actionName: nameof(GetProducts));
+        }
     }
+
 }

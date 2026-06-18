@@ -38,6 +38,7 @@ public partial class Basket
     }
     else
     {
+      // Update item quantity in Basket
       existingItem.Quantity += quantity;
     }
   }

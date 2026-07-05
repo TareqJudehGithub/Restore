@@ -54,10 +54,17 @@ namespace API.Controllers
             .Filter(types: productParams.Types, brands: productParams.Brands)
             .AsQueryable();
 
-            var productModel = await query.ToListAsync();
+            var productModel = await PagedList<Product>
+            .ToPagedList(
+                query,
+                productParams.PageNumber,
+                productParams.PageSize
+                );
+            Response.AddPaginationHeader(productModel.Metadata);
 
             // Map domain model to dto and return it
-            var productDto = productModel.Select(q => new GetProductDto()
+            var productsDto = productModel
+            .Select(q => new GetProductDto()
             {
                 Id = q.Id,
                 Name = q.Name,
@@ -68,7 +75,8 @@ namespace API.Controllers
                 Brand = q.Brand,
                 QuantityInStock = q.QuantityInStock
             });
-            return Ok(productDto);
+
+            return productModel;
         }
 
         // GET: //https:/localhost/api/products/3

@@ -1,6 +1,8 @@
+import { Link, NavLink } from "react-router";
 import { useAppSelector, useAppDispatch } from "../store/store";
+import { useFetchBasketQuery } from "../features/basket/basketApi";
+import { setDarkMode } from "./uiSlice";
 
-import { NavLink } from "react-router";
 import {
 	AppBar,
 	Toolbar,
@@ -12,12 +14,25 @@ import {
 	Badge,
 	LinearProgress,
 } from "@mui/material";
+
 import { LightMode, DarkMode, ShoppingCart } from "@mui/icons-material";
-import { setDarkMode } from "./uiSlice";
+import type { Item } from "../models/basket";
 
 export default function NavBar() {
 	const { isLoading, darkMode } = useAppSelector((state) => state.ui);
 	const dispatch = useAppDispatch();
+
+	const { data: basket } = useFetchBasketQuery();
+
+	// Single item count
+	const itemCount =
+		basket?.items.reduce(
+			(sum: number, item: Item) => sum + item.quantity,
+			0,
+		) || 0;
+
+	//TODO: Cart total
+
 	return (
 		<AppBar position="fixed">
 			<Toolbar
@@ -98,8 +113,8 @@ export default function NavBar() {
 					}}
 				>
 					<Box>
-						<IconButton size="medium">
-							<Badge badgeContent="0" color="secondary">
+						<IconButton size="medium" component={Link} to="/basket">
+							<Badge badgeContent={itemCount} color="secondary">
 								<ShoppingCart sx={{ color: "inherit" }} />
 							</Badge>
 						</IconButton>

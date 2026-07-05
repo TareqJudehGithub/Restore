@@ -3,6 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { useDispatch, useSelector } from "react-redux";
 
 import { catalogApi } from "../features/catalog/catalogApi";
+import { basketApi } from "../features/basket/basketApi";
 import { errorApi } from "../features/about/errorApi";
 import { counterSlice } from "../features/contact/counterReducer";
 import { uiSlice } from "../layout/uiSlice";
@@ -13,6 +14,7 @@ export const store = configureStore({
 		// Add the generated reducer as a specific top-level slice
 		// Products:
 		[catalogApi.reducerPath]: catalogApi.reducer,
+		[basketApi.reducerPath]: basketApi.reducer,
 
 		// Error handling:
 		[errorApi.reducerPath]: errorApi.reducer,
@@ -25,7 +27,11 @@ export const store = configureStore({
 	},
 	// Add the API middleware to the store, which is necessary for handling asynchronous actions and caching
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware().concat(catalogApi.middleware, errorApi.middleware),
+		getDefaultMiddleware().concat(
+			catalogApi.middleware,
+			basketApi.middleware,
+			errorApi.middleware,
+		),
 });
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors

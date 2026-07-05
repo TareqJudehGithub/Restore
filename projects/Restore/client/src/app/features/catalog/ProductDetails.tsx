@@ -1,6 +1,14 @@
+import React, { useEffect, useState, type ChangeEvent } from "react";
 import { useParams } from "react-router";
 import { useFetchProductDetailsQuery } from "./catalogApi";
 import Grid from "@mui/material/Grid";
+import {
+	useAddBasketItemMutation,
+	useFetchBasketQuery,
+	useIncreaseBasketItemQtyMutation,
+	useRemoveBasketItemMutation,
+} from "../basket/basketApi";
+
 import {
 	Button,
 	Divider,
@@ -8,42 +16,72 @@ import {
 	TableBody,
 	TableCell,
 	TableContainer,
-	TableHead,
 	TableRow,
 	TextField,
 	Typography,
 } from "@mui/material";
+import type { Item } from "../../models/basket";
 
 export default function ProductDetails() {
-	const { id } = useParams();
+	const { data: basket } = useFetchBasketQuery();
+	const [addBasketItem] = useAddBasketItemMutation();
+	const [increaseBasketItemQty] = useIncreaseBasketItemQtyMutation();
+	const [removeBasketItem] = useRemoveBasketItemMutation();
 
-	const { data: product, isLoading } = useFetchProductDetailsQuery(
-		id ? +id : 0,
+	const params = useParams();
+	const item = basket?.items?.find(
+		(item) => item.productId === Number(params.id),
 	);
-
-	//#region useEffect - getProduct by id
-	// const [product, setProduct] = useState<Product | null>(null);
-
-	// // Fetch item
-	// useEffect(() => {
-	// 	const url = `https://localhost:5001/api/products/${id}`;
-
-	// 	const fetchData = async () => {
-	// 		try {
-	// 			const response = await fetch(url);
-	// 			const data = await response.json();
-	// 			setProduct(data);
-	// 		} catch (err) {
-	// 			console.log(err);
-	// 		}
-	// 	};
-	// 	fetchData();
-	// }, [id]);
+	//#region States
+	const [quantity, setQuantity] = useState<number>(1);
+	useEffect(() => {
+		// Set the item quantity to (quantity state)
+		if (item) setQuantity(item.quantity);
+	}, [item]);
 	//#endregion
 
-	if (!product || isLoading) return <div>Loading...</div>;
+	const { data: product, isLoading } = useFetchProductDetailsQuery(
+		Number(params.id) || 0,
+	);
 
-	const productDetails: { label: string; value: string | number }[] = [
+	if (!product || isLoading) return <div>Loading...</div>;
+	//#region Helper functions for updating item quantity
+
+	const updateQuantity = (item: Item | undefined): number =>
+		item ? Math.abs(quantity - item.quantity) : quantity;
+
+	const handleUpdateBasket = () => {
+		// const updateQuantity = item
+		// 	? Math.abs(quantity - item.quantity)
+		// 	: quantity;
+
+		// In case we don't have (the) item in the basket/cart
+		if (!item) {
+			addBasketItem({ product, quantity: updateQuantity(item) });
+		}
+		if (item != null) {
+			if (quantity > item.quantity) {
+				increaseBasketItemQty({
+					productId: product.id,
+					quantity: updateQuantity(item),
+				});
+			}
+			if (quantity < item.quantity) {
+				removeBasketItem({
+					productId: product.id,
+					quantity: updateQuantity(item),
+				});
+			}
+		}
+	};
+	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+		event.preventDefault();
+		const value = Number(event.currentTarget.value);
+		if (value >= 0) setQuantity(value);
+	};
+	//#endregion
+
+	const productDetails: ProductProperties[] = [
 		{ label: "Brand", value: product.brand },
 		// { label: "Name", value: product.name },
 		{ label: "Type", value: product.type },
@@ -63,9 +101,7 @@ export default function ProductDetails() {
 			<Grid size={6}>
 				<Typography variant="h3">{product.name}</Typography>
 				<Divider sx={{ mb: 2 }} />
-				<Typography variant="h4">
-					{(product.price / 100).toFixed(2)}
-				</Typography>
+				<Typography variant="h4">{product.price.toFixed(2)}</Typography>
 
 				<TableContainer>
 					<Table
@@ -92,12 +128,22 @@ export default function ProductDetails() {
 							type="number"
 							label="Quantity in basket"
 							fullWidth
-							defaultValue={1}
+							value={quantity}
+							onChange={handleInputChange}
 						/>
 					</Grid>
 					<Grid size={6}>
-						<Button color="primary" size="large" variant="contained" fullWidth>
-							Add to Basket
+						<Button
+							onClick={handleUpdateBasket}
+							disabled={
+								quantity === item?.quantity || (!item && quantity === 0)
+							}
+							color="primary"
+							size="large"
+							variant="contained"
+							fullWidth
+						>
+							{item ? <span>Update Quantity</span> : <span>Add to Cart</span>}
 						</Button>
 					</Grid>
 				</Grid>
@@ -105,3 +151,28 @@ export default function ProductDetails() {
 		</Grid>
 	);
 }
+
+type ProductProperties = {
+	label: string;
+	value: string | number;
+};
+
+//#region useEffect - getProduct by id
+// const [product, setProduct] = useState<Product | null>(null);
+
+// // Fetch item
+// useEffect(() => {
+// 	const url = `https://localhost:5001/api/products/${id}`;
+
+// 	const fetchData = async () => {
+// 		try {
+// 			const response = await fetch(url);
+// 			const data = await response.json();
+// 			setProduct(data);
+// 		} catch (err) {
+// 			console.log(err);
+// 		}
+// 	};
+// 	fetchData();
+// }, [id]);
+//#endregion

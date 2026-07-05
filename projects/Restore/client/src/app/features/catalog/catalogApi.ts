@@ -7,8 +7,10 @@ import type { Product } from "../../models/product";
 // Define a service using a base URL and expected endpoints
 export const catalogApi = createApi({
 	reducerPath: "catalogApi",
+
 	// baseQuery: fetchBaseQuery({ baseUrl: "https://localhost:5001/api" }),
 	baseQuery: baseQueryWithErrorHandling,
+	refetchOnFocus: true,
 	endpoints: (builder) => ({
 		// GetProducts
 		fetchProducts: builder.query<Product[], void>({

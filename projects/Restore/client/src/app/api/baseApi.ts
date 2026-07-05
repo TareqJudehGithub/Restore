@@ -9,6 +9,7 @@ import { startLoading, stopLoading } from "../layout/uiSlice";
 
 const customBaseQuery = fetchBaseQuery({
 	baseUrl: "https://localhost:5001/api",
+	credentials: "include",
 	// responseHandler: "content-type",
 });
 

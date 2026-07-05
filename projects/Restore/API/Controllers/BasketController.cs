@@ -46,10 +46,8 @@ public class BasketController : BaseApiController
 
     basketModel ??= CreateBasket();
 
-
     // get product
     var product = await _dbContext.Products
-
     .FirstOrDefaultAsync(q => q.Id == productId);
 
     if (product is null)
@@ -69,7 +67,54 @@ public class BasketController : BaseApiController
     {
       return CreatedAtAction(
         actionName: nameof(GetBasket),
-        routeValues: new { id = basketModel.ToDto().BasketDtoId },
+        routeValues: new { id = basketModel.ToDto().BasketId },
+        value: basketModel.ToDto()
+      );
+    }
+    else
+    {
+      return BadRequest("Problem saving/updating Basket.");
+    }
+  }
+  [HttpPut]
+  public async Task<ActionResult<BasketDto>> IncreaseBasketItemQty(int productId, int quantity)
+  {
+
+    // get product
+    var product = await _dbContext.Products
+    .FirstOrDefaultAsync(q => q.Id == productId);
+
+    if (product is null)
+    {
+      return BadRequest("Problem adding item to Basket error.");
+    }
+
+    var basketModel = await RetrieveBasket();
+    if (basketModel is null)
+    {
+      return NotFound("Basket not found. Error 404");
+    }
+    var basketItem = await _dbContext.Products
+       .FirstOrDefaultAsync(q => q.Id == productId);
+
+
+    if (basketItem is null)
+    {
+      return NotFound("Item not found. Error 404");
+    }
+    // Increase item quantity
+    basketModel.AddItem(product: product, quantity: quantity);
+
+    // save changes
+    var result = await _dbContext.SaveChangesAsync();
+
+    // Map basket model to Dto
+
+    if (result > 0)
+    {
+      return CreatedAtAction(
+        actionName: nameof(GetBasket),
+        routeValues: new { id = basketModel.ToDto().BasketId },
         value: basketModel.ToDto()
       );
     }
@@ -100,16 +145,21 @@ public class BasketController : BaseApiController
     // Remove item or reduce its quantity
     basketModel.RemoveItem(product: basketItem, quantity: quantity);
 
+    // Check if BasketItems is empty
+    if (!basketModel.Items.Any())
+    {
+      _dbContext.Baskets.Remove(basketModel);
+    }
+
     // Save changes
     var result = await _dbContext.SaveChangesAsync();
 
     if (result > 0)
     {
-
       return CreatedAtAction(
 
       actionName: nameof(GetBasket),
-      routeValues: new { id = basketModel.ToDto().BasketDtoId },
+      routeValues: new { id = basketModel.ToDto().BasketId },
       value: basketModel.ToDto()
       );
     }

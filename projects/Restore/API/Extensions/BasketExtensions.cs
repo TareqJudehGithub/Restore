@@ -10,18 +10,18 @@ public static class BasketExtensions
     // Map basket model to Dto
     var basketDto = new BasketDto()
     {
-      BasketDtoId = basket.BasketId,
-      ItemsDto = basket.Items
+      BasketId = basket.BasketId,
+      Items = basket.Items
       .Select(q =>
       new BasketItemDto
       {
-        ProductIdDto = q.ProductId,
-        NameDto = q.Product.Name,
-        PriceDto = q.Product.Price,
-        BrandDto = q.Product.Brand,
-        TypeDto = q.Product.Type,
-        PictureUrlDto = q.Product.PictureUrl,
-        QuantityDto = q.Quantity
+        ProductId = q.ProductId,
+        Name = q.Product.Name,
+        Price = q.Product.Price,
+        Brand = q.Product.Brand,
+        Type = q.Product.Type,
+        PictureUrl = q.Product.PictureUrl,
+        Quantity = q.Quantity
       }).
       ToList()
     };

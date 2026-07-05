@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using API.Entities;
 using API.DTOs.Product;
 using API.Extensions;
+using API.RequestHelpers;
 
 namespace API.Controllers
 {
@@ -31,10 +32,31 @@ namespace API.Controllers
 
         // GET: //https:/localhost/api/products
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<ActionResult<List<Product>>> GetProducts
+        ([FromQuery] ProductParams productParams)
         {
-            var productModel = await _dbContext.Products.ToListAsync();
+            #region Without using ext.methods          
+            // var query = _dbContext.Products.AsQueryable();
 
+            // query = orderBy switch
+            // {
+            //     "price" => query.OrderBy(q => q.Price),
+            //     "priceDesc" => query.OrderByDescending(q => q.Price),
+            //     "name" => query.OrderBy(q => q.Name),
+            //     "nameDesc" => query.OrderByDescending(q => q.Name),
+            //     _ => query.OrderBy(q => q.Name)
+            // };
+            #endregion
+
+            var query = _dbContext.Products
+            .Sort(productParams.OrderBy)
+            .Search(productParams.SearchTerm)
+            .Filter(types: productParams.Types, brands: productParams.Brands)
+            .AsQueryable();
+
+            var productModel = await query.ToListAsync();
+
+            // Map domain model to dto and return it
             var productDto = productModel.Select(q => new GetProductDto()
             {
                 Id = q.Id,
@@ -52,7 +74,7 @@ namespace API.Controllers
         // GET: //https:/localhost/api/products/3
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<IActionResult> GetProduct([FromRoute] int id)
+        public async Task<ActionResult<GetProductDto>> GetProduct([FromRoute] int id)
         {
             var productModel = await _dbContext.Products
             .FirstOrDefaultAsync(x => x.Id == id);
@@ -64,7 +86,7 @@ namespace API.Controllers
 
         // POST: //https://localhost/api/products
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(Product product)
+        public async Task<ActionResult<GetProductDto>> CreateProduct(Product product)
         {
             var newProduct = new Product()
             {
@@ -105,11 +127,11 @@ namespace API.Controllers
             {
                 return NotFound("Product was not found");
             }
-
+            // Update product and save
             product.Id = updateDto.Id;
             product.Name = updateDto.Name;
             product.Description = updateDto.Description;
-            product.Price = updateDto.PriceDto;
+            product.Price = updateDto.Price;
             product.PictureUrl = updateDto.PictureUrl;
             product.Type = updateDto.Type;
             product.Brand = updateDto.Brand;

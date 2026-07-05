@@ -2,6 +2,6 @@ namespace API.DTOs;
 
 public class BasketDto
 {
-  public required string BasketDtoId { get; set; }
-  public List<BasketItemDto> ItemsDto { get; set; } = [];
+  public required string BasketId { get; set; }
+  public List<BasketItemDto> Items { get; set; } = [];
 }

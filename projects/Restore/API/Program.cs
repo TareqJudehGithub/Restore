@@ -52,6 +52,7 @@ app.UseCors(opt =>
   opt
   .AllowAnyHeader()
   .AllowAnyMethod()
+  .AllowCredentials() // Allows our browser to send up the cookie
   .WithOrigins("https://localhost:3000");
 });
 #endregion

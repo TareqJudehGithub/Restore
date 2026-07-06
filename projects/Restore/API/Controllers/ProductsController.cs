@@ -79,6 +79,25 @@ namespace API.Controllers
             return productModel;
         }
 
+        // GET: //https:/localhost/api/products/filters
+        [HttpGet("filters")]
+        public async Task<ActionResult> GetFilters()
+        {
+            var types = await _dbContext.Products
+                .Select(q => q.Type)
+                .Distinct()
+                .OrderBy(type => type)
+                .ToListAsync();
+
+            var brands = await _dbContext.Products
+                .Select(q => q.Brand)
+                .Distinct()
+                .OrderBy(brand => brand)
+                .ToListAsync();
+
+            return Ok(new { brands, types });
+        }
+
         // GET: //https:/localhost/api/products/3
         [HttpGet]
         [Route("{id:int}")]
@@ -91,6 +110,7 @@ namespace API.Controllers
 
             return Ok(productModel.ToDto());
         }
+
 
         // POST: //https://localhost/api/products
         [HttpPost]

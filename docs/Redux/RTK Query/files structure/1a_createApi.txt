@@ -1,0 +1,72 @@
+createApi  
+
+  - The core function of RTK Query.
+  - used to define backend endpoints and completely automate data fetching, caching, and 
+    state management. 
+  - createApi generates an "API slice" containing Redux logic, reducer paths, and custom 
+  React hooks.
+
+  - Use createApi (part of RTK Query) exclusively for managing server state—fetching, caching, and synchronizing data from an external API.
+
+
+  createApi should always be imported from "@reduxjs/toolkit/query/react"
+
+  import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+  import { fetchBaseQuery } from "@reduxjs/toolkit/query";
+
+  import {Country} from "../features/models/country";
+
+  const countryApi = createApi({
+    reducerPath: "countryApi",
+    baseQuery: fetchBaseQuery({baseUrl: "https://localhost:5001/api"})
+    endpoints: (builder) => ({
+      fetchCountries: builder.query<Country[], void>({
+        query: () => ({url: "countries"})
+      })
+      fetchCountryDetails: builder.query<Country, number>({
+        query: (id) => ({url: `countries/${id}`})
+      })
+    })
+  })
+
+  export {useFetchCountriesQuery, useFetchCountryDetailsQuery} = countryApi;
+
+
+Another createApi Example:
+
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+  export const productsApi = createApi({
+    // Unique key indicating where the cache will store data in Redux
+    reducerPath: 'productsApi', 
+    
+    // Base configuration for network requests
+    baseQuery: fetchBaseQuery({ baseUrl: 'https://example.com' }), 
+    
+    // Tag types used for automated caching and invalidation
+    tagTypes: ['Product'], 
+    
+    // List of queries (GET) and mutations (POST, PUT, DELETE)
+    endpoints: (builder) => ({
+      // Query: Fetches data
+      getProducts: builder.query({
+        query: () => 'products',
+        providesTags: ['Product'],
+      }),
+      
+      // Mutation: Changes data on the server
+      addProduct: builder.mutation({
+        query: (newProduct) => ({
+          url: 'products',
+          method: 'POST',
+          body: newProduct,
+        }),
+        // Invalidates cache tag to trigger an automatic refetch of getProducts
+        invalidatesTags: ['Product'], 
+      }),
+    }),
+  });
+
+  // RTK Query auto-generates custom hooks based on endpoint names
+  export const { useGetProductsQuery, useAddProductMutation } = productsApi;
+

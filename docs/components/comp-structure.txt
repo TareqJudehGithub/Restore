@@ -1,0 +1,7 @@
+Project Components Structure
+
+  App 
+    - Catalog
+      - ProductsList
+        - ProductCard
+        

@@ -1,0 +1,22 @@
+createSlice 
+
+  The createSlice function from Redux Toolkit is the standard way to write Redux logic. It accepts an initial state and an object of reducer functions, then automatically generates action creators and action types matching your reducers.
+  
+  Use createSlice for managing client state—local UI state, themes, modals, or form inputs that live purely inside the browser.
+
+  Import createSlice from "@reduxjs/toolkit";
+
+
+    import { createSlice } from "@reduxjs/toolkit";
+
+    export const uiSlice = createSlice({
+      name: "ui",
+      initialState: {
+
+      },
+      reducers: {
+        
+      }
+    })
+
+    export const { startLoading, stopLoading } = uiSlice.actions;

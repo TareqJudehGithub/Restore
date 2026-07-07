@@ -1,0 +1,55 @@
+Redux
+
+  - Redux is a store for client-side applications state.
+  - We can update state from any location globally using Redux.
+
+
+Installation
+
+  npm install @reduxjs/toolkit
+  npm install react-redux
+
+
+Configuration
+
+  1. counterReducer
+
+    export default function counterReducer(state = initialState) {
+      return state;
+    }
+
+    export type CounterState = {
+      data: number;
+    };
+    const initialState: CounterState = {
+      data: 42,
+    };
+
+
+  2. Create a store 
+    Under src, or app folder depending on your project folder structure, create a 
+    folder (name it store), and create file store.ts
+
+    import { legacy_createStore } from "@reduxjs/toolkit";
+    import counterReducer from "../features/contact/counterReducer";
+
+    export function configureTheStore() {
+      return legacy_createStore(counterReducer);
+    }
+
+  3. import { useSelector } from "react-redux";
+
+import type { CounterState } from "./counterReducer";
+import { Typography } from "@mui/material";
+
+export default function ContactPage() {
+	const data = useSelector((state: CounterState) => state.data);
+	return (
+		<>
+			<Typography variant="h2">Contact page</Typography>
+			<Typography variant="body1">This is data: {data}</Typography>
+		</>
+	);
+}
+
+

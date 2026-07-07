@@ -1,0 +1,6 @@
+API Browser security warning
+
+  In order to bypass the browser security certificate warning, run the following command
+  inside the API folder:
+    $ dotnet dev-certs https --clean
+    $ dotnet dev-certs https --trust

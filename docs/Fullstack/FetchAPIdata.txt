@@ -1,0 +1,80 @@
+Fetching Backend API data in the frontend
+
+Project
+  - API
+  - Client
+
+1. In the client project, install: vite-plugin-mkcert plugin
+
+     $ npm install vite-plugin-mkcert -D  
+
+      In vite.config.ts:
+      // https://vite.dev/config/
+        export default defineConfig({
+          server: {
+            port: 3000,
+          },
+          plugins: [react(), mkcert()],
+        });
+
+2. Enabling CORS in the backend
+  
+  In Program.cs
+    - Register the CORS service:     
+        builder.Services.AddCors();
+
+    - Enable the CORS middleware    
+        app.UseCors(opt =>
+        {
+          opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000");
+        });
+
+    * https://localhost:3000 is the frontend (client) server port
+
+
+3. In the client, fetch the data coming from the controller API endpoint    
+
+
+  import { useEffect, useState } from "react";
+
+  function App() {
+    // States
+    const [products, setProducts] = useState<{ name: string; price: number }[]>(
+      [],
+    );
+
+    const addProduct = () => {
+      setProducts((products) => [{ name: "product3", price: 300 }, ...products]);
+    };
+
+    useEffect(() => {
+      const url: string = "http://localhost:5168/api/products";
+
+      const fetchData = async () => {
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data);
+        setProducts(data);
+      };
+      fetchData();
+    }, []);
+    return (
+      <>
+        <h1 style={{ color: "red" }}>Re-store</h1>
+        <ul>
+          {products.map((product, index) => (
+            <li key={index}>
+              {product.name} - {product.price}
+            </li>
+          ))}
+        </ul>
+        <button onClick={addProduct}>Add Product</button>
+      </>
+    );
+  }
+
+  export default App;
+
+
+
+

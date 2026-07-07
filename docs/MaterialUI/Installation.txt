@@ -1,0 +1,35 @@
+Material UI Installation 
+
+  Default installation
+
+  Run one of the following commands to add Material UI to your project:
+    $ npm install @mui/material @emotion/react @emotion/styled
+
+  Roboto font
+
+    Material UI uses the Roboto font by default. Add it to your project via Fontsource, or with the Google Fonts CDN.
+
+    $ npm install @fontsource/roboto
+
+// Imports
+
+In file main.tsx
+
+  // Styles
+  import "./app/layout/styles.css";
+  import "@fontsource/roboto/300.css";
+  import "@fontsource/roboto/400.css";
+  import "@fontsource/roboto/500.css";
+  import "@fontsource/roboto/700.css";
+
+// Icon set
+  To use the font Icon component or the prebuilt SVG Material Icons (such as those found in the icon demos), you must first install the Material Icons font. You can do so with npm, or with the Google Web Fonts CDN
+  
+    $ npm install @mui/icons-material
+
+  
+*** For React V18 and before, each command of the above must end with:
+  --legacy-peer-deps
+
+  Example: $ npm install @mui/icons-material --legacy-peer-deps
+  

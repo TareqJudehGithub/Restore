@@ -1,0 +1,127 @@
+Adding an item to the basket (frontend)
+
+1. Create a basket.ts model under models folders for the basket and basketItem
+
+  export type Basket = {
+    basketId: string;
+    items: Item[];
+  };
+
+  export type Item = {
+    productId: number;
+    name: string;
+    price: number;
+    pictureUrl: string;
+    type: string;
+    brand: string;
+    quantity: number;
+  };
+
+2. Implement a basket api using createApi, to include endpoints: fetch, add, and delete.
+
+  import { createApi } from "@reduxjs/toolkit/query/react";
+  import { baseQueryWithErrorHandling } from "../../api/baseApi";
+  import type { Basket } from "../../models/basket";
+
+  export const basketApi = createApi({
+    reducerPath: "basketApi",
+    baseQuery: baseQueryWithErrorHandling,
+    tagTypes: ["Basket"],
+    // Fetch Basket
+    endpoints: (builder) => ({
+      fetchBasket: builder.query<Basket, void>({
+        query: () => ({ url: "basket", providesTag: ["Basket"] }),
+      }),
+      // Add Item(s) to Basket
+      addBasketItem: builder.mutation<
+        Basket,
+        { productId: number; quantity: number }
+      >({
+        query: ({ productId, quantity }) => ({
+          url: `basket?productId=${productId}&quantity=${quantity}`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Basket"],
+      }),
+      removeBasketItem: builder.mutation<
+        void,
+        { productId: number; quantity: number }
+      >({
+        query: ({ productId, quantity }) => ({
+          url: `basket?productId=${productId}&quantity=${quantity}`,
+          method: "Delete",
+        }),
+        invalidatesTags: ["Basket"],
+      }),
+    }),
+  });
+
+  export const { useFetchBasketQuery, useAddBasketItemMutation } = basketApi;
+
+3. Update Redux store with basketApi
+
+  Add: 
+  	reducer: {
+  	  [basketApi.reducerPath]: basketApi.reducer,
+    }
+
+    	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware().concat(
+		
+			basketApi.middleware,
+
+		),
+
+
+4. Implement a new BasketPage component
+
+
+    import { Typography } from "@mui/material";
+    import { useFetchBasketQuery } from "./basketApi";
+
+    export default function BasketPage() {
+      const { data, isLoading } = useFetchBasketQuery();
+
+      return (
+        <>
+          <Typography variant="h2">Shipping cart</Typography>
+          {isLoading && <h3>Loading</h3>}
+          {!data && <h3>your cart is empty</h3>}
+          {data?.basketId}
+        </>
+      );
+    }
+
+ 5. Implement useAddBasketItemMutation in the ProductCard component
+
+ export default function ProductCard({ product }: ProductCardProps) {
+	const [addBasketItem, { isLoading }] = useAddBasketItemMutation();
+
+
+  return (
+
+    <Button
+					disabled={isLoading}
+					onClick={() => addBasketItem({ productId: product.id, quantity: 1 })}
+				>
+					Add to cart
+				</Button>
+				{/* <Button>View</Button> */}
+				<Button
+  )
+ }   
+
+6. Update route.ts with basket route
+    { path: "/basket", element: <BasketPage /> },
+
+
+7. Update the cart icon in NavBar component
+    <Box>
+      <IconButton size="medium" component={Link} to="/basket">
+        <Badge badgeContent="0" color="secondary">
+          <ShoppingCart sx={{ color: "inherit" }} />
+        </Badge>
+      </IconButton>
+    </Box>
+
+

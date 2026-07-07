@@ -1,0 +1,113 @@
+RTK Query
+
+  RTK Query is a powerful data fetching and caching tool. It is designed to simplify common cases for loading data in a web application, eliminating the need to hand-write data fetching & caching logic yourself.
+
+  RTK Query can elimate the need to write any thunks, reducers, action creators, or effect hooks to manage fetching data and tracking loading state. 
+
+  TK Query is included within the installation of the core Redux Toolkit package.
+
+  RTK Query includes these APIs:
+  
+    createApi(): The core of RTK Query's functionality. It allows you to define a set of "endpoints" that describe how to retrieve data from backend APIs and other async sources, including the configuration of how to fetch and transform that data. In most cases, you should use this once per app, with "one API slice per base URL" as a rule of thumb.
+
+    fetchBaseQuery(): A small wrapper around fetch that aims to simplify requests. Intended as the recommended baseQuery to be used in createApi for the majority of users.
+
+    <ApiProvider />: Can be used as a Provider if you do not already have a Redux store.
+
+    setupListeners(): A utility used to enable refetchOnMount and refetchOnReconnect behaviors.
+
+    Read more on https://redux-toolkit.js.org/rtk-query/overview
+
+ 1. Create an API service
+
+    import { createApi } from "@reduxjs/toolkit/query/react";
+    import { fetchBaseQuery } from "@reduxjs/toolkit/query";
+    import type { Product } from "../../models/product";
+
+    // Define a service using a base URL and expected endpoints
+    export const catalogApi = createApi({
+      reducerPath: "catalogApi",
+      baseQuery: fetchBaseQuery({ baseUrl: "https://localhost:5001/api" }),
+      endpoints: (builder) => ({
+        fetchProducts: builder.query<Product[], void>({
+          // Define the baseQuery endpoints
+          query: () => ({ url: "products" }),
+        }),
+        fetchProductDetails: builder.query<Product[], number>({
+          query: (productId) => ({ url: `products/${productId}` }),
+        }),
+      }),
+    });
+
+    // Export hooks for usage in functional components, which are auto-generated based on the defined endpoints
+    export const { useFetchProductDetailsQuery, useFetchProductsQuery } =
+      catalogApi;
+        
+
+2.  Add the service to your store
+
+      - app
+        - store
+          store.ts
+
+      import { configureStore } from "@reduxjs/toolkit";
+      import { counterSlice } from "../features/contact/counterReducer";
+      import { useDispatch, useSelector } from "react-redux";
+      import { catalogApi } from "../features/catalog/catalogApi";
+      import { setupListeners } from "@reduxjs/toolkit/query";
+
+      //#region Redux Store - Legacy
+      // export function configureTheStore() {
+      // 	return legacy_createStore(counterReducer);
+      // }
+      //#endregion
+
+      // Redux Store - Modern
+      export const store = configureStore({
+        // Define the reducers for the store, including the API reducer and any other slices
+        reducer: {
+          // Add the generated reducer as a specific top-level slice
+          [catalogApi.reducerPath]: catalogApi.reducer,
+          counter: counterSlice.reducer,
+        },
+        // Add the API middleware to the store, which is necessary for handling asynchronous actions and caching
+        middleware: (getDefaultMiddleware) =>
+          getDefaultMiddleware().concat(catalogApi.middleware),
+      });
+
+      // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
+      // see `setupListeners` docs - takes an optional callback as the 2nd arg for customization
+      setupListeners(store.dispatch);
+
+3.  Wrap your application with the Provider
+
+
+      import { store } from "./app/store/store";
+      import { Provider } from "react-redux";
+
+      createRoot(document.getElementById("root")!).render(
+        <StrictMode>
+          <Provider store={store}>
+            <RouterProvider router={router} />
+          </Provider>
+        </StrictMode>,
+      );
+
+
+4. Use the query in a component
+
+    import { useFetchProductsQuery } from "./catalogApi";
+    import ProductList from "./ProductList";
+    // OR: import Button from "@mui/material/Button";
+
+    export default function Catalog() {
+      const { data, isLoading } = useFetchProductsQuery();
+
+      if (isLoading || !data) return <h3>Loading...</h3>;
+
+      return (
+        <>
+          <ProductList products={data} />
+        </>
+      );
+    }

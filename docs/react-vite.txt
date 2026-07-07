@@ -1,0 +1,37 @@
+Vite  (means quick in English)
+
+  A build too that aims to provide a faster and leaner development experience for modern
+  web projects.
+
+
+  React installation using Vite
+
+  using Vite
+    $ npm create vite@latest
+
+  Updateing Vite
+    $ npm install vite@latest --save-dev  
+
+  Running Vite server:
+
+    $ npm run dev
+
+Changing Server port number (to become port number 3000)
+
+  Go to file cite.config.ts
+      import { defineConfig } from 'vite'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
+import babel from '@rolldown/plugin-babel'
+
+// https://vite.dev/config/
+export default defineConfig({
+  // ADD THIS:
+  server: {
+port: 3000
+  },
+  plugins: [
+    react(),
+    babel({ presets: [reactCompilerPreset()] })
+  ],
+})
+

@@ -1,0 +1,18 @@
+import { Button } from "@mui/material";
+
+export default function Catalog({ products, addProduct }: CatalogProps) {
+	return (
+		<>
+			<ul>
+				{products.map((product) => (
+					<li key={product.id}>
+						{product.name} - {product.price}
+					</li>
+				))}
+			</ul>
+			<Button variant="contained" color="secondary" onClick={addProduct}>
+				Add Product
+			</Button>
+		</>
+	);
+}

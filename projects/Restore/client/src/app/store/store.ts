@@ -7,23 +7,18 @@ import { basketApi } from "../features/basket/basketApi";
 import { errorApi } from "../features/about/errorApi";
 import { counterSlice } from "../features/contact/counterReducer";
 import { uiSlice } from "../layout/uiSlice";
+import { catalogSlice } from "../features/catalog/catalogSlice";
 
 export const store = configureStore({
 	// Define the reducers for the store, including the API reducer and any other slices
 	reducer: {
 		// Add the generated reducer as a specific top-level slice
-		// Products:
 		[catalogApi.reducerPath]: catalogApi.reducer,
 		[basketApi.reducerPath]: basketApi.reducer,
-
-		// Error handling:
 		[errorApi.reducerPath]: errorApi.reducer,
-
-		// Contacts:
 		counter: counterSlice.reducer,
-
-		// UI:
 		ui: uiSlice.reducer,
+		catalog: catalogSlice.reducer,
 	},
 	// Add the API middleware to the store, which is necessary for handling asynchronous actions and caching
 	middleware: (getDefaultMiddleware) =>

@@ -1,0 +1,26 @@
+react-toastify
+
+
+React-Toastify allows you to add notifications to your app with ease.
+
+$ npm install react-toastify
+
+
+1. Wrap App with ToastContainer in main.ts
+
+    import { ToastContainer } from "react-toastify";
+    import "react-toastify/dist/ReactToastify.css";
+
+    createRoot(document.getElementById("root")!).render(
+      <StrictMode>
+        <Provider store={store}>
+          <ToastContainer position="bottom-right" hideProgressBar theme="colored"/>
+          <RouterProvider router={router} />
+        </Provider>
+      </StrictMode>,
+    );
+
+
+  2. In the component, implement a switch statement for diff toast colors.
+
+    import { toast } from "react-toastify";  

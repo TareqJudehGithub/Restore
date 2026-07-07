@@ -1,0 +1,30 @@
+Redux Store
+
+
+  configureStore 
+    The configureStore function is the standard method for initializing a Redux store 
+    using the official Redux Toolkit.
+
+     function is the standard method for initializing a Redux store using the official Redux Toolkit. It replaces the legacy, deprecated createStore method and drastically cuts down boilerplate code by automatically handling your root reducer compilation, middleware, and DevTools integration.
+
+  For TypeScript
+    - Define types for the RootState and AppDispatch, which are used for    type safety in the application
+
+    export type RootState = ReturnType<typeof store.getState>;
+    export type AppDispatch = typeof store.dispatch;
+
+  
+  useSelector   
+    The useSelector hook extracts data from the Redux store state for use in functional React components. 
+    
+    While useSelector is imported from the react-redux library rather than the Redux Toolkit core package, it is the standard, primary way to read slice states inside your layout components.
+
+    Subscription mechanism: The hook monitors the store and executes your selector whenever an action is dispatched.
+
+    Reference equality: It runs a strict reference check (===) between the old and new return values. Component re-renders only occur if the value changes.
+
+    Object pitfall: Returning a new object inline (e.g., useSelector(state => ({ a: state.a, b: state.b }))) breaks reference equality. This forces a re-render on every dispatch, even if data didn't change.
+
+
+
+

@@ -1,29 +1,110 @@
-using API.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using API.Entities;
 
 namespace API.Data;
 
-public class StoreSqlDbContext : DbContext
+public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<User>(options)
 {
 
-    #region Constructor
-    public StoreSqlDbContext(DbContextOptions<StoreSqlDbContext> options) : base(options)
-    {
-    }
-    #endregion
-
-    #region DBsets
     public DbSet<Product> Products { get; set; }
     public DbSet<Basket> Baskets { get; set; }
-    // public DbSet<BasketItem> basketItems { get; set; }
-    #endregion
 
-    #region Seeding and inserting data into the DB
+
+
+    // Identity roles, seeding and inserting data into the DB
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        // Seed data
+        var adminRoleId = "1165b171-8be5-4a22-b0c7-f93db9f29fec";
+        var userRoleId = "ddb0fce4-df11-40b6-87ff-271d8e9fd889";
+        var adminId = "70157d8e-2e14-49cc-8bd3-30fe0d42390f";
+        var userId = "3b6c6e8e-8f31-48ca-a86e-6e585cf79851";
+
+        // Identity roles
+        var roles = new List<IdentityRole>
+        {
+            new IdentityRole
+            {
+                Id = adminRoleId,
+                Name = "Admin",
+                NormalizedName = "Admin".ToUpper(),
+                ConcurrencyStamp = adminRoleId
+            },
+            new IdentityRole
+            {
+                Id = userRoleId,
+                Name = "User",
+                NormalizedName = "User".ToUpper(),
+                ConcurrencyStamp = userRoleId
+            }
+        };
+
+        // Identity users
+        var adminAccount = new IdentityUser
+        {
+            Id = adminId,
+            UserName = "admin@restore.com",
+            NormalizedUserName = "ADMIN@RESTORE.COM",
+            Email = "admin@restore.com",
+            NormalizedEmail = "ADMIN@RESTORE.COM",
+            EmailConfirmed = false,
+            PasswordHash = "$2a$12$RvwjAQouWp3xgZhIEv6HHuTiXQYWFMXZTWOn/6RFC8Z3qLNUTXl7K",
+            SecurityStamp = "ADMINSECURITYSTAMP",
+            ConcurrencyStamp = adminId,
+            PhoneNumber = null,
+            PhoneNumberConfirmed = false,
+            TwoFactorEnabled = false,
+            LockoutEnd = null,
+            LockoutEnabled = true,
+            AccessFailedCount = 0
+        };
+
+        var userAccount = new IdentityUser()
+        {
+            Id = userId,
+            UserName = "user@restore.com",
+            NormalizedUserName = "USER@RESTORE.COM",
+            Email = "user@restore.com",
+            NormalizedEmail = "USER@RESTORE.COM",
+            EmailConfirmed = false,
+            PasswordHash = "$2a$12$RvwjAQouWp3xgZhIEv6HHuTiXQYWFMXZTWOn/6RFC8Z3qLNUTXl7K",
+            SecurityStamp = "USERSECURITYSTAMP",
+            ConcurrencyStamp = userId,
+            PhoneNumber = null,
+            PhoneNumberConfirmed = false,
+            TwoFactorEnabled = false,
+            LockoutEnd = null,
+            LockoutEnabled = true,
+            AccessFailedCount = 0
+        };
+
+        // Assigning roles to users     
+        var adminRoles = new List<IdentityUserRole<string>>
+        {
+            new IdentityUserRole<string>
+            {
+                RoleId = adminRoleId,
+                UserId = adminId
+            },
+            new IdentityUserRole<string>
+            {
+                RoleId = userRoleId,
+                UserId = adminId
+            }
+        };
+        var userRoles = new List<IdentityUserRole<string>>
+        {
+            new IdentityUserRole<string>
+            {
+                RoleId = userRoleId,
+                UserId = userId
+            }
+        };
+
+        // Products seeding
         var products = new List<Product>()
     {
      new Product
@@ -240,9 +321,17 @@ public class StoreSqlDbContext : DbContext
             Type = "Boots",
             QuantityInStock = 100
         }
+
     };
-        // Insert into DB
+
+
+        // Insert all seedings into DB
+        builder.Entity<IdentityRole>().HasData(roles);
+        builder.Entity<IdentityUser>().HasData(adminAccount);
+        builder.Entity<IdentityUser>().HasData(userAccount);
+        builder.Entity<IdentityUserRole<string>>().HasData(adminRoles);
+        builder.Entity<IdentityUserRole<string>>().HasData(userRoles);
         builder.Entity<Product>().HasData(products);
     }
-    #endregion
+
 }

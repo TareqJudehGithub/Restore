@@ -12,41 +12,25 @@ namespace API.Controllers
     [ApiController] // attribute to make this class a controller
     public class ProductsController : BaseApiController
     {
-        #region SQLITE
+
         // private readonly StoreContext _dbContext;
         // public ProductsController(StoreContext dbContext)
         // {
         //     _dbContext = dbContext;
         // }
-        #endregion
 
-        #region  MSSQL
-        // Uncomment code below in order to use MSSQL instead of SQLITE
 
         private readonly StoreSqlDbContext _dbContext;
         public ProductsController(StoreSqlDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        #endregion
 
         // GET: //https:/localhost/api/products
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts
         ([FromQuery] ProductParams productParams)
         {
-            #region Without using ext.methods          
-            // var query = _dbContext.Products.AsQueryable();
-
-            // query = orderBy switch
-            // {
-            //     "price" => query.OrderBy(q => q.Price),
-            //     "priceDesc" => query.OrderByDescending(q => q.Price),
-            //     "name" => query.OrderBy(q => q.Name),
-            //     "nameDesc" => query.OrderByDescending(q => q.Name),
-            //     _ => query.OrderBy(q => q.Name)
-            // };
-            #endregion
 
             var query = _dbContext.Products
             .Sort(productParams.OrderBy)

@@ -1,5 +1,7 @@
 using API.Data;
+using API.Entities;
 using API.Middleware;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,12 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-#region SQLite 
-builder.Services.AddDbContext<StoreContext>(Options =>
-{
-  // SQLITE
-  Options.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection"));
-});
+
+#region SQLite - Not used
+// builder.Services.AddDbContext<StoreContext>(Options =>
+// {
+//   // SQLITE
+//   Options.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection"));
+// });
 #endregion 
 
 #region MSSQL 
@@ -33,6 +36,18 @@ builder.Services.AddCors();
 builder.Services.AddTransient<ExceptionMiddleware>();
 #endregion
 
+#region Identity
+builder.Services.AddIdentityApiEndpoints<User>(opt =>
+{
+  opt.User.RequireUniqueEmail = true;
+  opt.Password.RequiredUniqueChars = 1;
+  opt.Password.RequireDigit = true;
+  opt.Password.RequireUppercase = true;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<StoreSqlDbContext>();
+#endregion
+
 #endregion
 
 // Build the project
@@ -40,13 +55,12 @@ var app = builder.Build();
 
 #region Middlewares
 
-#region Exception
+
+#region Exceptions
 app.UseMiddleware<ExceptionMiddleware>();
 #endregion
 
 #region CORS
-app.MapControllers();
-
 app.UseCors(opt =>
 {
   opt
@@ -57,14 +71,19 @@ app.UseCors(opt =>
 });
 #endregion
 
-#region Error Handling
-
+#region Identity - Make sure these are above the MapControllers() middleware
+app.UseAuthentication();
+app.UseAuthorization();
 #endregion
+
 app.MapControllers();
+
+// Identity Endpoints API for Identity endpoints auto-implementation
+app.MapGroup("api").MapIdentityApi<User>();
 
 #region SQLite Middleware
 // Initialize the database with seed data
-DbDbInitializer.InitDb(app);
+//DbDbInitializer.InitDb(app);
 #endregion
 
 #endregion

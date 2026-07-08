@@ -1,26 +1,27 @@
-using System;
-using API.Entities;
-using Microsoft.EntityFrameworkCore;
+// using System;
+// using API.Entities;
+// using Microsoft.EntityFrameworkCore;
 
-namespace API.Data;
+// namespace API.Data;
 
-#region Fields
-#endregion
+// #region Fields
+// #endregion
 
-// public class StoreContext(DbContextOptions options) : DbContext(options)
+// // public class StoreContext(DbContextOptions options) : DbContext(options)
+// // {
+// public class StoreContext : DbContext
 // {
-public class StoreContext : DbContext
-{
-  #region Constructors
-  public StoreContext(DbContextOptions<StoreContext> options) : base(options)
-  {
-  }
-  #endregion
+//   #region Constructors
+//   public StoreContext(
+//     DbContextOptions<StoreContext> options) : base(options)
+//   {
+//   }
+//   #endregion
 
-  #region DbSets
-  public DbSet<Product> Products { get; set; }
+//   #region DbSets
+//   public DbSet<Product> Products { get; set; }
 
-  #endregion
+//   #endregion
 
-}
+// }
 

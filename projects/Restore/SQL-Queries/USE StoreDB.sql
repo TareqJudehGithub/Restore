@@ -72,3 +72,33 @@ DELETE
 FROM Baskets
 GO
 
+
+USE StoreDB
+GO
+
+
+SELECT AddressId
+FROM dbo.AspNetUsers
+WHERE UserName = 'john.smith@restore.com'
+GO
+
+SELECT *
+FROM Addresses
+WHERE Id = 4 
+GO
+
+SELECT *
+FROM AspNetUsers
+WHERE AddressId BETWEEN 1 AND 4
+GO
+
+
+SELECT Id, UserName, AddressId
+FROM AspNetUsers
+WHERE AddressId = 1
+GO
+
+
+DELETE Addresses
+WHERE Id = 3
+GO

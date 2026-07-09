@@ -3,6 +3,7 @@ using API.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
@@ -84,5 +85,60 @@ public class AccountController : BaseApiController
 
     return NoContent();
   }
+
+  [Authorize]
+  [HttpPost("address")]
+  public async Task<ActionResult<Address>> CreateOrUpdateAddress(
+    [FromBody] Address address)
+  {
+    // Fetch user 
+    var user = await _signInManager.UserManager.Users
+      .Include(q => q.Address)
+      .FirstOrDefaultAsync(q => q.UserName == User.Identity!.Name);
+
+    if (user is null)
+    {
+      return Unauthorized();
+    }
+    if (address is null)
+    {
+      user.Address = address;
+    }
+    if (user.Address is not null && address is not null)
+    {
+
+      user.Address.Name = address.Name;
+      user.Address.Line1 = address.Line1;
+      user.Address.Line2 = address.Line2;
+      user.Address.City = address.City;
+      user.Address.State = address.State;
+      user.Address.PostalCode = address.PostalCode;
+      user.Address.Country = address.Country;
+    }
+
+    var result = await _signInManager.UserManager.UpdateAsync(user);
+    if (!result.Succeeded)
+    {
+      return BadRequest("Error updating user address");
+    }
+    return Ok();
+  }
+
+  [Authorize]
+  [HttpGet("address")]
+  public async Task<ActionResult<Address>> GetSavedAddress()
+  {
+    var address = await _signInManager.UserManager.Users
+    .Where(q => q.UserName == User.Identity!.Name)
+    .Select(q => q.Address)
+    .FirstOrDefaultAsync();
+
+    if (address is null)
+    {
+      return NoContent();
+    }
+    return Ok(address);
+  }
+
 }
 

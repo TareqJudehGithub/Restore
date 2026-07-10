@@ -102,3 +102,18 @@ GO
 DELETE Addresses
 WHERE Id = 3
 GO
+
+
+
+
+
+UPDATE Products
+SET Price = 26
+WHERE Id = 17
+GO
+
+SELECT Id, Name, Price, QuantityInStock
+FROM Products
+WHERE Type = 'Boots'
+ORDER BY Id, Price DESC
+GO

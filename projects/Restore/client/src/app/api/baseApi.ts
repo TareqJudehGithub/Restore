@@ -53,9 +53,16 @@ export const baseQueryWithErrorHandling = async (
 				}
 				break;
 			case 401:
-				if (typeof responseData === "string") toast.error(responseData);
-
+				if (typeof responseData === "string") {
+					toast.error(responseData);
+				} else if ("errors" in responseData) {
+					// Throw the error(s) back to the component:
+					throw Object.values(responseData.errors).flat().join(", ");
+				} else {
+					toast.error(responseData.title);
+				}
 				break;
+
 			case 404:
 				router.navigate("/not-found");
 				break;

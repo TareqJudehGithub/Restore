@@ -10,6 +10,7 @@ import AboutPage from "../features/about/AboutPage";
 import ServerError from "../errors/ServerError";
 import NotFound from "../errors/NotFound";
 import CheckoutPage from "../features/checkout/CheckoutPage";
+import LoginForm from "../features/account/LoginForm";
 
 export const router = createBrowserRouter([
 	{
@@ -17,14 +18,15 @@ export const router = createBrowserRouter([
 		element: <App />,
 		children: [
 			{ path: "", element: <HomePage /> },
-			{ path: "/catalog", element: <Catalog /> },
-			{ path: "/catalog/:id", element: <ProductDetails /> },
-			{ path: "/basket", element: <BasketPage /> },
-			{ path: "/about", element: <AboutPage /> },
-			{ path: "/contact", element: <ContactPage /> },
-			{ path: "/server-error", element: <ServerError /> },
-			{ path: "/not-found", element: <NotFound /> },
-			{ path: "/checkout", element: <CheckoutPage /> },
+			{ path: "catalog", element: <Catalog /> },
+			{ path: "catalog/:id", element: <ProductDetails /> },
+			{ path: "basket", element: <BasketPage /> },
+			{ path: "about", element: <AboutPage /> },
+			{ path: "contact", element: <ContactPage /> },
+			{ path: "checkout", element: <CheckoutPage /> },
+			{ path: "login", element: <LoginForm /> },
+			{ path: "server-error", element: <ServerError /> },
+			{ path: "not-found", element: <NotFound /> },
 			{ path: "*", element: <Navigate replace to="/not-found" /> },
 		],
 	},

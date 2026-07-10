@@ -17,8 +17,12 @@ import {
 
 import { LightMode, DarkMode, ShoppingCart } from "@mui/icons-material";
 import type { Item } from "../models/basket";
+import UserMenu from "./UserMenu";
+import type { User } from "../models/User";
 
 export default function NavBar() {
+	const user: User = { email: "test@test.com", roles: [] };
+
 	const { isLoading, darkMode } = useAppSelector((state) => state.ui);
 	const dispatch = useAppDispatch();
 
@@ -119,16 +123,23 @@ export default function NavBar() {
 							</Badge>
 						</IconButton>
 					</Box>
+
 					{rightLinks.map(({ title, path }) =>
 						darkMode ? (
-							<ListItem
-								component={NavLink}
-								to={path}
-								key={path}
-								sx={navLinkStyleDark}
-							>
-								{title.toUpperCase()}
-							</ListItem>
+							user ? (
+								<UserMenu user={user} />
+							) : (
+								<ListItem
+									component={NavLink}
+									to={path}
+									key={path}
+									sx={navLinkStyleDark}
+								>
+									{title.toUpperCase()}
+								</ListItem>
+							)
+						) : user ? (
+							<UserMenu user={user} />
 						) : (
 							<ListItem
 								component={NavLink}

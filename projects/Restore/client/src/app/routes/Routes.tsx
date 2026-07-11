@@ -11,12 +11,19 @@ import ServerError from "../errors/ServerError";
 import NotFound from "../errors/NotFound";
 import CheckoutPage from "../features/checkout/CheckoutPage";
 import LoginForm from "../features/account/LoginForm";
+import RegisterForm from "../features/account/RegisterForm";
+import RequireAuth from "./RequireAuth";
 
 export const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <App />,
 		children: [
+			{
+				// Only authorized users can access CheckoutPage
+				element: <RequireAuth />,
+				children: [{ path: "checkout", element: <CheckoutPage /> }],
+			},
 			{ path: "", element: <HomePage /> },
 			{ path: "catalog", element: <Catalog /> },
 			{ path: "catalog/:id", element: <ProductDetails /> },
@@ -24,6 +31,7 @@ export const router = createBrowserRouter([
 			{ path: "about", element: <AboutPage /> },
 			{ path: "contact", element: <ContactPage /> },
 			{ path: "checkout", element: <CheckoutPage /> },
+			{ path: "register", element: <RegisterForm /> },
 			{ path: "login", element: <LoginForm /> },
 			{ path: "server-error", element: <ServerError /> },
 			{ path: "not-found", element: <NotFound /> },

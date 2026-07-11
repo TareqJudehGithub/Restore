@@ -18,10 +18,10 @@ import {
 import { LightMode, DarkMode, ShoppingCart } from "@mui/icons-material";
 import type { Item } from "../models/basket";
 import UserMenu from "./UserMenu";
-import type { User } from "../models/User";
+import { useUserInfoQuery } from "../features/account/accountApi";
 
 export default function NavBar() {
-	const user: User = { email: "test@test.com", roles: [] };
+	const { data: user } = useUserInfoQuery();
 
 	const { isLoading, darkMode } = useAppSelector((state) => state.ui);
 	const dispatch = useAppDispatch();
@@ -119,37 +119,26 @@ export default function NavBar() {
 					<Box>
 						<IconButton size="medium" component={Link} to="/basket">
 							<Badge badgeContent={itemCount} color="secondary">
-								<ShoppingCart sx={{ color: "inherit" }} />
+								<ShoppingCart sx={{ color: darkMode ? "inherit" : "white" }} />
 							</Badge>
 						</IconButton>
 					</Box>
 
-					{rightLinks.map(({ title, path }) =>
-						darkMode ? (
-							user ? (
-								<UserMenu user={user} />
-							) : (
-								<ListItem
-									component={NavLink}
-									to={path}
-									key={path}
-									sx={navLinkStyleDark}
-								>
-									{title.toUpperCase()}
-								</ListItem>
-							)
-						) : user ? (
+					{user ? (
+						<ListItem sx={navLinkStyleDark}>
 							<UserMenu user={user} />
-						) : (
+						</ListItem>
+					) : (
+						rightLinks.map(({ title, path }) => (
 							<ListItem
 								component={NavLink}
 								to={path}
 								key={path}
-								sx={navLinkStyleLight}
+								sx={navLinkStyleDark}
 							>
 								{title.toUpperCase()}
 							</ListItem>
-						),
+						))
 					)}
 				</List>
 			</Toolbar>

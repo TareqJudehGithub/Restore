@@ -32,7 +32,7 @@ export default function OrderSummary() {
 		subTotalAfterDiscount = subtotal;
 	}
 
-	deliveryFee = subTotalAfterDiscount >= 200 ? 0 : 5;
+	deliveryFee = subTotalAfterDiscount >= 100 ? 0 : 5;
 	const total = subTotalAfterDiscount + deliveryFee;
 
 	return (
@@ -57,13 +57,15 @@ export default function OrderSummary() {
 						sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
 					>
 						<Typography color="textSecondary">Subtotal</Typography>
-						<Typography>${subtotal}</Typography>
+						<Typography>${subtotal.toFixed(2)}</Typography>
 					</Box>
 					<Box
 						sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
 					>
 						<Typography color="textSecondary">Discount</Typography>
-						<Typography color="success">${discountAmount}</Typography>
+						<Typography color="success">
+							${discountAmount.toFixed(2)}
+						</Typography>
 					</Box>
 					<Box
 						sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
@@ -76,7 +78,7 @@ export default function OrderSummary() {
 						sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
 					>
 						<Typography color="textSecondary">Total</Typography>
-						<Typography>${total}</Typography>
+						<Typography>${total.toFixed(2)}</Typography>
 					</Box>
 				</Box>
 

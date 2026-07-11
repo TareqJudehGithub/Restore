@@ -104,9 +104,6 @@ WHERE Id = 3
 GO
 
 
-
-
-
 UPDATE Products
 SET Price = 26
 WHERE Id = 17
@@ -117,3 +114,5 @@ FROM Products
 WHERE Type = 'Boots'
 ORDER BY Id, Price DESC
 GO
+
+-- Pa$$w0rd@

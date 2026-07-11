@@ -35,11 +35,18 @@ public class AccountController : BaseApiController
 
     if (!result.Succeeded)
     {
-      foreach (var error in result.Errors)
+      var error = result.Errors.FirstOrDefault();
+
+      if (error is not null)
       {
         ModelState.AddModelError(error.Code, error.Description);
       }
       return ValidationProblem();
+
+      // foreach (var error in result.Errors)
+      // {       
+      //   ModelState.AddModelError(error.Code, error.Description);
+      // }
     }
 
     await _signInManager.UserManager

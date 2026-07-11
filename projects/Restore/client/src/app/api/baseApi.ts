@@ -46,12 +46,14 @@ export const baseQueryWithErrorHandling = async (
 			case 400:
 				if (typeof responseData === "string") toast.error(responseData);
 				else if ("errors" in responseData) {
+					toast.error(responseData.errors);
 					// Throw the error(s) back to the component:
 					throw Object.values(responseData.errors).flat().join(", ");
 				} else {
 					toast.error(responseData.title);
 				}
 				break;
+
 			case 401:
 				if (typeof responseData === "string") {
 					toast.error(responseData);

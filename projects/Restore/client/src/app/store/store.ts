@@ -9,6 +9,7 @@ import { counterSlice } from "../features/contact/counterReducer";
 import { uiSlice } from "../layout/uiSlice";
 import { catalogSlice } from "../features/catalog/catalogSlice";
 import { accountApi } from "../features/account/accountApi";
+import { checkoutApi } from "../features/checkout/checkoutApi";
 
 export const store = configureStore({
 	// Define the reducers for the store, including the API reducer and any other slices
@@ -18,6 +19,7 @@ export const store = configureStore({
 		[basketApi.reducerPath]: basketApi.reducer,
 		[errorApi.reducerPath]: errorApi.reducer,
 		[accountApi.reducerPath]: accountApi.reducer,
+		[checkoutApi.reducerPath]: checkoutApi.reducer,
 
 		counter: counterSlice.reducer,
 		ui: uiSlice.reducer,
@@ -30,6 +32,7 @@ export const store = configureStore({
 			basketApi.middleware,
 			errorApi.middleware,
 			accountApi.middleware,
+			checkoutApi.middleware,
 		),
 });
 

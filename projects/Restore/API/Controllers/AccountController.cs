@@ -11,12 +11,7 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class AccountController : BaseApiController
 {
-
-
   private readonly SignInManager<User> _signInManager;
-
-
-
   public AccountController(SignInManager<User> signInManager)
   {
     _signInManager = signInManager;

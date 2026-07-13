@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using API.DTOs;
 using API.Entities;
 
@@ -11,6 +12,8 @@ public static class BasketExtensions
     var basketDto = new BasketDto()
     {
       BasketId = basket.BasketId,
+      ClientSecret = basket.ClientSecret,
+      PaymentIntentId = basket.PaymentIntentId,
       Items = basket.Items
       .Select(q =>
       new BasketItemDto
@@ -27,4 +30,17 @@ public static class BasketExtensions
     };
     return basketDto;
   }
+
+  public static async Task<Basket> GetBasketWithItems(
+    this IQueryable<Basket> query, string? basketId)
+  {
+    return await query
+    .Include(q => q.Items)
+    .ThenInclude(q => q.Product)
+    .FirstOrDefaultAsync(q => q.BasketId == basketId)
+    ??
+    throw new Exception("Cannot get basket");
+
+  }
+
 }

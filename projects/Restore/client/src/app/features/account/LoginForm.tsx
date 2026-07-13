@@ -16,23 +16,25 @@ import {
 export default function LoginForm() {
 	// Login
 	const [login, { isLoading, error }] = useLoginMutation();
-	//const [fetchUserInfo] = useLazyUserInfoQuery();
+	const [fetchUserInfo] = useLazyUserInfoQuery();
 	const location = useLocation();
 	const navigate = useNavigate();
 
 	const onSubmit = async (data: loginSchema) => {
-		if ((await login(data)).error || error) {
-			return;
-		} else {
-			await login(data);
-			//	await fetchUserInfo();
+		try {
+			await login(data).unwrap();
+			await fetchUserInfo();
 			navigate(location.state?.from || "/catalog");
+		} catch (error) {
+			setError("password", { message: "Invalid username or password" });
+			return;
 		}
 	};
 
 	const {
 		register,
 		handleSubmit,
+		setError,
 		formState: { errors },
 	} = useForm<loginSchema>({
 		mode: "onSubmit",
@@ -74,11 +76,11 @@ export default function LoginForm() {
 					<TextField
 						fullWidth
 						label="Email"
-						//type="email"
 						autoFocus
 						{...register("email")}
 						error={!!errors.email}
 						helperText={errors.email?.message}
+						defaultValue="john.smith@restore.com"
 					/>
 					<TextField
 						fullWidth
@@ -88,6 +90,7 @@ export default function LoginForm() {
 						{...register("password")}
 						error={!!errors.password}
 						helperText={errors.password?.message}
+						defaultValue="Pa$$w0rd@"
 					/>
 					<Button disabled={isLoading} variant="contained" type="submit">
 						Sign in

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router";
 import { useRegisterMutation } from "./accountApi";
 import {
 	registerSchema,
@@ -7,7 +8,6 @@ import {
 } from "../../../lib/Schemas/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LockOutlined } from "@mui/icons-material";
-import { Link } from "react-router";
 import { getErrorMessage } from "../../errors/ToastErrors";
 import { toast } from "react-toastify";
 import {

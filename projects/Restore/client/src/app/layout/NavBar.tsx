@@ -1,8 +1,12 @@
 import { Link, NavLink } from "react-router";
 import { useAppSelector, useAppDispatch } from "../store/store";
 import { useFetchBasketQuery } from "../features/basket/basketApi";
-import { setDarkMode } from "./uiSlice";
+import { useUserInfoQuery } from "../features/account/accountApi";
 
+import { setDarkMode } from "./uiSlice";
+import { LightMode, DarkMode, ShoppingCart } from "@mui/icons-material";
+import type { Item } from "../models/basket";
+import UserMenu from "./UserMenu";
 import {
 	AppBar,
 	Toolbar,
@@ -14,11 +18,6 @@ import {
 	Badge,
 	LinearProgress,
 } from "@mui/material";
-
-import { LightMode, DarkMode, ShoppingCart } from "@mui/icons-material";
-import type { Item } from "../models/basket";
-import UserMenu from "./UserMenu";
-import { useUserInfoQuery } from "../features/account/accountApi";
 
 export default function NavBar() {
 	const { data: user } = useUserInfoQuery();
@@ -159,7 +158,7 @@ const midLinks = [
 
 const rightLinks = [
 	{ title: "login", path: "/login" },
-	{ title: "register", path: "/register" },
+	// { title: "register", path: "/register" },
 ];
 
 const navLinkStyleDark = {

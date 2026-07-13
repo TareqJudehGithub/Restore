@@ -1,18 +1,17 @@
 USE StoreDB
 GO
 
-
 SELECT *
 FROM Products
 WHERE Id = 1
 GO
-
 
 -- UPDATE
 UPDATE Products
 SET Price = 190
 WHERE Id = 19
 GO
+
 SELECT Id, Price, Name AS 'Product Name'
 FROM Products
 WHERE Id BETWEEN 15 AND 19
@@ -64,13 +63,13 @@ GO
 
 
 -- Delete 
-Delete 
-FROM BasketItems
-GO
+-- Delete 
+-- FROM BasketItems
+-- GO
 
-DELETE
-FROM Baskets
-GO
+-- DELETE
+-- FROM Baskets
+-- GO
 
 
 USE StoreDB
@@ -97,7 +96,6 @@ SELECT Id, UserName, AddressId
 FROM AspNetUsers
 WHERE AddressId = 1
 GO
-
 
 DELETE Addresses
 WHERE Id = 3

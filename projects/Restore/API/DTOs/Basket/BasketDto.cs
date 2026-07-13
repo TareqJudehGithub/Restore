@@ -4,4 +4,8 @@ public class BasketDto
 {
   public required string BasketId { get; set; }
   public List<BasketItemDto> Items { get; set; } = [];
+
+  //Stripe
+  public string? ClientSecret { get; set; }
+  public string? PaymentIntentId { get; set; }
 }

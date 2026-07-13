@@ -1,6 +1,7 @@
 using API.Data;
 using API.Entities;
 using API.Middleware;
+using API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,6 +36,9 @@ builder.Services.AddCors();
 #region Exception 
 builder.Services.AddTransient<ExceptionMiddleware>();
 #endregion
+
+//Stripe
+builder.Services.AddScoped<PaymentService>();
 
 #region Identity
 builder.Services.AddIdentityApiEndpoints<User>(opt =>

@@ -9,10 +9,12 @@ import {
 
 import { useFetchBasketQuery } from "../../features/basket/basketApi";
 import type { Item } from "../../models/basket";
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 
 export default function OrderSummary() {
+	const location = useLocation();
 	const { data: basket } = useFetchBasketQuery();
+
 	let subtotal: number = 0;
 	let discount: number = 0.1;
 	let discountAmount: number = 0;
@@ -83,16 +85,18 @@ export default function OrderSummary() {
 				</Box>
 
 				<Box sx={{ mt: 2 }}>
-					<Button
-						variant="contained"
-						color="primary"
-						fullWidth
-						sx={{ mb: 1 }}
-						component={NavLink}
-						to={"/checkout"}
-					>
-						Checkout
-					</Button>
+					{!location.pathname.includes("checkout") && (
+						<Button
+							variant="contained"
+							color="primary"
+							fullWidth
+							sx={{ mb: 1 }}
+							component={NavLink}
+							to={"/checkout"}
+						>
+							Checkout
+						</Button>
+					)}
 					<Button component={NavLink} to={"/catalog"} fullWidth>
 						Continue Shopping
 					</Button>

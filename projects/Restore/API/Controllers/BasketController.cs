@@ -171,7 +171,7 @@ public class BasketController : BaseApiController
   #endregion
 
 
-  #region Basket helper methods
+
   private async Task<Basket?> RetrieveBasket()
   {
     return await _dbContext.Baskets
@@ -201,6 +201,6 @@ public class BasketController : BaseApiController
 
     return basket;
   }
-  #endregion
+
 
 }

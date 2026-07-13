@@ -34,4 +34,7 @@ EF Core installation
 Specify your DbContext name
  dotnet ef migrations add MigrationName --context YourDbContextName
  dotnet ef database update --context YourDbContextName
+
+ To remove a migration:
+  $ dotnet ef migrations remove --context YourDbContextName
  

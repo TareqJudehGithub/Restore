@@ -1,0 +1,21 @@
+Stripe Payment
+  In the API folder
+  1. Install Stripe.net from NUGET
+
+  2. In appsettings.Development.json
+      "StripesSettings": {
+		"PublishableKey": "",
+		"SecretKey": ""
+	}
+
+  3. In Basket.cs entity add the below properties
+
+        // Client communication with Stripe
+  public string? ClientSecret { get; set; }
+  public string? PaymentIntentId { get; set; }
+
+  4. Create a new Services folder, inside create a new PaymentService.cs class
+  5. Update Program.cs services:    
+    builder.Services.AddScoped<PaymentService>();
+
+

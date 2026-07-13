@@ -1,0 +1,2 @@
+Run in the Client folder
+npm install --save @stripe/react-stripe-js @stripe/stripe-js

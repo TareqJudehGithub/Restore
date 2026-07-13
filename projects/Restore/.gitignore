@@ -4,9 +4,9 @@
 ## Get latest from `dotnet new gitignore`
 
 
+/API/appsettings.Development.json
 # DBML files
 *.db
-
 # dotenv files
 .env
 

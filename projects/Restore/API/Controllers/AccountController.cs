@@ -102,13 +102,14 @@ public class AccountController : BaseApiController
     {
       return Unauthorized();
     }
-    if (address is null)
+    // Add a new
+    if (user.Address is null)
     {
       user.Address = address;
     }
-    if (user.Address is not null && address is not null)
+    // Update Address
+    if (user.Address is not null)
     {
-
       user.Address.Name = address.Name;
       user.Address.Line1 = address.Line1;
       user.Address.Line2 = address.Line2;
@@ -123,7 +124,7 @@ public class AccountController : BaseApiController
     {
       return BadRequest("Error updating user address");
     }
-    return Ok();
+    return Ok(user.Address);
   }
 
   [Authorize]

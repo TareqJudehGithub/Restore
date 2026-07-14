@@ -42,7 +42,15 @@ export default function Review() {
 					<TableBody>
 						{basket?.items.map((item) => (
 							<TableRow key={item.productId} sx={{}}>
-								<TableCell sx={{ justifyItems: "start" }}>
+								<TableCell
+									sx={{
+										display: "flex",
+										flexDirection: "row",
+										justifyItems: "start",
+										justifyContent: "space-between",
+										alignItems: "center",
+									}}
+								>
 									<Box
 										sx={{
 											display: "flex",
@@ -60,12 +68,11 @@ export default function Review() {
 										</span>
 										<span style={{}}>{item.name}</span>
 										<span style={{}}>x{item.quantity}</span>
+									</Box>
+									<Box>
 										<span style={{}}>${item.price}</span>
 									</Box>
 								</TableCell>
-								{/* <TableCell>{item.name}</TableCell>
-								<TableCell sx={{}}>x {item.quantity}</TableCell>
-								<TableCell sx={{}}>${item.price}</TableCell> */}
 							</TableRow>
 						))}
 					</TableBody>

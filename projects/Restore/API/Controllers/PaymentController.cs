@@ -39,7 +39,7 @@ public class PaymentController : BaseApiController
     {
       var result = await _dbContext.SaveChangesAsync();
 
-      if (result >= 0)
+      if (result == 0)
       {
         return BadRequest("Problem updating basket with intent");
       }

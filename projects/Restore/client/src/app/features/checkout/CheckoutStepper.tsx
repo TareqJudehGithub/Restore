@@ -3,6 +3,7 @@ import {
 	AddressElement,
 	PaymentElement,
 	useElements,
+	useStripe,
 } from "@stripe/react-stripe-js";
 import {
 	useFetchAddressQuery,
@@ -22,10 +23,13 @@ import {
 import Review from "./Review";
 import type { Address } from "../../models/User";
 import type {
+	ConfirmationToken,
 	StripeAddressElementChangeEvent,
 	StripePaymentElementChangeEvent,
 } from "@stripe/stripe-js";
 import { useBasket } from "../../../lib/hooks/useBasket";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const steps: string[] = ["Address", "Payment", "Review"];
 
@@ -37,10 +41,17 @@ export default function CheckoutStepper() {
 	const [paymentComplete, setPaymentComplete] = useState<boolean>(false);
 	const [savedAddressChecked, setSavedAddressChecked] =
 		useState<boolean>(false);
+	const navigate = useNavigate();
 
-	const elements = useElements();
 	const [updateUserAddress] = useUpdateUserAddressMutation();
-	const { total } = useBasket();
+	const { total, basket, clearBasket } = useBasket();
+
+	// Stripe Hooks and const
+	const elements = useElements(); // contains user details (like address and payment)
+	const stripe = useStripe();
+	const [confirmationToken, setConfirmationToken] =
+		useState<ConfirmationToken | null>(null);
+	const [submitting, setSubmitting] = useState<boolean>(false);
 
 	const getStripedAddress = async () => {
 		const addressElement = elements?.getElement("address");
@@ -76,13 +87,61 @@ export default function CheckoutStepper() {
 	const handleBack = () => {
 		setActiveStep((step) => step - 1);
 	};
-
 	const handleNext = async () => {
 		if (activeStep === 0 && savedAddressChecked && elements) {
 			const userAddress = await getStripedAddress();
 			if (userAddress) await updateUserAddress(userAddress);
 		}
-		setActiveStep((step) => step + 1);
+		// Stripe token
+		if (activeStep === 1) {
+			if (!elements || !stripe) {
+				return;
+			}
+			const result = await elements.submit();
+			if (result.error) {
+				return toast.error(result.error.message);
+			}
+			const stripeResult = await stripe.createConfirmationToken({ elements });
+			if (stripeResult.error) {
+				return toast.error(stripeResult.error.message);
+			}
+			setConfirmationToken(stripeResult.confirmationToken);
+		}
+		if (activeStep === 2) {
+			await confirmPayment();
+		}
+		if (activeStep < 2) setActiveStep((step) => step + 1);
+	};
+	// Confirm payment
+	const confirmPayment = async () => {
+		setSubmitting(true);
+		try {
+			if (!confirmationToken || !basket?.clientSecret) {
+				throw new Error("Unable to process payment");
+			}
+			const paymentResult = await stripe?.confirmPayment({
+				clientSecret: basket.clientSecret,
+				redirect: "if_required",
+				confirmParams: {
+					confirmation_token: confirmationToken.id,
+				},
+			});
+			if (paymentResult?.paymentIntent?.status === "succeeded") {
+				navigate("/checkout/success");
+				clearBasket();
+			} else if (paymentResult?.error) {
+				throw new Error(paymentResult.error.message);
+			} else {
+				throw new Error("Something went wrong.");
+			}
+		} catch (error) {
+			if (error instanceof Error) {
+				toast.error(error.message);
+			}
+			setActiveStep((step) => step - 1);
+		} finally {
+			setSubmitting(false);
+		}
 	};
 
 	return (
@@ -125,10 +184,17 @@ export default function CheckoutStepper() {
 				</Box>
 
 				<Box sx={{ display: activeStep === 1 ? "block" : "none" }}>
-					<PaymentElement onChange={handlePaymentChange} />
+					<PaymentElement
+						options={{
+							wallets: {
+								// Add below any payment method you wish to enable/disable
+							},
+						}}
+						onChange={handlePaymentChange}
+					/>
 				</Box>
 				<Box sx={{ display: activeStep === 2 ? "block" : "none" }}>
-					<Review />
+					<Review confirmationToken={confirmationToken} />
 				</Box>
 			</Box>
 
@@ -139,11 +205,13 @@ export default function CheckoutStepper() {
 				<Button
 					disabled={
 						(activeStep === 0 && !addressComplete) ||
-						(activeStep === 1 && !paymentComplete)
+						(activeStep === 1 && !paymentComplete) ||
+						submitting
 					}
 					onClick={handleNext}
+					loading={submitting}
 				>
-					{activeStep === steps.length - 1 ? `Total $${total}` : "Next"}
+					{activeStep === steps.length - 1 ? "Place order" : "Next"}
 				</Button>
 			</Box>
 		</Paper>

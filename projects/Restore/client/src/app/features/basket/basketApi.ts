@@ -2,6 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithErrorHandling } from "../../api/baseApi";
 import { type Item, type Basket } from "../../models/basket";
 import type { Product } from "../../models/product";
+import Cookies from "js-cookie";
 
 export const basketApi = createApi({
 	reducerPath: "basketApi",
@@ -94,7 +95,6 @@ export const basketApi = createApi({
 				url: `basket?productId=${productId}&quantity=${quantity}`,
 				method: "DELETE",
 			}),
-
 			onQueryStarted: async (
 				{ productId, quantity },
 				{ dispatch, queryFulfilled },
@@ -125,6 +125,20 @@ export const basketApi = createApi({
 			},
 			invalidatesTags: ["Basket"],
 		}),
+		clearBasket: builder.mutation<void, void>({
+			queryFn: () => ({
+				data: undefined,
+			}),
+			onQueryStarted: async (_, { dispatch }) => {
+				dispatch(
+					basketApi.util.updateQueryData("fetchBasket", undefined, (draft) => {
+						draft.items = [];
+					}),
+				);
+				// Clear buyerId cookie from the browser using package js-cookie
+				Cookies.remove("basketId");
+			},
+		}),
 	}),
 });
 
@@ -133,4 +147,5 @@ export const {
 	useAddBasketItemMutation,
 	useIncreaseBasketItemQtyMutation,
 	useRemoveBasketItemMutation,
+	useClearBasketMutation,
 } = basketApi;

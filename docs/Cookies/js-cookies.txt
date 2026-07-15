@@ -1,0 +1,7 @@
+Js-cookies
+
+An npm Packages used to manage cookies in React.js
+
+  Install 
+    $ npm install js-cookie
+    $ npm install -D @types/js-cookie

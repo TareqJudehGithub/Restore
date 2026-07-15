@@ -1,8 +1,13 @@
-import { useFetchBasketQuery } from "../../app/features/basket/basketApi";
+import {
+	useClearBasketMutation,
+	useFetchBasketQuery,
+} from "../../app/features/basket/basketApi";
 import type { Item } from "../../app/models/basket";
 
 export const useBasket = () => {
 	const { data: basket } = useFetchBasketQuery();
+	const [clearBasket] = useClearBasketMutation();
+
 	let subtotal: number = 0;
 	let discount: number = 0.1;
 	let discountAmount: number = 0;
@@ -32,5 +37,6 @@ export const useBasket = () => {
 		subTotalAfterDiscount,
 		deliveryFee,
 		total,
+		clearBasket,
 	};
 };

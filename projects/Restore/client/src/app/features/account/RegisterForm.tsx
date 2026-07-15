@@ -114,11 +114,6 @@ export default function RegisterForm() {
 					<Button disabled={isLoading} variant="contained" type="submit">
 						Sign Up
 					</Button>
-					{/* {submitError && (
-						<Typography color="error" sx={{ textAlign: "center" }}>
-							{submitError}
-						</Typography>
-					)} */}
 					<Typography sx={{ textAlign: "center" }}>
 						Already have an account?
 						<Typography

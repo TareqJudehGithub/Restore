@@ -11,7 +11,7 @@ export const checkoutApi = createApi({
 		createPaymentIntent: builder.mutation<Basket, void>({
 			query: () => {
 				return {
-					url: "payment",
+					url: "payments",
 					method: "POST",
 				};
 			},

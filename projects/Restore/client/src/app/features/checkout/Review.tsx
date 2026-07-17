@@ -12,10 +12,9 @@ import {
 } from "@mui/material";
 import type { ConfirmationToken } from "@stripe/stripe-js";
 import { useBasket } from "../../../lib/hooks/useBasket";
-import { BorderBottom } from "@mui/icons-material";
 
 export default function Review({ confirmationToken }: ReviewProps) {
-	const { basket, subTotalAfterDiscount } = useBasket();
+	const { basket } = useBasket();
 
 	const addressString = () => {
 		if (!confirmationToken?.shipping) {
@@ -63,22 +62,38 @@ export default function Review({ confirmationToken }: ReviewProps) {
 			</Box>
 			<Box sx={{ mt: 6 }}></Box>
 			<Divider />
-			<TableContainer>
-				<Table>
-					<TableHead>
-						<TableRow
-							sx={{
-								display: "flex",
-								flexDirection: "row",
-								justifyContent: "space-between",
-								alignItems: "center",
-								gap: 2,
-							}}
-						>
-							<TableCell sx={{ BorderBottom: "none" }}>Item Name</TableCell>
-							<TableCell>Quantity Price</TableCell>
-							<TableCell sx={{ BorderBottom: "none" }}>
-								Item(s) Total
+			<TableContainer sx={{ BorderBottom: "none" }}>
+				<Table sx={{ BorderBottom: "none" }}>
+					<TableHead sx={{ BorderBottom: "none" }}>
+						<TableRow>
+							<TableCell
+								sx={{
+									display: "flex",
+									flexDirection: "row",
+									justifyContent: "space-between",
+									alignItems: "center",
+									gap: 2,
+									BorderBottom: "none",
+								}}
+							>
+								<Grid
+									size={6}
+									sx={{ gap: 2, display: "flex", justifyContent: "start" }}
+								>
+									Item Name
+								</Grid>
+								<Grid
+									size={3}
+									sx={{ gap: 2, display: "flex", justifyContent: "center" }}
+								>
+									Qty * Price
+								</Grid>
+								<Grid
+									size={3}
+									sx={{ gap: 2, display: "flex", justifyContent: "center" }}
+								>
+									Item(s) Total
+								</Grid>
 							</TableCell>
 						</TableRow>
 					</TableHead>
@@ -99,7 +114,6 @@ export default function Review({ confirmationToken }: ReviewProps) {
 										size={6}
 										sx={{
 											display: "flex",
-											flexDirection: "row",
 											justifyContent: "start",
 											alignItems: "center",
 											gap: 2,
@@ -116,25 +130,20 @@ export default function Review({ confirmationToken }: ReviewProps) {
 									</Grid>
 									<Grid
 										size={3}
-										sx={{ gap: 2, display: "flex", justifyContent: "start" }}
+										sx={{ gap: 1, display: "flex", justifyContent: "center" }}
 									>
 										<span style={{}}>x{item.quantity}</span>
 										<span style={{}}>{item.price}</span>
 									</Grid>
 									<Grid
 										size={3}
-										sx={{ display: "flex", justifyContent: "end" }}
+										sx={{ display: "flex", justifyContent: "center" }}
 									>
 										<span style={{}}>${item.price * item.quantity}</span>
 									</Grid>
 								</TableCell>
 							</TableRow>
 						))}
-						<TableRow sx={{ display: "flex", justifyContent: "end", mt: 2 }}>
-							<TableCell sx={{ borderBottom: "none" }}>
-								<span>Total: ${subTotalAfterDiscount}</span>
-							</TableCell>
-						</TableRow>
 					</TableBody>
 				</Table>
 			</TableContainer>

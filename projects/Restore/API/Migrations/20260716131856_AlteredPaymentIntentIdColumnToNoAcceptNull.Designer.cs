@@ -4,6 +4,7 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(StoreSqlDbContext))]
-    partial class StoreSqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260716131856_AlteredPaymentIntentIdColumnToNoAcceptNull")]
+    partial class AlteredPaymentIntentIdColumnToNoAcceptNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,11 +127,11 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("DeliveryFee")
-                        .HasColumnType("float");
+                    b.Property<long>("DeliveryFee")
+                        .HasColumnType("bigint");
 
-                    b.Property<double>("Discount")
-                        .HasColumnType("float");
+                    b.Property<long>("Discount")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -140,8 +143,8 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Subtotal")
-                        .HasColumnType("float");
+                    b.Property<long>("Subtotal")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -159,8 +162,8 @@ namespace API.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -196,8 +199,8 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("int");
@@ -218,7 +221,7 @@ namespace API.Migrations
                             Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Angular Speedster Board 2000",
                             PictureUrl = "/images/products/sb-ang1.png",
-                            Price = 20000.0,
+                            Price = 20000L,
                             QuantityInStock = 100,
                             Type = "Boards"
                         },
@@ -229,7 +232,7 @@ namespace API.Migrations
                             Description = "Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.",
                             Name = "Green Angular Board 3000",
                             PictureUrl = "/images/products/sb-ang2.png",
-                            Price = 15000.0,
+                            Price = 15000L,
                             QuantityInStock = 100,
                             Type = "Boards"
                         },
@@ -240,7 +243,7 @@ namespace API.Migrations
                             Description = "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
                             Name = "Core Board Speed Rush 3",
                             PictureUrl = "/images/products/sb-core1.png",
-                            Price = 18000.0,
+                            Price = 18000L,
                             QuantityInStock = 100,
                             Type = "Boards"
                         },
@@ -251,7 +254,7 @@ namespace API.Migrations
                             Description = "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
                             Name = "Net Core Super Board",
                             PictureUrl = "/images/products/sb-core2.png",
-                            Price = 30000.0,
+                            Price = 30000L,
                             QuantityInStock = 100,
                             Type = "Boards"
                         },
@@ -262,7 +265,7 @@ namespace API.Migrations
                             Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "React Board Super Whizzy Fast",
                             PictureUrl = "/images/products/sb-react1.png",
-                            Price = 25000.0,
+                            Price = 25000L,
                             QuantityInStock = 100,
                             Type = "Boards"
                         },
@@ -273,7 +276,7 @@ namespace API.Migrations
                             Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Typescript Entry Board",
                             PictureUrl = "/images/products/sb-ts1.png",
-                            Price = 12000.0,
+                            Price = 12000L,
                             QuantityInStock = 100,
                             Type = "Boards"
                         },
@@ -284,7 +287,7 @@ namespace API.Migrations
                             Description = "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Core Blue Hat",
                             PictureUrl = "/images/products/hat-core1.png",
-                            Price = 1000.0,
+                            Price = 1000L,
                             QuantityInStock = 100,
                             Type = "Hats"
                         },
@@ -295,7 +298,7 @@ namespace API.Migrations
                             Description = "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Green React Woolen Hat",
                             PictureUrl = "/images/products/hat-react1.png",
-                            Price = 8000.0,
+                            Price = 8000L,
                             QuantityInStock = 100,
                             Type = "Hats"
                         },
@@ -306,7 +309,7 @@ namespace API.Migrations
                             Description = "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Purple React Woolen Hat",
                             PictureUrl = "/images/products/hat-react2.png",
-                            Price = 1500.0,
+                            Price = 1500L,
                             QuantityInStock = 100,
                             Type = "Hats"
                         },
@@ -317,7 +320,7 @@ namespace API.Migrations
                             Description = "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Blue Code Gloves",
                             PictureUrl = "/images/products/glove-code1.png",
-                            Price = 1800.0,
+                            Price = 1800L,
                             QuantityInStock = 100,
                             Type = "Gloves"
                         },
@@ -328,7 +331,7 @@ namespace API.Migrations
                             Description = "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Green Code Gloves",
                             PictureUrl = "/images/products/glove-code2.png",
-                            Price = 1500.0,
+                            Price = 1500L,
                             QuantityInStock = 100,
                             Type = "Gloves"
                         },
@@ -339,7 +342,7 @@ namespace API.Migrations
                             Description = "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Purple React Gloves",
                             PictureUrl = "/images/products/glove-react1.png",
-                            Price = 1600.0,
+                            Price = 1600L,
                             QuantityInStock = 100,
                             Type = "Gloves"
                         },
@@ -350,7 +353,7 @@ namespace API.Migrations
                             Description = "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Green React Gloves",
                             PictureUrl = "/images/products/glove-react2.png",
-                            Price = 1400.0,
+                            Price = 1400L,
                             QuantityInStock = 100,
                             Type = "Gloves"
                         },
@@ -361,7 +364,7 @@ namespace API.Migrations
                             Description = "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
                             Name = "Redis Red Boots",
                             PictureUrl = "/images/products/boot-redis1.png",
-                            Price = 25000.0,
+                            Price = 25000L,
                             QuantityInStock = 100,
                             Type = "Boots"
                         },
@@ -372,7 +375,7 @@ namespace API.Migrations
                             Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
                             Name = "Core Red Boots",
                             PictureUrl = "/images/products/boot-core2.png",
-                            Price = 18999.0,
+                            Price = 18999L,
                             QuantityInStock = 100,
                             Type = "Boots"
                         },
@@ -383,7 +386,7 @@ namespace API.Migrations
                             Description = "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
                             Name = "Core Purple Boots",
                             PictureUrl = "/images/products/boot-core1.png",
-                            Price = 19999.0,
+                            Price = 19999L,
                             QuantityInStock = 100,
                             Type = "Boots"
                         },
@@ -394,7 +397,7 @@ namespace API.Migrations
                             Description = "Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.",
                             Name = "Angular Purple Boots",
                             PictureUrl = "/images/products/boot-ang2.png",
-                            Price = 15000.0,
+                            Price = 15000L,
                             QuantityInStock = 100,
                             Type = "Boots"
                         },
@@ -405,7 +408,7 @@ namespace API.Migrations
                             Description = "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
                             Name = "Angular Blue Boots",
                             PictureUrl = "/images/products/boot-ang1.png",
-                            Price = 18000.0,
+                            Price = 18000L,
                             QuantityInStock = 100,
                             Type = "Boots"
                         });
@@ -764,12 +767,10 @@ namespace API.Migrations
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("ExpMonth")
-                                .HasColumnType("int")
-                                .HasJsonPropertyName("exp_month");
+                                .HasColumnType("int");
 
                             b1.Property<int>("ExpYear")
-                                .HasColumnType("int")
-                                .HasJsonPropertyName("exp_year");
+                                .HasColumnType("int");
 
                             b1.Property<int>("Last4")
                                 .HasColumnType("int");

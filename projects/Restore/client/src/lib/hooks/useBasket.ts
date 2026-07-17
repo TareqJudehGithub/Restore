@@ -17,7 +17,7 @@ export const useBasket = () => {
 	((subtotal = (basket?.items ?? []).reduce(
 		(sum: number, item: Item) => sum + item.price * item.quantity,
 		0,
-	)),
+	)).toFixed(2),
 		0);
 
 	if (discount > 0) {
@@ -28,7 +28,7 @@ export const useBasket = () => {
 	}
 
 	deliveryFee = subTotalAfterDiscount >= 100 ? 0 : 5;
-	const total = subTotalAfterDiscount + deliveryFee;
+	const total = (subTotalAfterDiscount + deliveryFee).toFixed(2);
 
 	return {
 		basket,

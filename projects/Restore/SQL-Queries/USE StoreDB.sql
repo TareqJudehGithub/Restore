@@ -7,9 +7,9 @@ WHERE Id = 1
 GO
 
 -- UPDATE
-UPDATE Products
-SET Price = 190
-WHERE Id = 19
+-- UPDATE Products
+-- SET Price = 190
+-- WHERE Id = 19
 GO
 
 SELECT Id, Price, Name AS 'Product Name'
@@ -18,10 +18,10 @@ WHERE Id BETWEEN 15 AND 19
 GO
 
 -- Delete
-DELETE
-FROM Products
-WHERE Id BETWEEN 35 AND 44
-GO
+-- DELETE
+-- FROM Products
+-- WHERE Id BETWEEN 35 AND 44
+-- GO
 
 SELECT *
 FROM BasketItems
@@ -33,6 +33,7 @@ GO
 
 SELECT Id, Name, Price
 FROM Products
+WHERE Price > 100
 ORDER BY Name
 GO
 
@@ -61,13 +62,12 @@ FROM Products AS prod
 GO
 
 
-
--- Delete 
+--Delete 
 -- Delete 
 -- FROM BasketItems
 -- GO
 
--- DELETE
+--  DELETE
 -- FROM Baskets
 -- GO
 
@@ -97,15 +97,15 @@ FROM AspNetUsers
 WHERE AddressId = 1
 GO
 
-DELETE Addresses
-WHERE Id = 4
-GO
+-- DELETE Addresses
+-- WHERE Id = 4
+-- GO
 
 
-UPDATE Products
-SET Price = 26
-WHERE Id = 17
-GO
+-- UPDATE Products
+-- SET Price = 26
+-- WHERE Id = 17
+-- GO
 
 SELECT Id, Name, Price, QuantityInStock
 FROM Products
@@ -114,3 +114,27 @@ ORDER BY Id, Price DESC
 GO
 
 -- Pa$$w0rd@
+
+USE StoreDB
+GO
+
+SELECT *
+FROM Orders
+GO
+
+SELECT *
+FROM OrderItems
+GO
+
+
+-- UPDATE
+-- UPDATE Products
+-- SET Price = 180
+-- WHERE Id = 17
+-- GO
+
+SELECT Id, Name, Price
+FROM Products
+WHERE Type = 'Boots'
+GO
+

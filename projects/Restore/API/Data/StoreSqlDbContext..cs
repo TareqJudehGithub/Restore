@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using API.Entities;
+using API.Entities.OrderAggregate;
 
 namespace API.Data;
 
@@ -10,6 +11,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
 
     public DbSet<Product> Products { get; set; }
     public DbSet<Basket> Baskets { get; set; }
+    public DbSet<Order> Orders { get; set; }
 
 
 

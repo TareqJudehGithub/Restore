@@ -1,3 +1,11 @@
+import { Box } from "@mui/material";
+import OrdersPage from "../Orders/OrdersPage";
+
 export default function HomePage() {
-	return <div>HomePage</div>;
+	return (
+		<>
+			<Box>HomePage</Box>
+			<OrdersPage />
+		</>
+	);
 }

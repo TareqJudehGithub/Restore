@@ -58,7 +58,7 @@ export default function OrderSummary() {
 						sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
 					>
 						<Typography color="textSecondary">Total</Typography>
-						<Typography>${total.toFixed(2)}</Typography>
+						<Typography>${total}</Typography>
 					</Box>
 				</Box>
 

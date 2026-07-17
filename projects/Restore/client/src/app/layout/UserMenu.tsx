@@ -13,6 +13,7 @@ import type { User } from "../models/User";
 import { Person, History, Logout } from "@mui/icons-material";
 import { useLogoutMutation } from "../features/account/accountApi";
 import { useAppSelector } from "../store/store";
+import { Link } from "react-router";
 
 export default function UserMenu({ user }: UserMenuProps) {
 	const { isLoading, darkMode } = useAppSelector((state) => state.ui);
@@ -53,7 +54,7 @@ export default function UserMenu({ user }: UserMenuProps) {
 							</ListItemIcon>
 							<ListItemText>My Profile</ListItemText>
 						</MenuItem>
-						<MenuItem>
+						<MenuItem component={Link} to="/orders">
 							<ListItemIcon>
 								<History />
 							</ListItemIcon>

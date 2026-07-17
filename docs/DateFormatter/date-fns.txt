@@ -1,0 +1,10 @@
+Date-fns
+
+  date-fns is a modern, modular JavaScript date utility library often described as "Lodash for dates". It provides over 200 functions to format, manipulate, and compare native JavaScript date objects without mutating the original data.
+
+Installation
+ $ npm install date-fns
+
+
+ Core Features
+ Modular Architecture: You only import the specific functions you need. This supports tree-shaking and keeps production bundle sizes small.Immutable & Pure: Functions return a brand-new Date instance instead of modifying the existing one, preventing unintended side effects.Native Dates: It relies entirely on standard JavaScript Date objects rather than wrapping them in a custom framework class.First-Class Time Zones: Built-in time zone features handle complex calculations across multiple regions.TypeScript Ready: The entire codebase is built with 100% strict TypeScript types

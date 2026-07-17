@@ -132,7 +132,9 @@ export const basketApi = createApi({
 			onQueryStarted: async (_, { dispatch }) => {
 				dispatch(
 					basketApi.util.updateQueryData("fetchBasket", undefined, (draft) => {
+						// Clear items from Basket
 						draft.items = [];
+						draft.basketId = "";
 					}),
 				);
 				// Clear buyerId cookie from the browser using package js-cookie

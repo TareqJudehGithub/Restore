@@ -11,7 +11,7 @@ public class PaymentService(IConfiguration config)
 
     var service = new PaymentIntentService();
     var intent = new PaymentIntent();
-    long subtotal = basket.Items.Sum(q => q.Quantity * (q.Product.Price * 100));
+    double subtotal = basket.Items.Sum(q => q.Quantity * (q.Product.Price * 100));
     double discount = 0.1;
     double subtotalAfterDiscount = 0;
     if (discount > 0)

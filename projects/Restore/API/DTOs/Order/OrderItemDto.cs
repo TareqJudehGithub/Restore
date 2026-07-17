@@ -1,12 +1,10 @@
-namespace API.DTOs;
+namespace API.DTOs.Order;
 
-public class BasketItemDto
+public class OrderItemDto
 {
   public int ProductId { get; set; }
   public required string Name { get; set; }
-  public double Price { get; set; }
   public required string PictureUrl { get; set; }
-  public required string Type { get; set; }
-  public required string Brand { get; set; }
+  public double Price { get; set; }
   public int Quantity { get; set; }
 }

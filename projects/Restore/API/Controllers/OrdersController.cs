@@ -26,11 +26,17 @@ public class OrdersController : BaseApiController
   [HttpGet]
   public async Task<ActionResult<List<OrderDto>>> GetOrders()
   {
+
     var orders = await _dbContext.Orders
     // .Include(q => q.OrderItems)
     .ProjectToDto()
     .Where(q => q.BuyerEmail == User.GetUserName())
     .ToListAsync();
+
+    if (orders.Count == 0)
+    {
+      return NoContent();
+    }
     return Ok(orders);
   }
 

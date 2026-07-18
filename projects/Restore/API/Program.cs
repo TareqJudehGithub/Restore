@@ -7,40 +7,27 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-#region Services 
 // Add services to the container.
 builder.Services.AddControllers();
 
-
-#region SQLite - Not used
-// builder.Services.AddDbContext<StoreContext>(Options =>
-// {
-//   // SQLITE
-//   Options.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection"));
-// });
-#endregion 
-
-#region MSSQL 
+// MSSQL 
 builder.Services.AddDbContext<StoreSqlDbContext>(Options =>
 {
   // SQL Server
   Options.UseSqlServer(builder.Configuration
   .GetConnectionString("MSSQLConnection"));
 });
-#endregion
 
-#region CORS
+// CORS
 builder.Services.AddCors();
-#endregion
 
-#region Exception 
+// Exceptions 
 builder.Services.AddTransient<ExceptionMiddleware>();
-#endregion
 
 //Stripe
 builder.Services.AddScoped<PaymentService>();
 
-#region Identity
+// Identity
 builder.Services.AddIdentityApiEndpoints<User>(opt =>
 {
   opt.User.RequireUniqueEmail = true;
@@ -50,21 +37,16 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<StoreSqlDbContext>();
-#endregion
-
-#endregion
 
 // Build the project
 var app = builder.Build();
 
-#region Middlewares
-
-
-#region Exceptions
+// Middlewares
 app.UseMiddleware<ExceptionMiddleware>();
-#endregion
 
-#region CORS
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseCors(opt =>
 {
   opt
@@ -73,24 +55,17 @@ app.UseCors(opt =>
   .AllowCredentials() // Allows our browser to send up the cookie
   .WithOrigins("https://localhost:3000");
 });
-#endregion
 
-#region Identity - Make sure these are above the MapControllers() middleware
+//Identity - Make sure these are above the MapControllers() middleware
 app.UseAuthentication();
 app.UseAuthorization();
-#endregion
 
 app.MapControllers();
 
 // Identity Endpoints API for Identity endpoints auto-implementation
 app.MapGroup("api").MapIdentityApi<User>();
 
-#region SQLite Middleware
-// Initialize the database with seed data
-//DbDbInitializer.InitDb(app);
-#endregion
-
-#endregion
+app.MapFallbackToController("index", "Fallback");
 
 app.Run();
 

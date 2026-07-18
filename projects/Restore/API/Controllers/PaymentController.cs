@@ -118,7 +118,7 @@ public class PaymentController : BaseApiController
     {
       _dbContext.Baskets.Remove(basket);
     }
-    order.OrderStatus = OrderStatus.PaymentReceived;
+
     await _dbContext.SaveChangesAsync();
   }
 

@@ -30,16 +30,16 @@ jobs:
           dotnet-version: '10.x'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build "${{env.DOTNET_ROOT}}/projects/Restore/API/API.csproj" --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/API/API.csproj"
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/projects/Restore/API/API.csproj"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/API/API.csproj
+          path: ${{env.DOTNET_ROOT}}
 
   deploy:
     runs-on: windows-latest

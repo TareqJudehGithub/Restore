@@ -10,12 +10,27 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-// MSSQL 
-builder.Services.AddDbContext<StoreSqlDbContext>(Options =>
+// MSSQL
+var connectionString = builder.Configuration.GetConnectionString("MSSQLConnection")
+    ?? builder.Configuration["ConnectionStrings:MSSQLConnection"];
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+  throw new InvalidOperationException(
+      "A SQL Server connection string named 'MSSQLConnection' is required. Set it in appsettings.json, appsettings.{Environment}.json, or an environment variable such as ConnectionStrings__MSSQLConnection.");
+}
+
+builder.Services.AddDbContext<StoreSqlDbContext>(options =>
 {
   // SQL Server
-  Options.UseSqlServer(builder.Configuration
-  .GetConnectionString("MSSQLConnection"));
+  options.UseSqlServer(connectionString, sqlOptions =>
+  {
+    sqlOptions.EnableRetryOnFailure(
+          maxRetryCount: 5,
+          maxRetryDelay: TimeSpan.FromSeconds(10),
+          errorNumbersToAdd: null);
+    sqlOptions.CommandTimeout(60);
+  });
 });
 
 // CORS

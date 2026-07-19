@@ -1,4 +1,4 @@
-USE StoreDB
+USE frostlabeldb
 GO
 
 SELECT *
@@ -72,7 +72,7 @@ GO
 -- GO
 
 
-USE StoreDB
+USE frostlabeldb
 GO
 
 
@@ -102,20 +102,20 @@ GO
 -- GO
 
 
--- UPDATE Products
--- SET Price = 26
--- WHERE Id = 17
--- GO
+
+UPDATE Products
+SET Price = 144.99
+WHERE Id = 18
+GO
+
 
 SELECT Id, Name, Price, QuantityInStock
 FROM Products
-WHERE Type = 'Boots'
+WHERE Type = 'boots'
 ORDER BY Id, Price DESC
 GO
 
--- Pa$$w0rd@
-
-USE StoreDB
+USE frostlabeldb
 GO
 
 SELECT *
@@ -127,14 +127,42 @@ FROM OrderItems
 GO
 
 
--- UPDATE
--- UPDATE Products
--- SET Price = 180
--- WHERE Id = 17
+
+
+
+-- Server=TareqPC\\MSSQLSRV;
+
+SELECT
+  name
+  AS Username,
+  type_desc AS AccountType,
+  is_disabled AS IsDisabled
+FROM sys.server_principals
+WHERE type IN
+('S', 'U', 'G'); 
+GO
+
+SELECT SUSER_SNAME() AS CurrentUser
+GO
+
+
+
+USE frostlabeldb
+GO
+
+
+-- Set active user 
+-- EXECUTE AS LOGIN = 'sa'
+-- GO
+-- ALTER LOGIN sa WITH PASSWORD = 'Pa$$w0rd@'
+-- GO
+-- ALTER LOGIN sa ENABLE
 -- GO
 
-SELECT Id, Name, Price
-FROM Products
-WHERE Type = 'Boots'
+SELECT
+  SUSER_NAME() AS [Current Login],
+  CURRENT_USER AS [Current DB User]
 GO
+
+--"MSSQLConnection": "Server=TareqPC\\MSSQLSRV; Database=frostlabeldb; User Id=sa;Password=Pa$$w0rd@; Trusted_Connection=True; TrustServerCertificate=True;"
 

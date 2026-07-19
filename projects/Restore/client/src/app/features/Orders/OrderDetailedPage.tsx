@@ -37,7 +37,7 @@ export default function OrderDetailedPage() {
 						Order Summary for #{order.id}
 					</Typography>
 					<Button component={Link} to="/orders" variant="outlined">
-						Backk to Orders
+						Orders History
 					</Button>
 				</Box>
 
@@ -172,8 +172,7 @@ export default function OrderDetailedPage() {
 											borderBottom: "none",
 										}}
 									>
-										<Grid
-											size={6}
+										<Box
 											sx={{
 												display: "flex",
 												justifyContent: "start",
@@ -189,18 +188,7 @@ export default function OrderDetailedPage() {
 												/>
 											</span>
 											<span style={{}}>{item.name}</span>
-										</Grid>
-										<Grid
-											size={6}
-											sx={{
-												gap: 1,
-												display: "flex",
-												justifyContent: "center",
-											}}
-										>
-											<span style={{}}>x{item.quantity}</span>
-											<span style={{}}>{item.price}</span>
-										</Grid>
+										</Box>
 									</TableCell>
 								</TableRow>
 							))}
@@ -257,7 +245,7 @@ export default function OrderDetailedPage() {
 								fontWeight: 300,
 							}}
 						>
-							&#36;{order.subtotal}
+							&#36;{Number(order.subtotal).toFixed(2)}
 						</Typography>
 					</Box>
 
@@ -282,7 +270,7 @@ export default function OrderDetailedPage() {
 								color: "green",
 							}}
 						>
-							-&#36;{order.discount}
+							-&#36;{Number(order.discount).toFixed(2)}
 						</Typography>
 					</Box>
 
@@ -316,7 +304,7 @@ export default function OrderDetailedPage() {
 									</span>
 								</>
 							) : (
-								<span>&#36;order.deliveryFee</span>
+								<span>&#36;{order.deliveryFee}</span>
 							)}
 						</Typography>
 					</Box>
@@ -342,7 +330,7 @@ export default function OrderDetailedPage() {
 							fontWeight: 300,
 						}}
 					>
-						&#36;{order.total}
+						&#36;{Number(order.total).toFixed(2)}
 					</Typography>
 				</Box>
 			</Card>

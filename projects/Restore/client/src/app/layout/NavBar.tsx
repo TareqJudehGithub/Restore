@@ -10,13 +10,13 @@ import UserMenu from "./UserMenu";
 import {
 	AppBar,
 	Toolbar,
-	Typography,
 	IconButton,
 	ListItem,
 	List,
 	Box,
 	Badge,
 	LinearProgress,
+	Typography,
 } from "@mui/material";
 
 export default function NavBar() {
@@ -33,8 +33,6 @@ export default function NavBar() {
 			(sum: number, item: Item) => sum + item.quantity,
 			0,
 		) || 0;
-
-	//TODO: Cart total
 
 	return (
 		<AppBar position="fixed">
@@ -55,22 +53,34 @@ export default function NavBar() {
 					}}
 				>
 					{darkMode ? (
-						<Typography
-							component={NavLink}
-							to={"/"}
-							variant="inherit"
-							sx={navLinkStyleDark}
-						>
-							Re-Store
+						<Typography component={NavLink} to={"/"} variant="inherit">
+							<Box
+								component="img"
+								src="/images/shop_logo_dark.png"
+								alt="Winter Adventures shop logo"
+								sx={{
+									width: "100%",
+									maxWidth: 45,
+									height: "auto",
+									borderRadius: 5,
+									boxShadow: 3,
+								}}
+							></Box>
 						</Typography>
 					) : (
-						<Typography
-							component={NavLink}
-							to={"/"}
-							variant="inherit"
-							sx={navLinkStyleLight}
-						>
-							Re-Store
+						<Typography component={NavLink} to={"/"} variant="inherit">
+							<Box
+								component="img"
+								src="/images/shop_logo_light.png"
+								alt="Winter Adventures shop logo"
+								sx={{
+									width: "100%",
+									maxWidth: 45,
+									height: "auto",
+									borderRadius: 5,
+									boxShadow: 3,
+								}}
+							></Box>
 						</Typography>
 					)}
 

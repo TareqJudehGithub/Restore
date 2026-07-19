@@ -12,14 +12,22 @@ import {
 import { useFetchOrderQuery } from "./orderApi";
 import { useNavigate } from "react-router";
 import { format } from "date-fns";
+import { useUserInfoQuery } from "../account/accountApi";
 
 export default function OrdersPage() {
 	const { data: orders, isLoading } = useFetchOrderQuery();
+	const { data: user } = useUserInfoQuery();
 	const navigate = useNavigate();
 
 	if (isLoading) return <Typography>Loading...</Typography>;
+
 	if (!orders)
-		return <Typography variant="h5">No orders available</Typography>;
+		return (
+			<Typography variant="h5">
+				No orders available for {user?.email}
+			</Typography>
+		);
+
 	return (
 		<Container maxWidth="md">
 			<Typography variant="h5" align="center" gutterBottom>
@@ -47,7 +55,7 @@ export default function OrdersPage() {
 								<TableCell>
 									{format(order.orderDate, " dd MMM yyyy")}
 								</TableCell>
-								<TableCell>${order.total}</TableCell>
+								<TableCell>${order.total.toFixed(2)}</TableCell>
 								<TableCell>{order.orderStatus}</TableCell>
 							</TableRow>
 						))}

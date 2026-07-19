@@ -76,7 +76,7 @@ public class OrdersController : BaseApiController
 
     var subtotal = items.Sum(q => q.Price * q.Quantity);
     var deliveryFees = CalculateDeliveryFees(subtotal);
-    var discount = subtotal * 0.1;
+    var discount = Math.Round(subtotal * 0.1, 2);
 
     // Check if we have an order in DB:
     var order = await _dbContext.Orders

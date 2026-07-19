@@ -52,7 +52,7 @@ export default function HomePage() {
 							my: 3,
 						}}
 					>
-						Welcome to Restore!
+						Winter Adventures
 					</Typography>
 					<Button
 						variant="contained"

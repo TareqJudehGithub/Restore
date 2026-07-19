@@ -37,7 +37,7 @@ const steps: string[] = ["Address", "Payment", "Review"];
 export default function CheckoutStepper() {
 	const [activeStep, setActiveStep] = useState<number>(0);
 
-	const { data: address, isLoading } = useFetchAddressQuery();
+	const { data, isLoading } = useFetchAddressQuery();
 	const [createOrder] = useCreateOrderMutation();
 
 	const [addressComplete, setAddressComplete] = useState<boolean>(false);
@@ -47,7 +47,7 @@ export default function CheckoutStepper() {
 	const navigate = useNavigate();
 
 	const [updateUserAddress] = useUpdateUserAddressMutation();
-	const { total, basket, clearBasket } = useBasket();
+	const { basket, clearBasket } = useBasket();
 
 	// Stripe Hooks and const
 	const elements = useElements(); // contains user details (like address and payment)
@@ -56,9 +56,14 @@ export default function CheckoutStepper() {
 		useState<ConfirmationToken | null>(null);
 	const [submitting, setSubmitting] = useState<boolean>(false);
 
+	let name, address;
+	if (data) {
+		({ name, ...address } = data);
+	}
 	const getStripedAddress = async () => {
 		const addressElement = elements?.getElement("address");
 		if (!addressElement) return null;
+
 		const {
 			value: { name, address },
 		} = await addressElement.getValue();
@@ -66,19 +71,17 @@ export default function CheckoutStepper() {
 		if (name && address) return { ...address, name };
 	};
 
-	const addressDefaults = address
-		? {
-				name: address.name ?? "",
-				address: {
-					line1: address.line1 ?? "",
-					line2: address.line2 ?? "",
-					city: address.city ?? "",
-					state: address.state ?? "",
-					postal_code: address.postal_code ?? "",
-					country: address.country ?? "",
-				},
-			}
-		: undefined;
+	const addressDefaults = {
+		name: name ?? "",
+		address: {
+			line1: address?.line1 ?? "",
+			line2: address?.line2 ?? "",
+			city: address?.city ?? "",
+			state: address?.state ?? "",
+			postal_code: address?.postal_code ?? "",
+			country: address?.country ?? "",
+		},
+	};
 
 	const handleAddressChange = (event: StripeAddressElementChangeEvent) => {
 		setAddressComplete(event.complete);

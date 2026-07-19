@@ -13,10 +13,8 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
     public DbSet<Basket> Baskets { get; set; }
     public DbSet<Order> Orders { get; set; }
 
-
-
     // Identity roles, seeding and inserting data into the DB
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override async void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
@@ -115,7 +113,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Angular Speedster Board 2000",
             Description =
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-            Price = 20000,
+            Price = 120,
             PictureUrl = "/images/products/sb-ang1.png",
             Brand = "Angular",
             Type = "Boards",
@@ -126,7 +124,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Id = 2,
             Name = "Green Angular Board 3000",
             Description = "Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.",
-            Price = 15000,
+            Price = 95,
             PictureUrl = "/images/products/sb-ang2.png",
             Brand = "Angular",
             Type = "Boards",
@@ -138,7 +136,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Core Board Speed Rush 3",
             Description =
                 "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
-            Price = 18000,
+            Price = 180,
             PictureUrl = "/images/products/sb-core1.png",
             Brand = "NetCore",
             Type = "Boards",
@@ -150,7 +148,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Net Core Super Board",
             Description =
                 "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
-            Price = 30000,
+            Price = 145,
             PictureUrl = "/images/products/sb-core2.png",
             Brand = "NetCore",
             Type = "Boards",
@@ -162,7 +160,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "React Board Super Whizzy Fast",
             Description =
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-            Price = 25000,
+            Price = 250,
             PictureUrl = "/images/products/sb-react1.png",
             Brand = "React",
             Type = "Boards",
@@ -174,7 +172,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Typescript Entry Board",
             Description =
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-            Price = 12000,
+            Price = 75,
             PictureUrl = "/images/products/sb-ts1.png",
             Brand = "TypeScript",
             Type = "Boards",
@@ -186,7 +184,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Core Blue Hat",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-            Price = 1000,
+            Price = 48,
             PictureUrl = "/images/products/hat-core1.png",
             Brand = "NetCore",
             Type = "Hats",
@@ -198,7 +196,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Green React Woolen Hat",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-            Price = 8000,
+            Price = 65,
             PictureUrl = "/images/products/hat-react1.png",
             Brand = "React",
             Type = "Hats",
@@ -210,7 +208,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Purple React Woolen Hat",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-            Price = 1500,
+            Price = 37,
             PictureUrl = "/images/products/hat-react2.png",
             Brand = "React",
             Type = "Hats",
@@ -222,7 +220,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Blue Code Gloves",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-            Price = 1800,
+            Price = 23,
             PictureUrl = "/images/products/glove-code1.png",
             Brand = "VS Code",
             Type = "Gloves",
@@ -234,7 +232,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Green Code Gloves",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-            Price = 1500,
+            Price = 33,
             PictureUrl = "/images/products/glove-code2.png",
             Brand = "VS Code",
             Type = "Gloves",
@@ -246,7 +244,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Purple React Gloves",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-            Price = 1600,
+            Price = 19,
             PictureUrl = "/images/products/glove-react1.png",
             Brand = "React",
             Type = "Gloves",
@@ -258,7 +256,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Green React Gloves",
             Description =
                 "Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-            Price = 1400,
+            Price = 46,
             PictureUrl = "/images/products/glove-react2.png",
             Brand = "React",
             Type = "Gloves",
@@ -270,7 +268,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Redis Red Boots",
             Description =
                 "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
-            Price = 25000,
+            Price = 175,
             PictureUrl = "/images/products/boot-redis1.png",
             Brand = "Redis",
             Type = "Boots",
@@ -282,7 +280,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Core Red Boots",
             Description =
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.",
-            Price = 18999,
+            Price = 89,
             PictureUrl = "/images/products/boot-core2.png",
             Brand = "NetCore",
             Type = "Boots",
@@ -294,7 +292,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Core Purple Boots",
             Description =
                 "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci.",
-            Price = 19999,
+            Price = 134,
             PictureUrl = "/images/products/boot-core1.png",
             Brand = "NetCore",
             Type = "Boots",
@@ -305,7 +303,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Id = 17,
             Name = "Angular Purple Boots",
             Description = "Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.",
-            Price = 15000,
+            Price = 64,
             PictureUrl = "/images/products/boot-ang2.png",
             Brand = "Angular",
             Type = "Boots",
@@ -317,7 +315,7 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
             Name = "Angular Blue Boots",
             Description =
                 "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
-            Price = 18000,
+            Price = 55,
             PictureUrl = "/images/products/boot-ang1.png",
             Brand = "Angular",
             Type = "Boots",
@@ -325,7 +323,6 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
         }
 
     };
-
 
         // Insert all seedings into DB
         builder.Entity<IdentityRole>().HasData(roles);
@@ -335,5 +332,4 @@ public class StoreSqlDbContext(DbContextOptions options) : IdentityDbContext<Use
         builder.Entity<IdentityUserRole<string>>().HasData(userRoles);
         builder.Entity<Product>().HasData(products);
     }
-
 }

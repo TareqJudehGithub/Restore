@@ -37,28 +37,28 @@ export default function OrderSummary() {
 						sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
 					>
 						<Typography color="textSecondary">Subtotal</Typography>
-						<Typography>${subtotal.toFixed(2)}</Typography>
+						<Typography>&#36;{subtotal.toFixed(2)}</Typography>
 					</Box>
 					<Box
 						sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
 					>
 						<Typography color="textSecondary">Discount</Typography>
 						<Typography color="success">
-							${discountAmount.toFixed(2)}
+							-&#36;{discountAmount.toFixed(2)}
 						</Typography>
 					</Box>
 					<Box
 						sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
 					>
 						<Typography color="textSecondary">Delivery fee</Typography>
-						<Typography> ${deliveryFee}</Typography>
+						<Typography> &#36;{deliveryFee}</Typography>
 					</Box>
 					<Divider sx={{ my: 2 }} />
 					<Box
 						sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
 					>
 						<Typography color="textSecondary">Total</Typography>
-						<Typography>${total}</Typography>
+						<Typography>&#36;{Number(total).toFixed(2)}</Typography>
 					</Box>
 				</Box>
 

@@ -16,21 +16,28 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read 
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
 
       # Added Node.js v24 setup step
-      # - name: Set up Node.js v24
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: '24'      
+      - name: Set up Node.js v24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      # Build the client
+      - name: Install deps and build client app
+        run: |
+          cd projects/Restore/client
+          npm install
+          npm build
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.x'
+          dotnet-version: "10.x"
 
       - name: Build with dotnet
         run: dotnet build "projects/Restore/API/API.csproj" --configuration Release
@@ -45,7 +52,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app          
+          name: .net-app
           path: projects/Restore/API/bin/publish
 
   deploy:
@@ -59,9 +66,9 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app     
+          name: .net-app
           path: ./published-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -73,6 +80,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'frosty-label'
-          slot-name: 'Production'          
+          app-name: "frosty-label"
+          slot-name: "Production"
           package: ./published-app

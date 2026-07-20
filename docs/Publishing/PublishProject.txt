@@ -1,0 +1,93 @@
+Publishing project
+
+In the Client
+  1. In the client side, and under Client folder, create a new file: .env.production
+  2. Copy all .env files content into the new .env.production file
+    Adjust the URL path in .env.production:
+      
+      VITE_API_URL=/api
+      VITE_STRIPE_PK=pk_test_YXpV5Dm8rG7rmDxLlR9NWhyS00u9QKlt90
+
+ 3. In vite.config.ts file, add build object:
+
+    import { defineConfig } from "vite";
+    import react from "@vitejs/plugin-react";
+    import mkcert from "vite-plugin-mkcert";
+
+
+    export default defineConfig({
+      build: {
+        outDir: "../API/wwwroot",
+        chunkSizeWarningLimit: 1024,
+        emptyOutDir: true,
+      },
+      server: {
+        port: 3000,
+      },
+      plugins: [react(), mkcert()],
+    });
+
+
+ 4. In Terminal, and in the client root directory, run: 
+    $npm run build
+
+
+In the API side
+
+  1. In program.cs, add: 
+
+    app.UseDefaultFiles();
+    app.UseStaticFiles();
+
+  Right below the app.UseMiddleware<ExceptionMiddleware>();
+  This is v.important
+  
+  Now we should be able to run the client project from the API.
+  Test this by typing https://localhost/5001 in the browser
+
+
+  2. Inside Controllers
+  Create a new controller: FallbackController
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
+    namespace API.Controllers;
+
+    [ApiController]
+    [Route("api/[controller]")]
+
+    [AllowAnonymous]
+    public class FallbackController : ControllerBase
+    {
+      public IActionResult Index()
+      {
+        return PhysicalFile(Path.Combine(
+          Directory
+          .GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
+      }
+    }
+
+  3. In program.cs
+    Add the middleware for the Fallback controller
+    app.MapFallbackToController("index", "Fallback");
+
+
+Azure
+
+ - Create an Azure Account.
+ - Create a new Resource Group.
+ - Create a new Web App, and configure it.
+    - Use any Keys as a new Environment Variable values.
+ - Create a new Database and configure it.
+    - Use the DB connection strings from appsetting.json.
+
+
+-- From your API terminal, publish the project
+  $ dotnet publish -c Release -o ./bin/Publish
+
+
+
+
+
+

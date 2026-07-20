@@ -1,0 +1,85 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core app to Azure Web App - frosty-label
+
+env:
+  NODE_OPTIONS: "--no-deprecation" # Hides the harmless warnings we discussed
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Added Node.js v24 setup step
+      - name: Set up Node.js v24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      # Build the client
+      - name: Install deps and build client app
+        run: |
+          cd projects/Restore/client
+          npm install
+          npm run build
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.x"
+
+      - name: Build with dotnet
+        run: dotnet build "projects/Restore/API/API.csproj" --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish --configuration Release --output ./bin/publish
+        working-directory: projects/Restore/API/
+
+      - name: Zip published binaries
+        run: Compress-Archive -Path projects/Restore/API/bin/publish/* -DestinationPath ./site.zip
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: projects/Restore/API/bin/publish
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+          path: ./published-app
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3DBDD208EA4F4ED0856E2D6823AD27F4 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BBA24F55B47C4E949402B3A640133242 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_1EBCA3039703494A9EB0BAF17D80BD99 }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: "frosty-label"
+          slot-name: "Production"
+          package: ./published-app

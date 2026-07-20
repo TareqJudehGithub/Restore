@@ -18,11 +18,11 @@ export default function Catalog() {
 		return <h3>Loading...</h3>;
 
 	return (
-		<Grid container spacing={4}>
-			<Grid size={3}>
+		<Grid container spacing={{ xs: 3, md: 4 }}>
+			<Grid size={{ xs: 12, md: 3 }}>
 				<Filters filtersData={filtersData} />
 			</Grid>
-			<Grid size={9}>
+			<Grid size={{ xs: 12, md: 9 }}>
 				{data.items && data.items.length > 0 ? (
 					<>
 						<ProductList products={data.items} />
@@ -41,19 +41,3 @@ export default function Catalog() {
 		</Grid>
 	);
 }
-
-//#region useEffect, useState hooks
-//const [products, setProducts] = useState<Product[]>([]);
-
-// useEffect(() => {
-// 	const url: string = "https://localhost:5001/api/products";
-
-// 	const fetchData = async () => {
-// 		const response = await fetch(url);
-// 		const data = await response.json();
-
-// 		setProducts(data);
-// 	};
-// 	fetchData();
-// }, []);
-//#endregion

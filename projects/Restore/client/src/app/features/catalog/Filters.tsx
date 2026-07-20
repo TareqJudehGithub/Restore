@@ -22,27 +22,27 @@ export default function Filters({ filtersData: data }: FiltersProps) {
 			sx={{
 				display: "flex",
 				flexDirection: "column",
-				gap: 3,
+				gap: { xs: 2, md: 3 },
 			}}
 		>
-			<Paper>
+			<Paper sx={{ overflow: "hidden" }}>
 				<Search />
 			</Paper>
-			<Paper sx={{ p: 3 }}>
+			<Paper sx={{ p: { xs: 2, sm: 3 } }}>
 				<RadioButtonGroup
 					options={sortOptions}
 					selectedValue={orderBy}
 					onChange={(e) => dispatch(setOrderBy(e.target.value))}
 				/>
 			</Paper>
-			<Paper sx={{ p: 3 }}>
+			<Paper sx={{ p: { xs: 2, sm: 3 } }}>
 				<CheckboxButtons
 					items={data.brands}
 					checked={brands}
 					onChange={(items: string[]) => dispatch(setBrands(items))}
 				/>
 			</Paper>
-			<Paper sx={{ p: 3 }}>
+			<Paper sx={{ p: { xs: 2, sm: 3 } }}>
 				<FormGroup>
 					<CheckboxButtons
 						items={data.types}
@@ -52,7 +52,7 @@ export default function Filters({ filtersData: data }: FiltersProps) {
 				</FormGroup>
 			</Paper>
 			<Button
-				sx={{ mt: 0, justifyContent: "start" }}
+				sx={{ mt: 0, justifyContent: "start", px: 0 }}
 				onClick={() => dispatch(resetParams())}
 			>
 				Reset filters

@@ -1,13 +1,14 @@
 import {
 	Button,
-	Menu,
 	Fade,
 	MenuItem,
 	ListItemIcon,
 	ListItemText,
 	Divider,
-	Box,
 } from "@mui/material";
+import Menu, { type MenuProps } from "@mui/material/Menu";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { styled, alpha } from "@mui/material/styles";
 import { useState } from "react";
 import type { User } from "../models/User";
 import { Person, History, Logout } from "@mui/icons-material";
@@ -18,6 +19,7 @@ import { Link } from "react-router";
 export default function UserMenu({ user }: UserMenuProps) {
 	const { isLoading, darkMode } = useAppSelector((state) => state.ui);
 	const [logout] = useLogoutMutation();
+
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,87 +29,171 @@ export default function UserMenu({ user }: UserMenuProps) {
 		setAnchorEl(null);
 	};
 
+	const StyledMenu = styled((props: MenuProps) => (
+		<Menu
+			elevation={0}
+			anchorOrigin={{
+				vertical: "bottom",
+				horizontal: "right",
+			}}
+			transformOrigin={{
+				vertical: "top",
+				horizontal: "right",
+			}}
+			{...props}
+		/>
+	))(({ theme }) => ({
+		"& .MuiPaper-root": {
+			borderRadius: 6,
+			marginTop: theme.spacing(1),
+			minWidth: 180,
+			color: "rgb(55, 65, 81)",
+			boxShadow:
+				"rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+			"& .MuiMenu-list": {
+				padding: "4px 0",
+			},
+			"& .MuiMenuItem-root": {
+				"& .MuiSvgIcon-root": {
+					fontSize: 18,
+					color: theme.palette.text.secondary,
+					marginRight: theme.spacing(1.5),
+					...theme.applyStyles("dark", {
+						color: "inherit",
+					}),
+				},
+				"&:active": {
+					backgroundColor: alpha(
+						theme.palette.primary.main,
+						theme.palette.action.selectedOpacity,
+					),
+				},
+			},
+			...theme.applyStyles("dark", {
+				color: theme.palette.grey[300],
+			}),
+		},
+	}));
+
 	return (
 		<div>
 			{darkMode ? (
 				<>
-					<Button size="large" sx={navLinkStyleDark} onClick={handleClick}>
+					<Button
+						size="large"
+						sx={navLinkStyleDark}
+						id="demo-customized-button"
+						aria-controls={open ? "demo-customized-menu" : undefined}
+						aria-haspopup="true"
+						aria-expanded={open}
+						disableElevation
+						onClick={handleClick}
+						endIcon={<KeyboardArrowDownIcon />}
+					>
 						{user.email}
 					</Button>
 
-					<Menu
-						sx={navLinkStyleDark}
-						id="fade-menu"
+					<StyledMenu
+						id="demo-customized-menu"
 						slotProps={{
 							list: {
-								"aria-labelledby": "fade-button",
+								"aria-labelledby": "demo-customized-button",
 							},
 						}}
-						slots={{ transition: Fade }}
 						anchorEl={anchorEl}
 						open={open}
 						onClose={handleClose}
+						sx={navLinkStyleDark}
 					>
-						<MenuItem>
+						<MenuItem onClick={handleClose} disableRipple>
 							<ListItemIcon>
 								<Person />
 							</ListItemIcon>
 							<ListItemText>My Profile</ListItemText>
 						</MenuItem>
-						<MenuItem component={Link} to="/orders">
+						<MenuItem
+							onClick={handleClose}
+							disableRipple
+							component={Link}
+							to="/orders"
+						>
 							<ListItemIcon>
 								<History />
 							</ListItemIcon>
 							<ListItemText>My Orders</ListItemText>
 						</MenuItem>
 						<Divider />
-						<MenuItem onClick={logout}>
+						<MenuItem
+							onClick={(e) => {
+								logout(e.currentTarget.value);
+								handleClose();
+							}}
+						>
 							<ListItemIcon>
 								<Logout />
 							</ListItemIcon>
 							<ListItemText>Logout</ListItemText>
 						</MenuItem>
-					</Menu>
+					</StyledMenu>
 				</>
 			) : (
 				<>
-					<Button size="large" sx={navLinkStyleLight} onClick={handleClick}>
+					<Button
+						size="large"
+						sx={navLinkStyleLight}
+						id="demo-customized-button"
+						aria-controls={open ? "demo-customized-menu" : undefined}
+						aria-haspopup="true"
+						aria-expanded={open}
+						disableElevation
+						onClick={handleClick}
+						endIcon={<KeyboardArrowDownIcon />}
+					>
 						{user.email}
 					</Button>
 
-					<Menu
-						sx={navLinkStyleLight}
-						id="fade-menu"
+					<StyledMenu
+						id="demo-customized-menu"
 						slotProps={{
 							list: {
-								"aria-labelledby": "fade-button",
+								"aria-labelledby": "demo-customized-button",
 							},
 						}}
-						slots={{ transition: Fade }}
 						anchorEl={anchorEl}
 						open={open}
 						onClose={handleClose}
+						sx={navLinkStyleLight}
 					>
-						<MenuItem>
+						<MenuItem onClick={handleClose} disableRipple>
 							<ListItemIcon>
 								<Person />
 							</ListItemIcon>
 							<ListItemText>My Profile</ListItemText>
 						</MenuItem>
-						<MenuItem>
+						<MenuItem
+							onClick={handleClose}
+							disableRipple
+							component={Link}
+							to="/orders"
+						>
 							<ListItemIcon>
 								<History />
 							</ListItemIcon>
 							<ListItemText>My Orders</ListItemText>
 						</MenuItem>
 						<Divider />
-						<MenuItem onClick={logout}>
+						<MenuItem
+							onClick={(e) => {
+								logout(e.currentTarget.value);
+								handleClose();
+							}}
+						>
 							<ListItemIcon>
 								<Logout />
 							</ListItemIcon>
 							<ListItemText>Logout</ListItemText>
 						</MenuItem>
-					</Menu>
+					</StyledMenu>
 				</>
 			)}
 		</div>

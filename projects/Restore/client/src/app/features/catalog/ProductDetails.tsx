@@ -10,6 +10,7 @@ import {
 } from "../basket/basketApi";
 
 import {
+	Box,
 	Button,
 	Divider,
 	Table,
@@ -90,24 +91,42 @@ export default function ProductDetails() {
 	];
 
 	return (
-		<Grid container spacing={6} sx={{ mx: "auto" }}>
-			<Grid size={6}>
-				<img
+		<Grid container spacing={{ xs: 3, md: 6 }} sx={{ mx: "auto" }}>
+			<Grid size={{ xs: 12, md: 6 }}>
+				<Box
+					component="img"
 					src={product.pictureUrl}
 					alt={product.name}
-					style={{ width: "100%" }}
-				/>
+					sx={{
+						width: "100%",
+						maxWidth: "100%",
+						height: { xs: 200, sm: 300, md: 400 },
+						overflow: "hidden",
+						borderRadius: 8,
+						backgroundColor: "#f5f5f5",
+						objectFit: "contain", // Ensures it doesn't stretch or distort
+						objectPosition: "center",
+						display: "block",
+					}}
+				></Box>
 			</Grid>
-			<Grid size={6}>
-				<Typography variant="h3">{product.name}</Typography>
+			<Grid size={{ xs: 12, md: 6 }}>
+				<Typography
+					variant="h3"
+					sx={{ fontSize: { xs: "1.75rem", md: "3rem" } }}
+				>
+					{product.name}
+				</Typography>
 				<Divider sx={{ mb: 2 }} />
-				<Typography variant="h4">{product.price.toFixed(2)}</Typography>
+				<Typography
+					variant="h4"
+					sx={{ fontSize: { xs: "1.25rem", md: "2.125rem" } }}
+				>
+					{product.price.toFixed(2)}
+				</Typography>
 
 				<TableContainer>
-					<Table
-						// Increase cell font size
-						sx={{ "& td": { fontSize: "1rem" } }}
-					>
+					<Table sx={{ "& td": { fontSize: { xs: "0.95rem", md: "1rem" } } }}>
 						<TableBody>
 							{productDetails.map((product, index) => (
 								<TableRow key={index}>
@@ -120,8 +139,8 @@ export default function ProductDetails() {
 						</TableBody>
 					</Table>
 				</TableContainer>
-				<Grid container spacing={2} sx={{ marginTop: 3 }}>
-					<Grid size={6}>
+				<Grid container spacing={{ xs: 1.5, md: 2 }} sx={{ marginTop: 3 }}>
+					<Grid size={{ xs: 12, sm: 6 }}>
 						<TextField
 							size="small"
 							variant="outlined"
@@ -132,7 +151,7 @@ export default function ProductDetails() {
 							onChange={handleInputChange}
 						/>
 					</Grid>
-					<Grid size={6}>
+					<Grid size={{ xs: 12, sm: 6 }}>
 						<Button
 							onClick={handleUpdateBasket}
 							disabled={

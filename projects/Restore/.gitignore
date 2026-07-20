@@ -9,7 +9,7 @@
 *.db
 # dotenv files
 .env
-.env.production
+
 
 
 # User-specific files

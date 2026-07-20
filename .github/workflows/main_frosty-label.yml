@@ -32,7 +32,7 @@ jobs:
         run: |
           cd projects/Restore/client
           npm install
-          npm build
+          npm run build
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4

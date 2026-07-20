@@ -38,13 +38,15 @@ jobs:
       - name: dotnet publish
         run: dotnet publish --configuration Release --output ./bin/publish
         working-directory: projects/Restore/API/
-        
+
+      - name: Zip published binaries
+        run: Compress-Archive -Path projects/Restore/API/bin/publish/* -DestinationPath ./site.zip
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
-          # ✅ FIXED: Now correctly pointing to your actual published binaries
-          path: projects/Restore/API/bin/publish
+          name: .net-app          
+          path: ./site.zip
 
   deploy:
     runs-on: windows-latest
@@ -57,8 +59,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
-          # ✅ FIXED: Extract the files safely into a dedicated folder
+          name: .net-app     
           path: ./published-app
       
       - name: Login to Azure
@@ -73,6 +74,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'frosty-label'
-          slot-name: 'Production'
-          # ✅ FIXED: Target the clean extracted workspace instead of the whole root directory
-          package: ./published-app
+          slot-name: 'Production'          
+          package: ./site.zip

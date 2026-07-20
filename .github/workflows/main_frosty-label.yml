@@ -33,7 +33,7 @@ jobs:
         run: dotnet build "projects/Restore/API/API.csproj" --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "./bin/Publish"
+        run: dotnet publish -c Release -o "API/"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4

@@ -28,11 +28,33 @@ export default function ProductCard({ product }: ProductCardProps) {
 			}}
 		>
 			<CardMedia
-				sx={{ height: { xs: 180, sm: 220 }, backgroundSize: "cover" }}
+				sx={{
+					height: { xs: 180, sm: 220 },
+					backgroundSize: {
+						xs: "cover",
+						sm: "cover",
+						md: "cover",
+						lg: "cover",
+					},
+
+					//objectFit: "" // Ensures it doesn't stretch or distort
+				}}
 				image={product.pictureUrl}
 				title={product.name}
+				// sx={{
+				// 	width: "100%",
+				// 	maxWidth: "100%",
+				// 	height: "100%",
+				// 	overflow: "hidden",
+				// 	borderRadius: 8,
+				// 	backgroundColor: "#f5f5f5",
+				// 	objectPosition: "center",
+				// 	display: "block",
+				// }}
 			/>
-			<CardContent sx={{ flexGrow: 1, px: { xs: 1.5, sm: 2 }, pb: { xs: 1, sm: 1.5 } }}>
+			<CardContent
+				sx={{ flexGrow: 1, px: { xs: 1.5, sm: 2 }, pb: { xs: 1, sm: 1.5 } }}
+			>
 				<Typography
 					gutterBottom
 					sx={{ textTransform: "uppercase", fontWeight: 600, lineHeight: 1.4 }}
@@ -102,4 +124,3 @@ const navLinkStyleLight = {
 		color: "#baecf9",
 	},
 };
-

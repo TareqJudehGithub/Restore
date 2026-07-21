@@ -46,16 +46,11 @@ export default function ProductDetails() {
 	);
 
 	if (!product || isLoading) return <div>Loading...</div>;
-	//#region Helper functions for updating item quantity
 
 	const updateQuantity = (item: Item | undefined): number =>
 		item ? Math.abs(quantity - item.quantity) : quantity;
 
 	const handleUpdateBasket = () => {
-		// const updateQuantity = item
-		// 	? Math.abs(quantity - item.quantity)
-		// 	: quantity;
-
 		// In case we don't have (the) item in the basket/cart
 		if (!item) {
 			addBasketItem({ product, quantity: updateQuantity(item) });
@@ -100,7 +95,7 @@ export default function ProductDetails() {
 					sx={{
 						width: "100%",
 						maxWidth: "100%",
-						height: { xs: 200, sm: 300, md: 400 },
+						height: "100%",
 						overflow: "hidden",
 						borderRadius: 8,
 						backgroundColor: "#f5f5f5",
@@ -175,23 +170,3 @@ type ProductProperties = {
 	label: string;
 	value: string | number;
 };
-
-//#region useEffect - getProduct by id
-// const [product, setProduct] = useState<Product | null>(null);
-
-// // Fetch item
-// useEffect(() => {
-// 	const url = `https://localhost:5001/api/products/${id}`;
-
-// 	const fetchData = async () => {
-// 		try {
-// 			const response = await fetch(url);
-// 			const data = await response.json();
-// 			setProduct(data);
-// 		} catch (err) {
-// 			console.log(err);
-// 		}
-// 	};
-// 	fetchData();
-// }, [id]);
-//#endregion

@@ -11,13 +11,13 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { styled, alpha } from "@mui/material/styles";
 import { useState } from "react";
 import type { User } from "../models/User";
-import { Person, History, Logout } from "@mui/icons-material";
+import { Person, History, Logout, Inventory } from "@mui/icons-material";
 import { useLogoutMutation } from "../features/account/accountApi";
 import { useAppSelector } from "../store/store";
 import { Link } from "react-router";
 
 export default function UserMenu({ user }: UserMenuProps) {
-	const { isLoading, darkMode } = useAppSelector((state) => state.ui);
+	const { darkMode } = useAppSelector((state) => state.ui);
 	const [logout] = useLogoutMutation();
 
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -122,6 +122,20 @@ export default function UserMenu({ user }: UserMenuProps) {
 							</ListItemIcon>
 							<ListItemText>My Orders</ListItemText>
 						</MenuItem>
+
+						{user.roles.includes("Admin") && (
+							<MenuItem
+								onClick={handleClose}
+								disableRipple
+								component={Link}
+								to="/inventory"
+							>
+								<ListItemIcon>
+									<History />
+								</ListItemIcon>
+								<ListItemText>Inventory</ListItemText>
+							</MenuItem>
+						)}
 						<Divider />
 						<MenuItem
 							onClick={(e) => {
@@ -181,7 +195,22 @@ export default function UserMenu({ user }: UserMenuProps) {
 							</ListItemIcon>
 							<ListItemText>My Orders</ListItemText>
 						</MenuItem>
+
+						{user.roles.includes("Admin") && (
+							<MenuItem
+								onClick={handleClose}
+								disableRipple
+								component={Link}
+								to="/inventory"
+							>
+								<ListItemIcon>
+									<Inventory />
+								</ListItemIcon>
+								<ListItemText>Inventory</ListItemText>
+							</MenuItem>
+						)}
 						<Divider />
+
 						<MenuItem
 							onClick={(e) => {
 								logout(e.currentTarget.value);

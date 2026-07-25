@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { number } from "zod";
+import type { Product } from "../models/product";
 
 // Dark Mode theme
 const getInitialDarkMode = (): boolean => {
@@ -12,6 +14,7 @@ export const uiSlice = createSlice({
 	initialState: {
 		isLoading: false,
 		darkMode: getInitialDarkMode(),
+		inventoryEditMode: false,
 	},
 	reducers: {
 		startLoading: (state) => {
@@ -24,8 +27,12 @@ export const uiSlice = createSlice({
 			localStorage.setItem("darkMode", JSON.stringify(!state.darkMode));
 			state.darkMode = !state.darkMode;
 		},
+		setInventoryEditMode: (state, action) => {
+			state.inventoryEditMode = action.payload;
+		},
 	},
 });
 
 // Dispatch actions
-export const { startLoading, stopLoading, setDarkMode } = uiSlice.actions;
+export const { startLoading, stopLoading, setDarkMode, setInventoryEditMode } =
+	uiSlice.actions;

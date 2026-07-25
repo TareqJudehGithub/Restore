@@ -59,6 +59,7 @@ public class AccountController : BaseApiController
 
   }
 
+  // api/account/user-info
   [HttpGet("user-info")]
   public async Task<ActionResult> GetUserInfo()
   {
@@ -80,6 +81,8 @@ public class AccountController : BaseApiController
       Roles = roles
     });
   }
+
+  // api/account/logout
   [HttpPost("logout")]
   public async Task<ActionResult> Logout()
   {

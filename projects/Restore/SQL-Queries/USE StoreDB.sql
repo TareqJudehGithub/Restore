@@ -166,3 +166,42 @@ GO
 
 --"MSSQLConnection": "Server=TareqPC\\MSSQLSRV; Database=frostlabeldb; User Id=sa;Password=Pa$$w0rd@; Trusted_Connection=True; TrustServerCertificate=True;"
 
+
+
+-- User
+
+SELECT *
+FROM AspNetUsers
+WHERE UserName LIKE 'ad%'
+GO
+
+SELECT *
+FROM AspNetUserRoles
+GO
+
+SELECT *
+FROM AspNetRoles
+GO
+
+
+
+-- DELETE
+-- FROM AspNetUserRoles 
+-- WHERE UserId ='bf69fe9c-deb8-4d99-93b5-8093a30fa84b'
+--   AND RoleId =  'ddb0fce4-df11-40b6-87ff-271d8e9fd889'
+-- GO
+
+-- INSERT INTO AspNetUserRoles
+-- VALUES('bf69fe9c-deb8-4d99-93b5-8093a30fa84b', '1165b171-8be5-4a22-b0c7-f93db9f29fec' )
+-- GO
+
+SELECT *
+FROM Products
+WHERE Price < 20
+GO
+
+USE frostlabeldb
+GO
+
+SELECT 1
+GO

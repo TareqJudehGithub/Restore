@@ -1,3 +1,4 @@
+import type { FieldValues, Path, UseFormSetError } from "react-hook-form";
 import type { ShippingAddress, PaymentSummary } from "../app/models/order";
 
 export function filterEmptyValues(values: object) {
@@ -26,3 +27,23 @@ export const formatPaymentString = (card: PaymentSummary) => {
 	return `${card?.brand.toUpperCase()}, **** **** **** ${card?.last4}, 
 	Exp: ${card?.exp_month}/${card?.exp_year}`;
 };
+
+export function handleApiError<T extends FieldValues>(
+	error: unknown,
+	setError: UseFormSetError<T>,
+	fieldNames: Path<T>[],
+) {
+	const apiError = (error as { message: string }) || {};
+	if (apiError.message && typeof apiError.message === "string") {
+		const errorArray = apiError.message.split(",");
+
+		errorArray.forEach((err) => {
+			const matchedField = fieldNames.find((fieldName) =>
+				err.toLowerCase().includes(fieldName.toString().toLowerCase()),
+			);
+			if (matchedField) {
+				setError(matchedField, { message: err.trim() });
+			}
+		});
+	}
+}

@@ -117,7 +117,7 @@ export default function ProductDetails() {
 					variant="h4"
 					sx={{ fontSize: { xs: "1.25rem", md: "2.125rem" } }}
 				>
-					{product.price.toFixed(2)}
+					&#36;{product.price.toFixed(2)}
 				</Typography>
 
 				<TableContainer>

@@ -42,7 +42,6 @@ export default function RegisterForm() {
 		} catch (error) {
 			const message = getErrorMessage(error);
 			//		setSubmitError(message);
-
 			setError("email", { message: message });
 		}
 	};

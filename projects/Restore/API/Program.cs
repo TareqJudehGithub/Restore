@@ -1,6 +1,7 @@
 using API.Data;
 using API.Entities;
 using API.Middleware;
+using API.RequestHelpers;
 using API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+
 builder.Services.AddControllers();
 
 // MSSQL
@@ -17,7 +21,7 @@ var connectionString = builder.Configuration.GetConnectionString("MSSQLConnectio
 if (string.IsNullOrWhiteSpace(connectionString))
 {
   throw new InvalidOperationException(
-      "A SQL Server connection string named 'MSSQLConnection' is required. Set it in appsettings.json, appsettings.{Environment}.json, or an environment variable such as ConnectionStrings__MSSQLConnection.");
+      "A SQL Server connection string named 'MSSQLConnection' is required.");
 }
 
 builder.Services.AddDbContext<StoreSqlDbContext>(options =>
@@ -26,21 +30,28 @@ builder.Services.AddDbContext<StoreSqlDbContext>(options =>
   options.UseSqlServer(connectionString, sqlOptions =>
   {
     sqlOptions.EnableRetryOnFailure(
-          maxRetryCount: 5,
-          maxRetryDelay: TimeSpan.FromSeconds(10),
-          errorNumbersToAdd: null);
-    sqlOptions.CommandTimeout(60);
+      maxRetryCount: 5,
+      maxRetryDelay: TimeSpan.FromSeconds(15),
+      errorNumbersToAdd: null
+    );
   });
 });
 
 // CORS
 builder.Services.AddCors();
 
+// AutoMapper V14
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 // Exceptions 
 builder.Services.AddTransient<ExceptionMiddleware>();
 
 //Stripe
 builder.Services.AddScoped<PaymentService>();
+
+// Cloudinary Image
+builder.Services.AddScoped<ImageService>();
 
 // Identity
 builder.Services.AddIdentityApiEndpoints<User>(opt =>

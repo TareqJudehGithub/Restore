@@ -5,6 +5,9 @@ using API.Entities;
 using API.DTOs.Product;
 using API.Extensions;
 using API.RequestHelpers;
+using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using API.Services;
 
 namespace API.Controllers
 {
@@ -12,19 +15,39 @@ namespace API.Controllers
     [ApiController] // attribute to make this class a controller
     public class ProductsController : BaseApiController
     {
-
-        // private readonly StoreContext _dbContext;
-        // public ProductsController(StoreContext dbContext)
-        // {
-        //     _dbContext = dbContext;
-        // }
-
-
         private readonly StoreSqlDbContext _dbContext;
-        public ProductsController(StoreSqlDbContext dbContext)
+        private readonly IMapper _mapper;
+        private readonly ImageService _imageService;
+        public ProductsController(
+            StoreSqlDbContext dbContext,
+            IMapper mapper,
+            ImageService imageService
+            )
         {
             _dbContext = dbContext;
+            _mapper = mapper;
+            _imageService = imageService;
         }
+
+        // GET: //https:/localhost/api/products/filters
+        [HttpGet("filters")]
+        public async Task<ActionResult> GetFilters()
+        {
+            var types = await _dbContext.Products
+                .Select(q => q.Type)
+                .Distinct()
+                .OrderBy(type => type)
+                .ToListAsync();
+
+            var brands = await _dbContext.Products
+                .Select(q => q.Brand)
+                .Distinct()
+                .OrderBy(brand => brand)
+                .ToListAsync();
+
+            return Ok(new { brands, types });
+        }
+
 
         // GET: //https:/localhost/api/products
         [HttpGet]
@@ -63,25 +86,6 @@ namespace API.Controllers
             return productModel;
         }
 
-        // GET: //https:/localhost/api/products/filters
-        [HttpGet("filters")]
-        public async Task<ActionResult> GetFilters()
-        {
-            var types = await _dbContext.Products
-                .Select(q => q.Type)
-                .Distinct()
-                .OrderBy(type => type)
-                .ToListAsync();
-
-            var brands = await _dbContext.Products
-                .Select(q => q.Brand)
-                .Distinct()
-                .OrderBy(brand => brand)
-                .ToListAsync();
-
-            return Ok(new { brands, types });
-        }
-
         // GET: //https:/localhost/api/products/3
         [HttpGet]
         [Route("{id:int}")]
@@ -95,70 +99,97 @@ namespace API.Controllers
             return Ok(productModel.ToDto());
         }
 
-
+        [Authorize(Roles = "Admin")]
         // POST: //https://localhost/api/products
         [HttpPost]
-        public async Task<ActionResult<GetProductDto>> CreateProduct(Product product)
+        public async Task<ActionResult<GetProductDto>> CreateProduct(
+            CreateProductDto productDto
+            )
         {
-            var newProduct = new Product()
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                PictureUrl = product.PictureUrl,
-                Type = product.Type,
-                Brand = product.Brand,
-                QuantityInStock = product.QuantityInStock
-            };
+            var product = _mapper.Map<Product>(productDto);
 
-            await _dbContext.Products.AddAsync(newProduct);
-            await _dbContext.SaveChangesAsync();
+            // Cloudinary
+            if (productDto.File != null)
+            {
+                var imageResult = await _imageService.AddImageAsync(productDto.File);
+                if (imageResult.Error != null)
+                {
+                    return BadRequest(imageResult.Error.Message);
+                }
+                // Set image in product with Cloudinary image url            
+                product.PictureUrl = imageResult.SecureUrl.AbsoluteUri;
+                product.PublicId = imageResult.PublicId;
+            }
+
+            await _dbContext.Products.AddAsync(product);
+            var result = await _dbContext.SaveChangesAsync();
+            if (result == 0)
+            {
+                return BadRequest("Problem creating a new product");
+            }
 
             return CreatedAtAction(
                 actionName: nameof(GetProduct),
-                routeValues: new { id = newProduct.ToDto().Id },
-                value: newProduct.ToDto()
+                routeValues: new { id = product.Id },
+                value: product.ToDto()
             );
         }
-        //PUT: https:/localhost/api/products/3
+
+        //PUT: https:/localhost/api/products/
+        [Authorize(Roles = "Admin")]
         [HttpPut]
-        [Route("{id:int}")]
-        public async Task<IActionResult> UpdateProduct([FromRoute] int id, UpdateProductDto updateDto)
+        public async Task<IActionResult> UpdateProduct(
+            UpdateProductDto updateDto)
         {
 
-            if (id != updateDto.Id)
-            {
-                return BadRequest("DTO ID mismatch between URL and request body.");
-            }
-
             var product = await _dbContext.Products
-            .FirstOrDefaultAsync(q => q.Id == id);
+            .FirstOrDefaultAsync(q => q.Id == updateDto.Id);
 
             if (product is null)
             {
                 return NotFound("Product was not found");
             }
-            // Update product and save
-            product.Id = updateDto.Id;
-            product.Name = updateDto.Name;
-            product.Description = updateDto.Description;
-            product.Price = updateDto.Price;
-            product.PictureUrl = updateDto.PictureUrl;
-            product.Type = updateDto.Type;
-            product.Brand = updateDto.Brand;
-            product.QuantityInStock = updateDto.QuantityInStock;
 
-            await _dbContext.SaveChangesAsync();
+            product = _mapper.Map(updateDto, product);
+
+
+            // Update existing Cloudinary image
+            if (updateDto.File != null)
+            {
+                var imageResult = await _imageService.AddImageAsync(updateDto.File);
+                if (imageResult.Error != null)
+                {
+                    return BadRequest(imageResult.Error.Message);
+                }
+                if (!string.IsNullOrWhiteSpace(product.PublicId))
+                {
+                    await _imageService.DeleteImageAsync(product.PublicId);
+                }
+                product.PictureUrl = imageResult.SecureUrl.AbsoluteUri;
+                product.PublicId = imageResult.PublicId;
+            }
+
+            if (product.Id != updateDto.Id)
+            {
+                return BadRequest("DTO ID mismatch between URL and request body.");
+            }
+
+            var result = await _dbContext.SaveChangesAsync();
+
+            if (result == 0)
+            {
+                return BadRequest("Error updating product");
+            }
 
             return CreatedAtAction(
                          actionName: nameof(GetProduct),
-                         routeValues: new { id = product.ToDto().Id },
+                         routeValues: new { id = product.Id },
                          value: product.ToDto()
                      );
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("{id:int}")]
         // DELETE: https:/localhost/api/products/3
@@ -175,10 +206,18 @@ namespace API.Controllers
             {
                 return BadRequest("Invalid product Id");
             }
+            // Delete Cloudinary image
+            if (!string.IsNullOrWhiteSpace(product.PublicId))
+            {
+                await _imageService.DeleteImageAsync(product.PublicId);
+            }
 
             _dbContext.Products.Remove(product);
-            await _dbContext.SaveChangesAsync();
-
+            var result = await _dbContext.SaveChangesAsync();
+            if (result > 0)
+            {
+                return Ok($"{product.Name} was successfully deleted.");
+            }
             return RedirectToAction(actionName: nameof(GetProducts));
         }
     }

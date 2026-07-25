@@ -23,7 +23,7 @@ export const registerSchema = z
 			ctx.addIssue({
 				code: "custom",
 				message: "Password and Confirm Password must match",
-				path: ["confirmPassword"], // Sets the error specifically on the confirmPassword field
+				path: ["confirmPassword"], // Sets the error specifically on the confirmPassword field in RegisterForm
 			});
 		}
 	});

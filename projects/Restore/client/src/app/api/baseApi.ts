@@ -68,6 +68,12 @@ export const baseQueryWithErrorHandling = async (
 				}
 				break;
 
+			case 403:
+				if (typeof responseData === "object") {
+					toast.error("403 Forbidden");
+				}
+				break;
+
 			case 404:
 				router.navigate("/not-found");
 				break;

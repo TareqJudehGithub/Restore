@@ -1,0 +1,20 @@
+EmailJS
+ Send Email Directly From Your Code
+
+  - Create an Account.
+  - Get All services IDs from your account and save them in your project in .ENV
+
+      VITE_EMAILJS_SERVICE_ID=<your_service_id>
+      VITE_EMAILJS_TEMPLATE_ID=<your_TEMPLATE_ID>
+      VITE_EMAILJS_PUBLIC_KEY_ID=<your_PUBLIC_KEY_ID>
+
+  - In your project directory, install emailjs package.
+        $ npm install @emailjs/browser    
+
+
+  - create a form component, build a form, and configure it to start using EmailJS
+
+  
+
+https://www.emailjs.com/
+

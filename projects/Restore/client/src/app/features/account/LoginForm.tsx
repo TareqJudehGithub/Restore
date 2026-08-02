@@ -80,7 +80,8 @@ export default function LoginForm() {
 						{...register("email")}
 						error={!!errors.email}
 						helperText={errors.email?.message}
-						defaultValue="john.smith@restore.com"
+						defaultValue=""
+						placeholder="john.smith@example.com"
 					/>
 					<TextField
 						fullWidth
@@ -90,7 +91,7 @@ export default function LoginForm() {
 						{...register("password")}
 						error={!!errors.password}
 						helperText={errors.password?.message}
-						defaultValue="Pa$$w0rd@"
+						defaultValue=""
 					/>
 					<Button disabled={isLoading} variant="contained" type="submit">
 						Sign in

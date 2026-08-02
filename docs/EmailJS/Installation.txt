@@ -9,7 +9,7 @@ EmailJS
       VITE_EMAILJS_PUBLIC_KEY_ID=<your_PUBLIC_KEY_ID>
 
   - In your project directory, install emailjs package.
-        $ npm install @emailjs/browser    
+        $ npm install @emailjs/browser 
 
 
   - create a form component, build a form, and configure it to start using EmailJS

@@ -80,8 +80,8 @@ export default function RegisterForm() {
 					<TextField
 						fullWidth
 						label="Email"
-						defaultValue="@restore.com"
-						//type="email"
+						defaultValue=""
+						placeholder="john.smith@example.com"
 						autoFocus
 						{...register("email")}
 						error={!!errors.email}

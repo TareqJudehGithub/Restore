@@ -113,10 +113,9 @@ export default function HomePage() {
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
-	const visibleSlides = slides.slice(
-		activeIndex,
-		Math.min(activeIndex + visibleCount, slides.length),
-	);
+	const visibleSlides = Array.from({ length: visibleCount }, (_, index) => {
+		return slides[(activeIndex + index) % slides.length];
+	});
 
 	return (
 		<>

@@ -14,7 +14,7 @@ const slides = [
 		title: "",
 	},
 	{
-		src: "/images/ski_couple2.jpg",
+		src: "/images/ski_googles_kids2.png",
 		alt: "Ski resort image",
 		title: "",
 	},
@@ -29,7 +29,7 @@ const slides = [
 		title: "",
 	},
 	{
-		src: "/images/ski_board6.jpg",
+		src: "/images/ski_couple1.jpg",
 		alt: "Adventure gear",
 		title: "",
 	},
@@ -54,7 +54,7 @@ const slides = [
 		title: "",
 	},
 	{
-		src: "/images/ski_women2.jpg",
+		src: "/images/ski_googles3.jpg",
 		alt: "Adventure gear",
 		title: "",
 	},
@@ -64,12 +64,12 @@ const slides = [
 		title: "",
 	},
 	{
-		src: "/images/ski_googles2.jpg",
+		src: "/images/ski_googles2.png",
 		alt: "Adventure gear",
 		title: "",
 	},
 	{
-		src: "/images/ski_kids7.jpg",
+		src: "/images/ski_googles8.jpg",
 		alt: "Adventure gear",
 		title: "",
 	},
@@ -289,7 +289,7 @@ export default function HomePage() {
 					</Box>
 				</Box>
 
-				<Box sx={{ display: "flex", justifyContent: "center", gap: 1, mt: 2 }}>
+				{/* <Box sx={{ display: "flex", justifyContent: "center", gap: 1, mt: 2 }}>
 					{Array.from({ length: slides.length - 2 }).map((_, index) => (
 						<button
 							type="button"
@@ -299,7 +299,7 @@ export default function HomePage() {
 							className={`h-3 w-3 rounded-full ${index === activeIndex ? "bg-sky-600" : "bg-gray-300"}`}
 						/>
 					))}
-				</Box>
+				</Box> */}
 			</Box>
 		</>
 	);

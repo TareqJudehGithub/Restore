@@ -84,13 +84,10 @@ export default function NavBar() {
 							px: 1.5,
 							textShadow: "0.5px 0.5px 1px white",
 						}}
+						onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
 					>
 						Winter Adventures
 					</Typography>
-
-					{/* <Typography component={NavLink} to={"/"} variant="inherit">
-						Winter Adventures
-					</Typography> */}
 
 					<IconButton onClick={() => dispatch(setDarkMode())}>
 						{darkMode ? (
@@ -120,6 +117,9 @@ export default function NavBar() {
 										to={path}
 										key={path}
 										sx={{ ...navLinkStyleDark, px: 1.5 }}
+										onClick={() =>
+											window.scrollTo({ top: 0, behavior: "smooth" })
+										}
 									>
 										{title.toUpperCase()}
 									</ListItem>
@@ -129,6 +129,9 @@ export default function NavBar() {
 										to={path}
 										key={path}
 										sx={{ ...navLinkStyleLight, px: 1.5 }}
+										onClick={() =>
+											window.scrollTo({ top: 0, behavior: "smooth" })
+										}
 									>
 										{title.toUpperCase()}
 									</ListItem>
@@ -137,7 +140,14 @@ export default function NavBar() {
 						</List>
 						<List sx={{ display: "flex", alignItems: "center", ml: "0" }}>
 							<Box>
-								<IconButton size="medium" component={Link} to="/basket">
+								<IconButton
+									size="medium"
+									component={Link}
+									to="/basket"
+									onClick={() =>
+										window.scrollTo({ top: 0, behavior: "smooth" })
+									}
+								>
 									<Badge badgeContent={itemCount} color="secondary">
 										<ShoppingCart
 											sx={{ color: darkMode ? "inherit" : "white" }}
@@ -157,6 +167,9 @@ export default function NavBar() {
 										to={path}
 										key={path}
 										sx={navLinkStyleDark}
+										onClick={() =>
+											window.scrollTo({ top: 0, behavior: "smooth" })
+										}
 									>
 										{title.toUpperCase()}
 									</ListItem>
@@ -192,7 +205,10 @@ export default function NavBar() {
 						<ListItemButton
 							component={Link}
 							to="/basket"
-							onClick={() => setMobileMenuOpen(false)}
+							onClick={() => {
+								setMobileMenuOpen(false);
+								window.scrollTo({ top: 0, behavior: "smooth" });
+							}}
 							sx={{ borderRadius: 2 }}
 						>
 							<ListItemIcon>
@@ -204,13 +220,16 @@ export default function NavBar() {
 						<ListItemButton
 							component={NavLink}
 							to="/catalog"
-							onClick={() => setMobileMenuOpen(false)}
+							onClick={() => {
+								setMobileMenuOpen(false);
+								window.scrollTo({ top: 0, behavior: "smooth" });
+							}}
 							sx={{ borderRadius: 2 }}
 						>
 							<ListItemIcon>
 								<Storefront />
 							</ListItemIcon>
-							<ListItemText primary="Catalog" />
+							<ListItemText primary="Shop" />
 						</ListItemButton>
 
 						<Divider sx={{ my: 1 }} />
@@ -218,7 +237,10 @@ export default function NavBar() {
 						<ListItemButton
 							component={NavLink}
 							to="/login"
-							onClick={() => setMobileMenuOpen(false)}
+							onClick={() => {
+								setMobileMenuOpen(false);
+								window.scrollTo({ top: 0, behavior: "smooth" });
+							}}
 							sx={{ borderRadius: 2 }}
 						>
 							<ListItemIcon>
@@ -232,7 +254,10 @@ export default function NavBar() {
 						<ListItemButton
 							component={NavLink}
 							to="/about"
-							onClick={() => setMobileMenuOpen(false)}
+							onClick={() => {
+								setMobileMenuOpen(false);
+								window.scrollTo({ top: 0, behavior: "smooth" });
+							}}
 							sx={{ borderRadius: 2 }}
 						>
 							<ListItemIcon>
@@ -244,7 +269,10 @@ export default function NavBar() {
 						<Button
 							component={NavLink}
 							to="/contact"
-							onClick={() => setMobileMenuOpen(false)}
+							onClick={() => {
+								setMobileMenuOpen(false);
+								window.scrollTo({ top: 0, behavior: "smooth" });
+							}}
 							variant="contained"
 							sx={{
 								mt: 1,
@@ -253,7 +281,7 @@ export default function NavBar() {
 								justifyContent: "center",
 							}}
 						>
-							Contact
+							Contact Me
 						</Button>
 					</List>
 				</Box>
@@ -269,9 +297,9 @@ export default function NavBar() {
 }
 
 const midLinks = [
-	{ title: "catalog", path: "/catalog" },
+	{ title: "shop", path: "/catalog" },
 	{ title: "about", path: "/about" },
-	{ title: "contact", path: "/contact" },
+	{ title: "contacts", path: "/contact" },
 ];
 
 const rightLinks = [

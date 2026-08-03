@@ -19,42 +19,65 @@ export default function BasketItem({ item }: BasketItemProps) {
 				display: "flex",
 				justifyContent: "space-between",
 				alignItems: "center",
-
-				height: 140,
+				minHeight: { xs: 130, sm: 140 },
 				borderRadius: 3,
 				mb: 2,
-				p: 1,
+				p: { xs: 1, sm: 1.5 },
+				flexWrap: { xs: "wrap", sm: "nowrap" },
+				gap: { xs: 1, sm: 0 },
 			}}
 		>
-			<Box sx={{ display: "flex", alignItems: "center" }}>
+			<Box
+				sx={{ display: "flex", alignItems: "center", flex: 1, minWidth: 0 }}
+			>
 				<Box
 					component="img"
 					src={pictureUrl}
 					alt={name}
 					sx={{
-						width: 100,
-						height: 100,
+						width: { xs: 72, sm: 100 },
+						height: { xs: 72, sm: 100 },
 						objectFit: "cover",
 						borderRadius: "4px",
-						mr: 8,
-						ml: 4,
+						mr: { xs: 2, sm: 4 },
+						ml: { xs: 1, sm: 2 },
 					}}
 				/>
 				<Box
 					sx={{
 						display: "flex",
 						flexDirection: "column",
-						gap: 1,
-						minWidth: 200,
+						gap: { xs: 0.5, sm: 1 },
+						minWidth: { xs: 0, sm: 200 },
+						flex: 1,
+						py: { xs: 1, md: 2 },
 					}}
 				>
-					<Typography variant="h6">{name}</Typography>
+					<Typography
+						variant="h6"
+						sx={{ fontSize: { xs: "0.8rem", sm: "0.8rem", md: "1rem" } }}
+					>
+						{name}
+					</Typography>
 
-					<Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-						<Typography sx={{ fontSize: "1.1rem" }}>
+					<Box
+						sx={{
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+							gap: { xs: 2, sm: 4 },
+							flexWrap: "wrap",
+						}}
+					>
+						<Typography
+							sx={{ fontSize: { xs: "0.8rem", sm: "0.8rem", md: "1rem" } }}
+						>
 							${price} x {quantity}
 						</Typography>
-						<Typography sx={{ fontSize: "1.1rem" }} color="primary">
+						<Typography
+							sx={{ fontSize: { xs: "0.8rem", sm: "0.8rem", md: "1rem" } }}
+							color="primary"
+						>
 							${price * quantity}
 						</Typography>
 					</Box>
@@ -65,7 +88,14 @@ export default function BasketItem({ item }: BasketItemProps) {
 								disabled
 								color="primary"
 								size="small"
-								sx={{ border: 1, borderRadius: 1, minWidth: 0 }}
+								sx={{
+									border: 1,
+									borderRadius: 2,
+									minWidth: 0,
+									width: { xs: 28, sm: 32 },
+									height: { xs: 28, sm: 32 },
+									"& .MuiSvgIcon-root": { fontSize: { xs: 18, sm: 20 } },
+								}}
 							>
 								<Remove />
 							</IconButton>
@@ -74,19 +104,38 @@ export default function BasketItem({ item }: BasketItemProps) {
 								onClick={() => removeBasketItem({ productId, quantity: 1 })}
 								color="primary"
 								size="small"
-								sx={{ border: 1, borderRadius: 1, minWidth: 0 }}
+								sx={{
+									border: 1,
+									borderRadius: 1,
+									minWidth: 0,
+									width: { xs: 24, sm: 28 },
+									height: { xs: 24, sm: 28 },
+									"& .MuiSvgIcon-root": { fontSize: { xs: 18, sm: 20 } },
+								}}
 							>
 								<Remove />
 							</IconButton>
 						)}
-						<Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+						<Typography
+							sx={{
+								fontWeight: "bold",
+								fontSize: { xs: "0.8rem", sm: "0.8rem", md: "1rem" },
+							}}
+						>
 							{quantity}
 						</Typography>
 						<IconButton
 							onClick={() => increaseBasketItemQty({ productId, quantity: 1 })}
 							color="primary"
 							size="small"
-							sx={{ border: 1, borderRadius: 1, minWidth: 0 }}
+							sx={{
+								border: 1,
+								borderRadius: 1,
+								minWidth: 0,
+								width: { xs: 24, sm: 28 },
+								height: { xs: 24, sm: 28 },
+								"& .MuiSvgIcon-root": { fontSize: { xs: 18, sm: 20 } },
+							}}
 						>
 							<Add />
 						</IconButton>
@@ -103,6 +152,9 @@ export default function BasketItem({ item }: BasketItemProps) {
 					alignSelf: "start",
 					mr: 1,
 					mt: 1,
+					width: { xs: 24, sm: 28 },
+					height: { xs: 24, sm: 28 },
+					"& .MuiSvgIcon-root": { fontSize: { xs: 18, sm: 20 } },
 				}}
 				onClick={() => removeBasketItem({ productId, quantity: quantity })}
 			>

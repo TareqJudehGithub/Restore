@@ -7,7 +7,7 @@ import {
 	type RegisterSchema,
 } from "../../../lib/Schemas/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LockOutlined } from "@mui/icons-material";
+import { LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import { getErrorMessage } from "../../errors/ToastErrors";
 import { toast } from "react-toastify";
 import {
@@ -17,10 +17,13 @@ import {
 	Typography,
 	TextField,
 	Button,
+	InputAdornment,
+	IconButton,
 } from "@mui/material";
 
 export default function RegisterForm() {
 	const [registerUser, { isLoading }] = useRegisterMutation();
+	const [showPassword, setShowPassword] = useState(false);
 	//const [submitError, setSubmitError] = useState<string | null>(null);
 	const {
 		register,
@@ -90,7 +93,7 @@ export default function RegisterForm() {
 					<TextField
 						fullWidth
 						label="Password"
-						type="password"
+						type={showPassword ? "text" : "password"}
 						autoComplete="on"
 						{...register("password")}
 						error={!!errors.password}
@@ -99,16 +102,50 @@ export default function RegisterForm() {
 								? errors.password?.message
 								: "At least must contain: 8 characters, one lowercase letter (a-z), one uppercase letter (A-Z), one number (0-9), and one special symbol (!@#$)"
 						}
+						slotProps={{
+							input: {
+								endAdornment: (
+									<InputAdornment position="end">
+										<IconButton
+											aria-label={
+												showPassword ? "Hide password" : "Show password"
+											}
+											onClick={() => setShowPassword((prev) => !prev)}
+											edge="end"
+										>
+											{showPassword ? <VisibilityOff /> : <Visibility />}
+										</IconButton>
+									</InputAdornment>
+								),
+							},
+						}}
 						//helperText={errors.password?.message}
 					/>
 					<TextField
 						fullWidth
 						label="Confirm Password"
-						type="password"
+						type={showPassword ? "text" : "password"}
 						autoComplete="on"
 						{...register("confirmPassword")}
 						error={!!errors.confirmPassword}
 						helperText={errors.confirmPassword?.message}
+						slotProps={{
+							input: {
+								endAdornment: (
+									<InputAdornment position="end">
+										<IconButton
+											aria-label={
+												showPassword ? "Hide password" : "Show password"
+											}
+											onClick={() => setShowPassword((prev) => !prev)}
+											edge="end"
+										>
+											{showPassword ? <VisibilityOff /> : <Visibility />}
+										</IconButton>
+									</InputAdornment>
+								),
+							},
+						}}
 					/>
 					<Button disabled={isLoading} variant="contained" type="submit">
 						Sign Up

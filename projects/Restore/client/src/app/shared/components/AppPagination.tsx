@@ -24,7 +24,7 @@ export default function AppPagination({
 			}}
 		>
 			<Typography>
-				Displaying {startItem} - {endItem} of {totalCount} items
+				Displaying {startItem} - {endItem} of {totalCount} item(s)
 			</Typography>
 
 			<Box
@@ -36,18 +36,18 @@ export default function AppPagination({
 					mx: 0,
 				}}
 			>
-				<IconButton size="medium" onClick={() => dispatch(setPageNumber(1))}>
+				<IconButton size="small" onClick={() => dispatch(setPageNumber(1))}>
 					<FirstPage />
 				</IconButton>
 				<Pagination
 					color="secondary"
-					size="large"
+					size="small"
 					count={totalPages}
 					page={currentPage}
 					onChange={(_, page) => onPageChange(page)}
 				/>
 				<IconButton
-					size="medium"
+					size="small"
 					onClick={() => dispatch(setPageNumber(totalPages))}
 				>
 					<LastPage />

@@ -16,6 +16,7 @@ export const catalogSlice = createSlice({
 	reducers: {
 		setPageNumber(state, action) {
 			state.pageNumber = action.payload;
+			window.scrollTo({ top: 0, behavior: "smooth" });
 		},
 		setPageSize(state, action) {
 			state.pageSize = action.payload;
@@ -23,19 +24,24 @@ export const catalogSlice = createSlice({
 		setOrderBy(state, action) {
 			state.orderBy = action.payload;
 			state.pageNumber = 1;
+			window.scrollTo({ top: 0, behavior: "smooth" });
 		},
 		setSearchTerm(state, action) {
 			state.searchTerm = action.payload;
+			window.scrollTo({ top: 0, behavior: "smooth" });
 		},
 		setTypes(state, action) {
 			state.types = action.payload;
 			state.pageNumber = 1;
+			window.scrollTo({ top: 0, behavior: "smooth" });
 		},
 		setBrands(state, action) {
 			state.brands = action.payload;
 			state.pageNumber = 1;
+			window.scrollTo({ top: 0, behavior: "smooth" });
 		},
 		resetParams() {
+			window.scrollTo({ top: 0, behavior: "smooth" });
 			return initialState;
 		},
 	},

@@ -205,3 +205,7 @@ GO
 
 SELECT 1
 GO
+
+SELECT *
+FROM AspNetUsers
+GO

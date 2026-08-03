@@ -327,7 +327,7 @@ export default function OrderDetailedPage() {
 						variant="body2"
 						component={"dd"}
 						sx={{
-							fontWeight: 300,
+							fontWeight: 600,
 						}}
 					>
 						&#36;{Number(order.total).toFixed(2)}

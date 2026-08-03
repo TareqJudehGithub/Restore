@@ -1,4 +1,10 @@
-import { GitHub, LinkedIn } from "@mui/icons-material";
+import {
+	GitHub,
+	LinkedIn,
+	ArrowUpward,
+	ArrowUpwardOutlined,
+	ArrowUpwardRounded,
+} from "@mui/icons-material";
 import { useAppSelector } from "../store/store";
 import { Typography } from "@mui/material";
 import { NavLink } from "react-router";
@@ -11,6 +17,12 @@ export const Footer = () => {
 		<footer className="py-12 border-t border-border">
 			<div className="container mx-auto px-6">
 				<div className="flex flex-col md:flex-row items-center justify-between gap-8">
+					<a
+						href="#"
+						className={`text-sm text-muted-foreground ${darkMode ? "hover:text-white" : "hover:text-sky-600"}`}
+					>
+						<ArrowUpward />
+					</a>
 					{/* Logo & Copyright */}
 					<div className="text-center md:text-left">
 						<p className="text-sm text-muted-foreground mt-2">
@@ -31,13 +43,13 @@ export const Footer = () => {
 					</nav>
 
 					{/* Social Links */}
-					<div className="flex items-center gap-4">
+					<div className="flex items-center gap-4 ">
 						{socialLinks.map((social) => (
 							<a
 								key={social.label}
 								href={social.href}
 								aria-label={social.label}
-								className={`p-2 rounded-full glass  ${darkMode ? "hover:text-gray-500" : "hover:text-sky-200 hover:bg-sky-600"} transition-all`}
+								className={`p-2 rounded-full glass  ${darkMode ? "hover:text-gray-500" : "bg-sky-600 hover:bg-sky-200"} transition-all`}
 							>
 								<social.icon className="w-5 h-5" />
 							</a>

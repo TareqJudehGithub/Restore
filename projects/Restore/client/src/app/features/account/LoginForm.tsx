@@ -1,7 +1,8 @@
-import { LockOutlined } from "@mui/icons-material";
+import { LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { loginSchema } from "../../../lib/Schemas/LoginSchema";
 import { useLazyUserInfoQuery, useLoginMutation } from "./accountApi";
 import {
@@ -11,6 +12,8 @@ import {
 	Typography,
 	TextField,
 	Button,
+	IconButton,
+	InputAdornment,
 } from "@mui/material";
 
 export default function LoginForm() {
@@ -19,6 +22,7 @@ export default function LoginForm() {
 	const [fetchUserInfo] = useLazyUserInfoQuery();
 	const location = useLocation();
 	const navigate = useNavigate();
+	const [showPassword, setShowPassword] = useState<boolean>(false);
 
 	const onSubmit = async (data: loginSchema) => {
 		try {
@@ -86,12 +90,29 @@ export default function LoginForm() {
 					<TextField
 						fullWidth
 						label="Password"
-						type="password"
+						type={showPassword ? "text" : "password"}
 						autoComplete="on"
 						{...register("password")}
 						error={!!errors.password}
 						helperText={errors.password?.message}
 						defaultValue=""
+						slotProps={{
+							input: {
+								endAdornment: (
+									<InputAdornment position="end">
+										<IconButton
+											aria-label={
+												showPassword ? "Hide password" : "Show password"
+											}
+											onClick={() => setShowPassword((prev) => !prev)}
+											edge="end"
+										>
+											{showPassword ? <VisibilityOff /> : <Visibility />}
+										</IconButton>
+									</InputAdornment>
+								),
+							},
+						}}
 					/>
 					<Button disabled={isLoading} variant="contained" type="submit">
 						Sign in

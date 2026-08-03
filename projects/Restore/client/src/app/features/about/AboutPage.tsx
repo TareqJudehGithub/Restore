@@ -189,7 +189,6 @@ const projects: ProjectsType[] = [
 			"TypeScript",
 			"JavaScript",
 			"HTML/CSS",
-			"HTML/CSS",
 			"GitHub",
 			"Git",
 		],

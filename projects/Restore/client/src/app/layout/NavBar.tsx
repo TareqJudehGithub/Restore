@@ -14,7 +14,6 @@ import {
 	Storefront,
 	Login as LoginIcon,
 	InfoOutlined,
-	ContactMail,
 } from "@mui/icons-material";
 import type { Item } from "../models/basket";
 import UserMenu from "./UserMenu";
@@ -72,41 +71,26 @@ export default function NavBar() {
 						display: "flex",
 						alignItems: "center",
 						textDecoration: "none",
-						fontSize: 24,
+						fontSize: 22,
 						textTransform: "uppercase",
 					}}
 				>
-					{darkMode ? (
-						<Typography component={NavLink} to={"/"} variant="inherit">
-							<Box
-								component="img"
-								src="/images/shop_logo_dark.png"
-								alt="Winter Adventures shop logo"
-								sx={{
-									width: "100%",
-									maxWidth: 45,
-									height: "auto",
-									borderRadius: 5,
-									boxShadow: 3,
-								}}
-							></Box>
-						</Typography>
-					) : (
-						<Typography component={NavLink} to={"/"} variant="inherit">
-							<Box
-								component="img"
-								src="/images/shop_logo_light.png"
-								alt="Winter Adventures shop logo"
-								sx={{
-									width: "100%",
-									maxWidth: 45,
-									height: "auto",
-									borderRadius: 5,
-									boxShadow: 3,
-								}}
-							></Box>
-						</Typography>
-					)}
+					<Typography
+						component={NavLink}
+						to={"/"}
+						variant="inherit"
+						sx={{
+							...navLinkStyleDark,
+							px: 1.5,
+							textShadow: "0.5px 0.5px 1px white",
+						}}
+					>
+						Winter Adventures
+					</Typography>
+
+					{/* <Typography component={NavLink} to={"/"} variant="inherit">
+						Winter Adventures
+					</Typography> */}
 
 					<IconButton onClick={() => dispatch(setDarkMode())}>
 						{darkMode ? (
@@ -198,6 +182,7 @@ export default function NavBar() {
 						bgcolor: "background.paper",
 						borderTop: 1,
 						borderColor: "divider",
+						color: darkMode ? "white" : "#172f9b",
 					}}
 				>
 					<List

@@ -1,3 +1,4 @@
+import { createTheme } from "@mui/material/styles";
 import {
 	Button,
 	Fade,
@@ -255,3 +256,14 @@ const navLinkStyleLight = {
 		color: "#baecf9",
 	},
 };
+
+export const theme = createTheme({
+	palette: {
+		background: {
+			paper: "#36454F",
+		},
+		primary: {
+			main: "#363737",
+		},
+	},
+});

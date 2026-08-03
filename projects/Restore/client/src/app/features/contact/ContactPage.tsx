@@ -1,10 +1,5 @@
 import emailjs from "@emailjs/browser";
-import {
-	useState,
-	type ChangeEvent,
-	type ComponentType,
-	type FormEvent,
-} from "react";
+import { useState, type ChangeEvent, type ComponentType } from "react";
 import { useAppSelector } from "../../store/store";
 import {
 	Button,
@@ -23,7 +18,6 @@ import {
 	AlertCircle,
 	LoaderCircle,
 } from "lucide-react";
-
 export default function ContactPage() {
 	const { darkMode } = useAppSelector((state) => state.ui);
 
@@ -193,7 +187,7 @@ export default function ContactPage() {
 				<Box
 					sx={{
 						display: "grid",
-						gridTemplateColumns: { xs: "1fr", lg: "1.1fr 0.9fr" },
+						gridTemplateColumns: { xs: "1fr", md: "1.1fr 0.9fr" },
 						gap: 4,
 					}}
 				>
@@ -229,7 +223,7 @@ export default function ContactPage() {
 										borderRadius: 2,
 										border: "1px solid",
 										borderColor: "divider",
-										backgroundColor: "background.paper",
+										backgroundColor: darkMode ? "#ffffff59" : "#ffffff8c",
 										outline: "none",
 										"&:focus": { borderColor: "primary.main" },
 									}}
@@ -245,7 +239,7 @@ export default function ContactPage() {
 									type="email"
 									pattern="[^@\s]+@[^@\s]+\.[a-zA-Z]{3}"
 									required
-									placeholder="Leave your email address..."
+									placeholder="email@example.com"
 									value={formData.email}
 									onChange={handleInputChange("email")}
 									sx={{
@@ -255,7 +249,7 @@ export default function ContactPage() {
 										borderRadius: 2,
 										border: "1px solid",
 										borderColor: "divider",
-										backgroundColor: "background.paper",
+										backgroundColor: darkMode ? "#ffffff59" : "#ffffff8c",
 										outline: "none",
 										"&:focus": { borderColor: "primary.main" },
 									}}
@@ -280,7 +274,7 @@ export default function ContactPage() {
 										borderRadius: 2,
 										border: "1px solid",
 										borderColor: "divider",
-										backgroundColor: "background.paper",
+										backgroundColor: darkMode ? "#ffffff59" : "#ffffff8c",
 										outline: "none",
 										resize: "none",
 										"&:focus": { borderColor: "primary.main" },
@@ -292,11 +286,16 @@ export default function ContactPage() {
 								variant="contained"
 								type="submit"
 								size="large"
+								fullWidth
 								sx={{
+									color: "whitesmoke",
 									borderRadius: 999,
 									py: 1.25,
 									px: 6,
 									alignSelf: "center",
+									backgroundColor: darkMode
+										? "#1f2937"
+										: "radial-gradient(circle, #baecf9, #f0f9ff)",
 								}}
 								disabled={isLoading}
 							>
@@ -322,7 +321,7 @@ export default function ContactPage() {
 										borderRadius: 2,
 										backgroundColor:
 											currentStatus.type === "success"
-												? "info.main"
+												? "success.main"
 												: "error.main",
 										color: "common.white",
 									}}

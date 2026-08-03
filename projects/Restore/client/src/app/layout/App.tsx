@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 import NavBar from "./NavBar";
+import { Footer } from "./Footer";
 
 function App() {
 	const { darkMode } = useAppSelector((state) => state.ui);
@@ -43,6 +44,7 @@ function App() {
 					<Outlet />
 				</Container>
 			</Box>
+			<Footer />
 		</ThemeProvider>
 	);
 }

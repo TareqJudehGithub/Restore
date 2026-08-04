@@ -77,11 +77,11 @@ export const baseQueryWithErrorHandling = async (
 			case 404:
 				router.navigate("/not-found");
 				break;
-			case 500:
-				if (typeof responseData === "object")
-					//toast.error(responseData.title);
-					router.navigate("/server-error", { state: { error: responseData } });
-				break;
+			// case 500:
+			// 	if (typeof responseData === "object")
+			// 		//toast.error(responseData.title);
+			// 		router.navigate("/server-error", { state: { error: responseData } });
+			// 	break;
 			default:
 				break;
 		}

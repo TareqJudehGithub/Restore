@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
 	AddressElement,
 	PaymentElement,
@@ -56,10 +56,20 @@ export default function CheckoutStepper() {
 		useState<ConfirmationToken | null>(null);
 	const [submitting, setSubmitting] = useState<boolean>(false);
 
-	let name, address;
-	if (data) {
-		({ name, ...address } = data);
-	}
+	const savedAddress = data as
+		| (Partial<Address> & { name?: string })
+		| undefined;
+	const name = savedAddress?.name ?? "";
+	const address = savedAddress
+		? {
+				line1: savedAddress.line1 ?? "",
+				line2: savedAddress.line2 ?? "",
+				city: savedAddress.city ?? "",
+				state: savedAddress.state ?? "",
+				postal_code: savedAddress.postal_code ?? "",
+				country: savedAddress.country ?? "",
+			}
+		: undefined;
 	const getStripedAddress = async () => {
 		const addressElement = elements?.getElement("address");
 		if (!addressElement) return null;
@@ -71,17 +81,49 @@ export default function CheckoutStepper() {
 		if (name && address) return { ...address, name };
 	};
 
-	const addressDefaults = {
-		name: name ?? "",
+	const [addressDefaults, setAddressDefaults] = useState({
+		name: "",
 		address: {
-			line1: address?.line1 ?? "",
-			line2: address?.line2 ?? "",
-			city: address?.city ?? "",
-			state: address?.state ?? "",
-			postal_code: address?.postal_code ?? "",
-			country: address?.country ?? "",
+			line1: "",
+			line2: "",
+			city: "",
+			state: "",
+			postal_code: "",
+			country: "",
 		},
-	};
+	});
+	useEffect(() => {
+		if (!isLoading && data) {
+			const nextDefaults = {
+				name: name ?? "",
+				address: {
+					line1: address?.line1 ?? "",
+					line2: address?.line2 ?? "",
+					city: address?.city ?? "",
+					state: address?.state ?? "",
+					postal_code: address?.postal_code ?? "",
+					country: address?.country ?? "",
+				},
+			};
+			setAddressDefaults((current) => {
+				const hasEnteredValue = Boolean(
+					current.name ||
+					current.address.line1 ||
+					current.address.city ||
+					current.address.postal_code,
+				);
+				return hasEnteredValue ? current : nextDefaults;
+			});
+		}
+	}, [address, data, isLoading, name]);
+	const addressElementOptions = useMemo(
+		() => ({
+			mode: "shipping" as const,
+			defaultValues: addressDefaults,
+		}),
+		[addressDefaults],
+	);
+	const addressElementKey = "address-element";
 
 	const handleAddressChange = (event: StripeAddressElementChangeEvent) => {
 		setAddressComplete(event.complete);
@@ -176,14 +218,18 @@ export default function CheckoutStepper() {
 				})}
 			</Stepper>
 			<Box sx={{ mt: 2 }}>
-				<Box sx={{ display: activeStep === 0 ? "block" : "none" }}>
+				<Box
+					sx={{
+						opacity: activeStep === 0 ? 1 : 0,
+						height: activeStep === 0 ? "auto" : 0,
+						overflow: "hidden",
+						pointerEvents: activeStep === 0 ? "auto" : "none",
+					}}
+				>
 					{!isLoading && addressDefaults && (
 						<AddressElement
-							key={`${addressDefaults.name}-${addressDefaults.address.line1}-${addressDefaults.address.city}-${addressDefaults.address.country}`}
-							options={{
-								mode: "shipping",
-								defaultValues: addressDefaults,
-							}}
+							key={addressElementKey}
+							options={addressElementOptions}
 							onChange={handleAddressChange}
 						/>
 					)}

@@ -60,11 +60,6 @@ export default function ContactPage() {
 				publicKey,
 			);
 
-			emailjs.send(servicesId, templateId, {
-				name: formData.name,
-				email: formData.email,
-			});
-
 			setSubmitStatus({
 				type: "success",
 				message: "Thank you for your message. I will get back to you soon.",

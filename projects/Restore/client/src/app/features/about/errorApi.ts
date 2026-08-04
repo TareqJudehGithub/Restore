@@ -18,9 +18,9 @@ export const errorApi = createApi({
 		get404Error: builder.query<void, void>({
 			query: () => ({ url: "buggy/not-found" }),
 		}),
-		get500Error: builder.query<void, void>({
-			query: () => ({ url: "buggy/server-error" }),
-		}),
+		// get500Error: builder.query<void, void>({
+		// 	query: () => ({ url: "buggy/server-error" }),
+		// }),
 	}),
 });
 
@@ -29,5 +29,5 @@ export const {
 	useLazyGet400ErrorQuery,
 	useLazyGet401ErrorQuery,
 	useLazyGet404ErrorQuery,
-	useLazyGet500ErrorQuery,
+	// useLazyGet500ErrorQuery,
 } = errorApi;

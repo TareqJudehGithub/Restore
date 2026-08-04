@@ -7,7 +7,6 @@ using API.Extensions;
 using API.DTOs.Order;
 using API.Entities;
 
-
 namespace API.Controllers;
 
 [ApiController]
@@ -18,6 +17,7 @@ public class OrdersController : BaseApiController
 
 {
   private readonly StoreSqlDbContext _dbContext;
+
   public OrdersController(StoreSqlDbContext dbContext)
   {
     _dbContext = dbContext;
@@ -115,10 +115,12 @@ public class OrdersController : BaseApiController
       return BadRequest("Problem creating order");
     }
 
+    var createdOrder = order.ToDto();
+
     return CreatedAtAction(
       actionName: nameof(GetOrderDetails),
       routeValues: new { id = order.Id },
-      value: order.ToDto()
+      value: createdOrder
     );
   }
 

@@ -28,6 +28,10 @@ export default function Search() {
 
 	return (
 		<TextField
+			sx={{
+				mt: 1,
+				height: "62px",
+			}}
 			label="Search products.."
 			variant="outlined"
 			fullWidth

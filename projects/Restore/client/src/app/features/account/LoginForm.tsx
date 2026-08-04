@@ -28,7 +28,7 @@ export default function LoginForm() {
 		try {
 			await login(data).unwrap();
 			await fetchUserInfo();
-			navigate(location.state?.from || "/catalog");
+			navigate(location.state?.from || "/");
 		} catch (error) {
 			setError("password", { message: "Invalid username or password" });
 			return;

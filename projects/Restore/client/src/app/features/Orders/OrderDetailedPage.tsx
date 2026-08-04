@@ -166,7 +166,7 @@ export default function OrderDetailedPage() {
 										sx={{
 											display: "flex",
 											flexDirection: "row",
-											justifyItems: "start",
+
 											justifyContent: "space-between",
 											alignItems: "center",
 											borderBottom: "none",
@@ -187,7 +187,28 @@ export default function OrderDetailedPage() {
 													style={{ width: 40, height: 40 }}
 												/>
 											</span>
-											<span style={{}}>{item.name}</span>
+											<Box sx={{ display: "flex", flexDirection: "column" }}>
+												<span style={{}}>{item.name}</span>
+												<span>
+													{item.quantity} * &#36;{item.price}
+												</span>
+											</Box>
+										</Box>
+
+										<Box
+											component={"dl"}
+											sx={{ display: "flex", justifyContent: "space-evenly" }}
+										>
+											<Typography
+												variant="body2"
+												component={"dd"}
+												sx={{
+													fontWeight: 300,
+													pr: 1,
+												}}
+											>
+												&#36;{item.quantity * item.price}
+											</Typography>
 										</Box>
 									</TableCell>
 								</TableRow>
@@ -201,7 +222,7 @@ export default function OrderDetailedPage() {
 						component={"dl"}
 						sx={{ display: "flex", justifyContent: "space-between" }}
 					>
-						<Typography
+						{/* <Typography
 							variant="subtitle1"
 							component={"dt"}
 							sx={{
@@ -222,7 +243,7 @@ export default function OrderDetailedPage() {
 							>
 								{item.quantity} * {item.price}
 							</Typography>
-						))}
+						))} */}
 					</Box>
 
 					<Box

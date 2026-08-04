@@ -47,3 +47,8 @@ export function handleApiError<T extends FieldValues>(
 		});
 	}
 }
+export const servicesId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+export const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY_ID;
+export const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+export const confirmOrderTemplateId = import.meta.env
+	.VITE_EMAILJS_CONFIRM_ORDER_TEMPLATE_ID;

@@ -1,3 +1,4 @@
+import { projectCover } from "../../../util/images";
 import {
 	Box,
 	Button,
@@ -176,7 +177,7 @@ const projects: ProjectsType[] = [
 		title: "Winter Adventures",
 		description:
 			"A full-stack e-commerce application built with ASP.NET Core Web API, React, Redux Toolkit, and RTK Query, featuring product browsing, account creation, checkout, order placement, and admin tools for managing inventory and product details.",
-		image: "../../../../public/images/about/winter_adventures.png",
+		image: projectCover,
 		tags: [
 			"ASP.NET Core Web API",
 			"ASP.NET Core Identity",

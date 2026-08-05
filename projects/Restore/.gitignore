@@ -9,6 +9,7 @@
 *.db
 # dotenv files
 .env
+.env.production
 
 #
 
@@ -486,3 +487,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Wildcard fallback to catch anything starting with .env
+.env.*

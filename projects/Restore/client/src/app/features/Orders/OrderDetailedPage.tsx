@@ -6,7 +6,6 @@ import {
 	Box,
 	Button,
 	Divider,
-	Grid,
 	Table,
 	TableBody,
 	TableCell,

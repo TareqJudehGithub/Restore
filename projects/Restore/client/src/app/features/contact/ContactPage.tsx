@@ -18,6 +18,13 @@ import {
 	AlertCircle,
 	LoaderCircle,
 } from "lucide-react";
+import {
+	servicesId,
+	publicKey,
+	templateId,
+	autoReplyTemplateId,
+} from "../../../util/util";
+
 export default function ContactPage() {
 	const { darkMode } = useAppSelector((state) => state.ui);
 
@@ -32,6 +39,7 @@ export default function ContactPage() {
 		message: "",
 	});
 	const [open, setOpen] = useState(true);
+
 	const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
@@ -39,16 +47,11 @@ export default function ContactPage() {
 		setSubmitStatus({ type: null, message: "" });
 
 		try {
-			// Import EmailJS .ENV variables
-			const servicesId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-			const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY_ID;
-			const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-
-			if (!servicesId || !publicKey || !templateId) {
+			if (!servicesId || !publicKey || !templateId || !autoReplyTemplateId) {
 				("EmailJS configuration is missing. Please check your environment variables.");
 			}
 
-			// Email
+			// Email - Sender msg to you
 			await emailjs.send(
 				servicesId,
 				templateId,
@@ -59,6 +62,17 @@ export default function ContactPage() {
 				},
 				publicKey,
 			);
+
+			// Sender auto-reply message receiving
+			// await emailjs.send(
+			// 	servicesId,
+			// 	autoReplyTemplateId,
+			// 	{
+			// 		name: formData.name,
+			// 		email: formData.email,
+			// 	},
+			// 	publicKey,
+			// );
 
 			setSubmitStatus({
 				type: "success",

@@ -29,6 +29,12 @@ jobs:
 
       # Build the client
       - name: Install deps and build client app
+        env:
+          VITE_STRIPE_PK: ${{ secrets.VITE_STRIPE_PK }}
+          VITE_EMAILJS_SERVICE_ID: ${{ secrets.VITE_EMAILJS_SERVICE_ID }}
+          VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}
+          VITE_EMAILJS_PUBLIC_KEY_ID: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY_ID }}
+          VITE_EMAILJS_CONFIRM_ORDER_TEMPLATE_ID: ${{ secrets.VITE_EMAILJS_CONFIRM_ORDER_TEMPLATE_ID }}
         run: |
           cd projects/Restore/client
           npm install

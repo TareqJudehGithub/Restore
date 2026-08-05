@@ -38,7 +38,9 @@ export default function CheckoutPage() {
 		<Grid container spacing={2} sx={{}}>
 			<Grid size={8}>
 				{!stripePromise || !options || isLoading ? (
-					<Typography variant="h6">Loading checkout...</Typography>
+					<Typography variant="h6">
+						Loading checkout... Please wait...
+					</Typography>
 				) : (
 					<Elements stripe={stripePromise} options={options}>
 						<CheckoutStepper />

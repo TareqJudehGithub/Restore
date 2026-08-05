@@ -1,4 +1,5 @@
 import emailjs from "@emailjs/browser";
+import { waLogoLight } from "../../../util/images";
 import {
 	Box,
 	Button,

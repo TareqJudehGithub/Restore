@@ -18,7 +18,11 @@ import {
 	Button,
 	FormControlLabel,
 	Checkbox,
+	Typography,
+	Tooltip,
+	IconButton,
 } from "@mui/material";
+import { InfoOutlined } from "@mui/icons-material";
 
 import Review from "./Review";
 import type { Address } from "../../models/User";
@@ -241,7 +245,8 @@ export default function CheckoutStepper() {
 						}}
 						control={
 							<Checkbox
-								checked={savedAddressChecked}
+								defaultChecked
+								checked={savedAddressChecked ? savedAddressChecked : undefined}
 								onChange={(e) => setSavedAddressChecked(e.target.checked)}
 							/>
 						}
@@ -250,6 +255,19 @@ export default function CheckoutStepper() {
 				</Box>
 
 				<Box sx={{ display: activeStep === 1 ? "block" : "none" }}>
+					<Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
+						<Typography variant="body2" color="text.secondary">
+							Test card: 4242 4242 4242 4242
+						</Typography>
+						<Tooltip
+							title="Use card number 4242 4242 4242 4242, any future expiration date, and any random 3-digit security code for testing."
+							arrow
+						>
+							<IconButton size="small" aria-label="Test card help">
+								<InfoOutlined fontSize="small" />
+							</IconButton>
+						</Tooltip>
+					</Box>
 					<PaymentElement
 						options={{
 							wallets: {

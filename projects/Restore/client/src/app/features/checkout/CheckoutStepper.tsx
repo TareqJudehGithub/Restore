@@ -37,9 +37,12 @@ import { useNavigate } from "react-router";
 import { useCreateOrderMutation } from "../Orders/orderApi";
 
 const steps: string[] = ["Address", "Payment", "Review"];
+const TEST_CARD_NUMBER = "4242 4242 4242 4242";
+const TEST_CARD_TOOLTIP = `Use card number ${TEST_CARD_NUMBER}, any future expiration date, and any random 3-digit security code for testing.`;
 
 export default function CheckoutStepper() {
 	const [activeStep, setActiveStep] = useState<number>(0);
+	const [copied, setCopied] = useState<boolean>(false);
 
 	const { data, isLoading } = useFetchAddressQuery();
 	const [createOrder] = useCreateOrderMutation();
@@ -134,6 +137,16 @@ export default function CheckoutStepper() {
 	};
 	const handlePaymentChange = (event: StripePaymentElementChangeEvent) => {
 		setPaymentComplete(event.complete);
+	};
+
+	const handleCopyTestCardNumber = async () => {
+		try {
+			await navigator.clipboard.writeText(TEST_CARD_NUMBER);
+			setCopied(true);
+			window.setTimeout(() => setCopied(false), 1500);
+		} catch {
+			toast.error("Unable to copy test card number");
+		}
 	};
 
 	const handleBack = () => {
@@ -257,13 +270,18 @@ export default function CheckoutStepper() {
 				<Box sx={{ display: activeStep === 1 ? "block" : "none" }}>
 					<Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
 						<Typography variant="body2" color="text.secondary">
-							Test card: 4242 4242 4242 4242
+							Test card: {TEST_CARD_NUMBER}
 						</Typography>
 						<Tooltip
-							title="Use card number 4242 4242 4242 4242, any future expiration date, and any random 3-digit security code for testing."
+							title={copied ? "Copied" : TEST_CARD_TOOLTIP}
 							arrow
+							open={copied || undefined}
 						>
-							<IconButton size="small" aria-label="Test card help">
+							<IconButton
+								size="small"
+								aria-label="Copy test card number"
+								onClick={handleCopyTestCardNumber}
+							>
 								<InfoOutlined fontSize="small" />
 							</IconButton>
 						</Tooltip>

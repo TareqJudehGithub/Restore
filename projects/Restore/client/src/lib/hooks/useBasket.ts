@@ -8,31 +8,26 @@ export const useBasket = () => {
 	const { data: basket } = useFetchBasketQuery();
 	const [clearBasket] = useClearBasketMutation();
 
-	let subtotal: number = 0;
-	let discount: number = 0.1;
-	let discountAmount: number = 0;
-	let deliveryFee: number = 10;
-	let subTotalAfterDiscount: number;
-
-	((subtotal = (basket?.items ?? []).reduce(
+	const subtotal = (basket?.items ?? []).reduce(
 		(sum: number, item: Item) => sum + item.price * item.quantity,
 		0,
-	)).toFixed(2),
-		0);
+	);
 
-	if (discount > 0) {
-		discountAmount = subtotal * discount;
-		subTotalAfterDiscount = subtotal - discountAmount;
-	} else {
-		subTotalAfterDiscount = subtotal;
-	}
+	const discount = basket?.coupon
+		? basket.coupon.amountOff != null
+			? basket.coupon.amountOff
+			: subtotal * ((basket.coupon.percentOff ?? 0) / 100)
+		: 0;
 
-	deliveryFee = subTotalAfterDiscount >= 100 ? 0 : 5;
+	const discountAmount = Number(discount.toFixed(2));
+	const subTotalAfterDiscount = subtotal - discountAmount;
+	const deliveryFee = subTotalAfterDiscount >= 100 ? 0 : 5;
 	const total = (subTotalAfterDiscount + deliveryFee).toFixed(2);
 
 	return {
 		basket,
 		subtotal,
+		discount,
 		discountAmount,
 		subTotalAfterDiscount,
 		deliveryFee,

@@ -4,6 +4,11 @@ import { type Item, type Basket } from "../../models/basket";
 import type { Product } from "../../models/product";
 import Cookies from "js-cookie";
 
+// Type Guard to check if the product is of type Item
+function isBasketItem(product: Product | Item): product is Item {
+	return (product as Item).quantity !== undefined;
+}
+
 export const basketApi = createApi({
 	reducerPath: "basketApi",
 	baseQuery: baseQueryWithErrorHandling,
@@ -15,7 +20,6 @@ export const basketApi = createApi({
 			query: () => "basket",
 			providesTags: ["Basket"],
 		}),
-
 		// Add Item(s) to Basket
 		addBasketItem: builder.mutation<
 			Basket,
@@ -55,6 +59,7 @@ export const basketApi = createApi({
 			},
 			invalidatesTags: ["Basket"],
 		}),
+		// Increase Item Quantity in Basket
 		IncreaseBasketItemQty: builder.mutation<
 			void,
 			{ productId: number; quantity: number }
@@ -87,6 +92,7 @@ export const basketApi = createApi({
 			},
 			invalidatesTags: ["Basket"],
 		}),
+		// Remove Item(s) from Basket
 		removeBasketItem: builder.mutation<
 			void,
 			{ productId: number; quantity: number }
@@ -125,6 +131,7 @@ export const basketApi = createApi({
 			},
 			invalidatesTags: ["Basket"],
 		}),
+		// Clear Basket
 		clearBasket: builder.mutation<void, void>({
 			queryFn: () => ({
 				data: undefined,
@@ -141,6 +148,57 @@ export const basketApi = createApi({
 				Cookies.remove("basketId");
 			},
 		}),
+		// Apply Coupon
+		addCoupon: builder.mutation<Basket, string>({
+			query: (code: string) => ({
+				url: `basket/${code}`,
+				method: "POST",
+			}),
+			onQueryStarted: async (code, { dispatch, queryFulfilled }) => {
+				const patchResult = dispatch(
+					basketApi.util.updateQueryData("fetchBasket", undefined, (draft) => {
+						if (!draft) return;
+					}),
+				);
+				try {
+					const { data: updatedBasket } = await queryFulfilled;
+					dispatch(
+						basketApi.util.updateQueryData(
+							"fetchBasket",
+							undefined,
+							(draft) => {
+								if (!draft) return;
+								Object.assign(draft, updatedBasket);
+							},
+						),
+					);
+				} catch (error) {
+					console.log(error);
+					patchResult.undo();
+				}
+			},
+		}),
+		// Remove Coupon
+		removeCoupon: builder.mutation<Basket, void>({
+			query: () => ({
+				url: "basket/remove-coupon",
+				method: "DELETE",
+			}),
+			onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+				const patchResult = dispatch(
+					basketApi.util.updateQueryData("fetchBasket", undefined, (draft) => {
+						if (!draft) return;
+						draft.coupon = null;
+					}),
+				);
+				try {
+					await queryFulfilled;
+				} catch (error) {
+					console.log(error);
+					patchResult.undo();
+				}
+			},
+		}),
 	}),
 });
 
@@ -150,4 +208,6 @@ export const {
 	useIncreaseBasketItemQtyMutation,
 	useRemoveBasketItemMutation,
 	useClearBasketMutation,
+	useAddCouponMutation,
+	useRemoveCouponMutation,
 } = basketApi;

@@ -9,11 +9,41 @@ import {
 
 import { NavLink, useLocation } from "react-router";
 import { useBasket } from "../../../lib/hooks/useBasket";
+import { useForm, type FieldValues } from "react-hook-form";
+import {
+	useAddCouponMutation,
+	useRemoveCouponMutation,
+} from "../../features/basket/basketApi";
+import { Delete } from "@mui/icons-material";
 
 export default function OrderSummary() {
 	const location = useLocation();
+	const isCheckout = location.pathname.includes("checkout");
 
-	const { subtotal, deliveryFee, total, discountAmount } = useBasket();
+	const { subtotal, deliveryFee, total, discountAmount, basket } = useBasket();
+	const {
+		register,
+		handleSubmit,
+		reset,
+		setValue,
+		formState: { isSubmitting },
+	} = useForm({ defaultValues: { code: "" } });
+	const [addCoupon] = useAddCouponMutation();
+	const [removeCoupon, { isLoading }] = useRemoveCouponMutation();
+
+	const onSubmit = async (data: FieldValues) => {
+		const code = String(data?.code ?? "").trim();
+		if (!code) return;
+
+		await addCoupon(code);
+		reset({ code: "" });
+	};
+
+	const handlePresetCoupon = async () => {
+		const presetCode = "GIVEME10";
+		setValue("code", presetCode, { shouldDirty: true, shouldValidate: true });
+		await handleSubmit(onSubmit)();
+	};
 
 	return (
 		<Box
@@ -104,7 +134,7 @@ export default function OrderSummary() {
 							}}
 							color="success"
 						>
-							-&#36;{discountAmount.toFixed(2)}
+							{discountAmount === 0 ? "N/A" : `-$${discountAmount.toFixed(2)}`}
 						</Typography>
 					</Box>
 					<Box
@@ -184,43 +214,70 @@ export default function OrderSummary() {
 				</Box>
 			</Paper>
 
-			{/* Coupon Code Section */}
-			<Paper
-				sx={{
-					mb: 2,
-					px: { xs: 1, sm: 1, md: 2, lg: 3 },
-					py: { xs: 1, sm: 1, md: 3 },
-					width: "100%",
-					borderRadius: 3,
-				}}
-			>
-				<form>
-					<Typography
-						sx={{ fontSize: { xs: 14, md: 16 } }}
-						variant="subtitle1"
-						component="label"
-					>
-						Do you have a discount coupon?
-					</Typography>
+			{isCheckout && (
+				<Paper
+					sx={{
+						mb: 2,
+						px: { xs: 1, sm: 1, md: 2, lg: 3 },
+						py: { xs: 1, sm: 1, md: 3 },
+						width: "100%",
+						borderRadius: 3,
+					}}
+				>
+					<form onSubmit={handleSubmit(onSubmit)}>
+						{basket?.coupon && (
+							<Box
+								sx={{
+									display: "flex",
+									justifyContent: "space-between",
+									alignItems: "center",
+									gap: 1,
+								}}
+							>
+								<Typography variant="body2" sx={{ fontWeight: "bold" }}>
+									{basket.coupon.name} applied
+								</Typography>
+								<Button
+									type="button"
+									disabled={isLoading}
+									onClick={() => removeCoupon()}
+									color="error"
+									variant="text"
+									sx={{ minWidth: 0, px: 1 }}
+								>
+									<Delete fontSize="small" />
+									Remove coupon
+								</Button>
+							</Box>
+						)}
 
-					<TextField
-						label="Coupon"
-						variant="outlined"
-						fullWidth
-						sx={{ my: 1, fontSize: { xs: 12, sm: 14, md: 16 } }}
-					/>
+						<TextField
+							label={
+								basket?.coupon || isSubmitting
+									? "GIVEME10 coupon applied"
+									: "Apply coupon"
+							}
+							variant="outlined"
+							fullWidth
+							disabled={!!basket?.coupon}
+							{...register("code", { required: "Coupon code missing" })}
+							sx={{ my: 1, fontSize: { xs: 12, sm: 14, md: 16 } }}
+						/>
 
-					<Button
-						sx={{ mb: 1, fontSize: { xs: 12, sm: 14, md: 16 } }}
-						type="submit"
-						variant="contained"
-						color="primary"
-						fullWidth
-					>
-						Apply
-					</Button>
-				</form>
-			</Paper>
+						<Button
+							onClick={handlePresetCoupon}
+							sx={{ mb: 1, fontSize: { xs: 12, sm: 14, md: 16 } }}
+							type="button"
+							variant="contained"
+							color="primary"
+							fullWidth
+							disabled={isSubmitting || !!basket?.coupon}
+						>
+							{isSubmitting ? "Applying..." : "Get 10% discount now!"}
+						</Button>
+					</form>
+				</Paper>
+			)}
 		</Box>
 	);
 }

@@ -92,7 +92,7 @@ export default function Review({ confirmationToken }: ReviewProps) {
 									size={3}
 									sx={{ gap: 2, display: "flex", justifyContent: "center" }}
 								>
-									Item(s) Total
+									Subtotal
 								</Grid>
 							</TableCell>
 						</TableRow>

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using API.Extensions;
 using API.DTOs.Order;
 using API.Entities;
+using API.Services;
 
 namespace API.Controllers;
 
@@ -17,10 +18,12 @@ public class OrdersController : BaseApiController
 
 {
   private readonly StoreSqlDbContext _dbContext;
+  private readonly DiscountService _discountService;
 
-  public OrdersController(StoreSqlDbContext dbContext)
+  public OrdersController(StoreSqlDbContext dbContext, DiscountService discountService)
   {
     _dbContext = dbContext;
+    _discountService = discountService;
   }
 
   [HttpGet]
@@ -76,7 +79,18 @@ public class OrdersController : BaseApiController
 
     var subtotal = items.Sum(q => q.Price * q.Quantity);
     var deliveryFees = CalculateDeliveryFees(subtotal);
-    var discount = Math.Round(subtotal * 0.1, 2);
+    decimal discount = 0;
+
+    if (basket.Coupon != null)
+    {
+      var subtotalInDecimal = Convert.ToDecimal(subtotal);
+      var subtotalInCents = (long)Math.Round(subtotalInDecimal * 100m, MidpointRounding.AwayFromZero);
+      var discountInCents = await _discountService.CalculateDiscountFromAmount(
+        basket.Coupon,
+        subtotalInCents);
+
+      discount = discountInCents / 100;
+    }
 
     // Check if we have an order in DB:
     var order = await _dbContext.Orders
@@ -92,7 +106,7 @@ public class OrdersController : BaseApiController
         BuyerEmail = User.GetUserName(),
         ShippingAddress = createOrderDto.ShippingAddress,
         DeliveryFee = deliveryFees,
-        Discount = discount,
+        Discount = (double)discount,
         Subtotal = subtotal,
         PaymentSummary = createOrderDto.PaymentSummary,
         PaymentIntentId = basket.PaymentIntentId
@@ -103,10 +117,10 @@ public class OrdersController : BaseApiController
     else
     {
       order.OrderItems = items;
+      order.Subtotal = subtotal;
+      order.DeliveryFee = deliveryFees;
+      order.Discount = (double)discount;
     }
-
-    // _dbContext.Baskets.Remove(basket);
-    // Response.Cookies.Delete("basketId");
 
     var result = await _dbContext.SaveChangesAsync();
 

@@ -234,7 +234,7 @@ export default function CheckoutStepper() {
 					);
 				})}
 			</Stepper>
-			<Box sx={{ mt: 2 }}>
+			<Box sx={{ mt: 2, mb: 4 }}>
 				<Box
 					sx={{
 						opacity: activeStep === 0 ? 1 : 0,

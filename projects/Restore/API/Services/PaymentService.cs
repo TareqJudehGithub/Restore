@@ -3,25 +3,21 @@ using Stripe;
 
 namespace API.Services;
 
-public class PaymentService(IConfiguration config)
+public class PaymentService(IConfiguration config, DiscountService discountService)
 {
-  public async Task<PaymentIntent> CreateOrUpdatePaymentIntent(Basket basket)
+  public async Task<PaymentIntent> CreateOrUpdatePaymentIntent(Basket basket, bool removeDiscount = false)
   {
     StripeConfiguration.ApiKey = config["StripesSettings:SecretKey"];
 
-    var service = new PaymentIntentService();
     var intent = new PaymentIntent();
-    double subtotal = basket.Items.Sum(q => q.Quantity * (q.Product.Price * 100));
-    double discount = 0.1;
-    double subtotalAfterDiscount = 0;
-    if (discount > 0)
-    {
-      subtotalAfterDiscount = subtotal - (subtotal * discount);
-    }
-    else
-    {
-      subtotalAfterDiscount = subtotal;
-    }
+    var service = new PaymentIntentService();
+
+    var subtotal = basket.Items.Sum(q => q.Quantity * (q.Product.Price * 100));
+    var discount = basket.Coupon is not null
+      ? await discountService.CalculateDiscountFromAmount(basket.Coupon, (long)subtotal, removeDiscount)
+      : 0;
+
+    var subtotalAfterDiscount = subtotal - (double)discount;
     // Free delivery for orders above $100
     var deliveryFee = subtotalAfterDiscount > 10000 ? 0 : 500;
 

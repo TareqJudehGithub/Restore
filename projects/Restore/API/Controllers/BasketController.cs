@@ -5,6 +5,7 @@ using API.Data;
 using API.Entities;
 using API.DTOs;
 using API.Extensions;
+using API.Services;
 
 namespace API.Controllers;
 
@@ -12,18 +13,16 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class BasketController : BaseApiController
 {
-  #region Fields
   private readonly StoreSqlDbContext _dbContext;
-  #endregion
+  private readonly PaymentService _paymentsService;
+  private readonly DiscountService _discountService;
 
-  #region Constructor
-  public BasketController(StoreSqlDbContext dbContext)
+  public BasketController(StoreSqlDbContext dbContext, PaymentService paymentsService, DiscountService discountService)
   {
     _dbContext = dbContext;
+    _paymentsService = paymentsService;
+    _discountService = discountService;
   }
-  #endregion
-
-  #region API Endpoints
 
   [HttpGet]
   public async Task<ActionResult<BasketDto>> GetBasket()
@@ -79,7 +78,6 @@ public class BasketController : BaseApiController
   [HttpPut]
   public async Task<ActionResult<BasketDto>> IncreaseBasketItemQty(int productId, int quantity)
   {
-
     // get product
     var product = await _dbContext.Products
     .FirstOrDefaultAsync(q => q.Id == productId);
@@ -168,9 +166,6 @@ public class BasketController : BaseApiController
       return BadRequest("Problem saving/Delete item from Basket.");
     }
   }
-  #endregion
-
-
 
   private async Task<Basket?> RetrieveBasket()
   {
@@ -202,5 +197,69 @@ public class BasketController : BaseApiController
     return basket;
   }
 
+  [HttpPost("{code}")]
+  public async Task<ActionResult<BasketDto>> AddCouponCode(string code)
+  {
+    var basket = await RetrieveBasket();
+
+    if (basket is null || string.IsNullOrWhiteSpace(basket.ClientSecret))
+    {
+      return BadRequest("Unable to apply voucher");
+    }
+
+    var coupon = await _discountService.GetCouponFromPromoCode(code);
+
+    if (coupon is null)
+    {
+      return BadRequest("Invalid coupon");
+    }
+
+    basket.Coupon = coupon;
+
+    var intent = await _paymentsService.CreateOrUpdatePaymentIntent(basket);
+
+    if (intent is null)
+    {
+      return BadRequest("Problem applying coupon to basket");
+    }
+
+    var result = await _dbContext.SaveChangesAsync() > 0;
+
+    if (result)
+    {
+      return CreatedAtAction(nameof(GetBasket), new { id = basket.BasketId }, basket.ToDto());
+    }
+
+    return BadRequest("Problem updating basket");
+  }
+
+  [HttpDelete("remove-coupon")]
+  public async Task<ActionResult> RemoveCouponFromBasket()
+  {
+    var basket = await RetrieveBasket();
+
+    if (basket is null || basket.Coupon is null || string.IsNullOrWhiteSpace(basket.ClientSecret))
+    {
+      return BadRequest("Unable to update basket with coupon");
+    }
+
+    var intent = await _paymentsService.CreateOrUpdatePaymentIntent(basket, true);
+
+    if (intent is null)
+    {
+      return BadRequest("Problem removing coupon from basket");
+    }
+
+    basket.Coupon = null;
+
+    var result = await _dbContext.SaveChangesAsync() > 0;
+
+    if (result)
+    {
+      return Ok();
+    }
+
+    return BadRequest("Problem updating basket");
+  }
 
 }

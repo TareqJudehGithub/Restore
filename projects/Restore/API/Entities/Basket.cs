@@ -16,7 +16,7 @@ public partial class Basket
   // Client communication with Stripe
   public string? ClientSecret { get; set; }
   public string? PaymentIntentId { get; set; }
-
+  public AppCoupon? Coupon { get; set; }
 
 
   #region Helper Methods - add, remove, and find item(s).

@@ -49,6 +49,7 @@ builder.Services.AddTransient<ExceptionMiddleware>();
 
 //Stripe
 builder.Services.AddScoped<PaymentService>();
+builder.Services.AddScoped<DiscountService>();
 
 // Cloudinary Image
 builder.Services.AddScoped<ImageService>();

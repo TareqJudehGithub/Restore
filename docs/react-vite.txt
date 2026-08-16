@@ -17,7 +17,10 @@ Vite  (means quick in English)
     $ npm run dev
 
   - Change Server port number (to become port number 3000)
+
   - Add mkcert plugin for https connection
+    $ npm install vite-plugin-mkcert -D
+
   - Set a default path for your Vite project using 'path'
     
     Go to file cite.config.ts

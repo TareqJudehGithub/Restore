@@ -1,0 +1,16 @@
+Cloudinary
+
+  Installation for React
+
+  https://cloudinary.com/documentation/react_quick_start
+
+
+    $ npx create-cloudinary-react
+
+    - Choose a project name
+    - Fill in your Cloudinary name from your Cloudinary account page.
+    - Create an unsigned preset from Cloudinary: Setting => Upload.
+      Use that unsigned preset in the next project creation question.
+    - Choose your AI agent if found.
+    - Install needed dependencies using npm install. Don't forget here to cd to your project.
+    

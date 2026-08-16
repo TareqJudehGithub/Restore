@@ -1,0 +1,5 @@
+Lucide-react
+  
+ A nice react icons package.
+
+  $ npm install lucid-react

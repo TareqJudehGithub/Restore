@@ -1,0 +1,7 @@
+React dropzone 
+
+  Simple HTML5 drag 'n' drop zone with React
+
+A hooks-first library for building file drag-and-drop zones — with folder support, validation, and full control over your markup.
+
+  & npm install react-dropzone

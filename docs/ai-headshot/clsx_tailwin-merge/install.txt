@@ -1,0 +1,5 @@
+React libraries clsx and tailwind-merge
+
+  clsx and tailwind-merge are utility libraries used together in React to build flexible, conflict-free UI components using Tailwind CSS. While clsx handles the logic of toggleable and conditional styles, tailwind-merge ensures that overridden utility classes resolve correctly without breaking layouts.
+
+npm install clsx tailwind-merge
